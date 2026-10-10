@@ -57,6 +57,7 @@ ajar
 ajaran
 ajuk
 ajukan
+akad
 akademi
 akademik
 akal
@@ -249,6 +250,7 @@ asas
 asin
 asing
 asingan
+askar
 asli
 asma
 aspal
@@ -712,7 +714,6 @@ bepergaulan
 bepergelangan
 bepergian
 beperjumpaan
-beperkahwinan
 beperkara
 beperkemahan
 beperkenalan
@@ -949,6 +950,7 @@ berasas
 berasi
 berasin
 berasing
+beraskar
 berasma
 beraspal
 berasrama
@@ -1086,6 +1088,7 @@ berbaris
 berbarisan
 berbarong
 berbarut
+berbas
 berbasah
 berbasis
 berbasket
@@ -1461,7 +1464,6 @@ bercewek
 bercicak
 bercicilan
 bercicit
-bercili
 bercilok
 bercincang
 bercincin
@@ -1495,7 +1497,6 @@ bercoret
 bercorong
 bercowok
 bercuaca
-bercuba
 bercubit
 bercuci
 bercucu
@@ -1693,6 +1694,7 @@ berdobrak
 berdodol
 berdokar
 berdokter
+berdoktor
 berdoktrin
 berdokumen
 berdolak
@@ -1775,6 +1777,7 @@ berelung
 berelus
 berem
 beremaja
+beremak
 beremas
 beremban
 berembara
@@ -1854,7 +1857,6 @@ bereuro
 berezeki
 berfabel
 berfaedah
-berfail
 berfajar
 berfakir
 berfakta
@@ -1873,7 +1875,6 @@ berfestival
 berfikih
 berfikir
 berfikiran
-berfilem
 berfilm
 berfilsafat
 berfirasat
@@ -1972,6 +1973,7 @@ bergeladak
 bergelagat
 bergelak
 bergelang
+bergelanggang
 bergelap
 bergelar
 bergelas
@@ -2122,7 +2124,6 @@ berhalaman
 berhalang
 berhalangan
 berhalau
-berhalia
 berhalilintar
 berhalte
 berhalus
@@ -2279,7 +2280,6 @@ berimitasi
 berimpi
 berimpian
 berimun
-berimuniti
 berinang
 berinap
 berincar
@@ -3300,6 +3300,7 @@ berlonjong
 berlontar
 berlontong
 berlorek
+berlori
 berlorong
 berlosmen
 berloteng
@@ -3501,6 +3502,7 @@ bermeriam
 bermesin
 bermeskipun
 bermesra
+bermesyuarat
 bermetafora
 bermeteor
 bermeter
@@ -3547,6 +3549,7 @@ bermotor
 bermoyang
 bermual
 bermuara
+bermuat
 bermubaligh
 bermuda
 bermudi
@@ -3723,7 +3726,6 @@ berorbit
 berorgan
 berorkes
 berorkestra
-berosak
 berotak
 berotan
 beroti
@@ -3823,7 +3825,6 @@ berparibasa
 berparit
 berparkir
 berparlemen
-berparlimen
 berpartai
 berpartikel
 berparu
@@ -3966,7 +3967,6 @@ berpendiri
 berpendopo
 berpenduduk
 berpendukung
-berpeneliti
 berpenelitian
 berpenentang
 berpenerbit
@@ -4036,6 +4036,7 @@ berperangkat
 berperangko
 berperantau
 berperasaan
+berperaturan
 berperawakan
 berperawat
 berperayaan
@@ -4138,6 +4139,7 @@ berpojok
 berpokok
 berpola
 berpoles
+berpolis
 berpolisi
 berpolitik
 berpolong
@@ -4249,7 +4251,6 @@ bersaf
 bersaga
 bersagu
 bersahabat
-bersahaja
 bersaham
 bersahaya
 bersahur
@@ -4398,11 +4399,9 @@ berselasa
 berselasih
 berselat
 berselatan
-berselebriti
 berselempang
 berselendang
 berselera
-berselesema
 berseleweng
 berselidik
 berselimut
@@ -4588,7 +4587,6 @@ bersodok
 bersofa
 bersokong
 bersolar
-bersolat
 bersombong
 bersonar
 bersonata
@@ -4760,6 +4758,7 @@ bertanaman
 bertanda
 bertandai
 bertandan
+bertandas
 bertanding
 bertanduk
 bertang
@@ -4848,7 +4847,6 @@ bertelepon
 berteleskop
 bertelevisi
 bertelinga
-berteliti
 berteluk
 bertelungkup
 bertelunjuk
@@ -4885,7 +4883,6 @@ bertenis
 bertentang
 bertentara
 bertenteng
-bertentera
 bertentu
 bertenun
 bertenunan
@@ -4909,7 +4906,6 @@ berterompet
 berterong
 berterowong
 berterowongan
-berterung
 bertesis
 bertestimoni
 bertetangga
@@ -5051,6 +5047,7 @@ bertupai
 berturbin
 berturis
 berturnamen
+berturun
 berturut
 bertusuk
 bertutup
@@ -5191,10 +5188,13 @@ berwalaupun
 berwalet
 berwali
 berwalikota
+berwan
+berwang
 berwangi
 berwanita
 berwarga
 berwarisan
+berwarkah
 berwarna
 berwarta
 berwartawan
@@ -5703,7 +5703,6 @@ cicilan
 cicip
 cicipan
 cicit
-cili
 cilok
 cincang
 cincangan
@@ -5757,8 +5756,6 @@ corong
 corongan
 cowok
 cuaca
-cuba
-cubaan
 cubit
 cubitan
 cuci
@@ -6162,7 +6159,6 @@ dianyarkan
 diapatiskan
 diapikan
 diapit
-diapiti
 diapitkan
 diapung
 diapungkan
@@ -6227,7 +6223,6 @@ dibabat
 dibabati
 dibabatkan
 dibabit
-dibabiti
 dibabitkan
 dibaca
 dibacakan
@@ -6285,7 +6280,6 @@ dibandarkan
 dibandelkan
 dibanggakan
 dibangkit
-dibangkiti
 dibangkitkan
 dibangkrutkan
 dibangun
@@ -6399,7 +6393,6 @@ dibeli
 dibeliakan
 dibelikan
 dibelit
-dibeliti
 dibelitkan
 dibelok
 dibeloki
@@ -6614,7 +6607,6 @@ dibujurkan
 dibuka
 dibukakan
 dibukit
-dibukiti
 dibukitkan
 dibukti
 dibuktikan
@@ -6933,11 +6925,7 @@ dicoretkan
 dicorong
 dicorongi
 dicorongkan
-dicuba
-dicubai
-dicubakan
 dicubit
-dicubiti
 dicubitkan
 dicuci
 dicucikan
@@ -7172,7 +7160,6 @@ didihan
 didik
 didikan
 didikit
-didikiti
 didikitkan
 didikte
 didiktekan
@@ -7451,7 +7438,6 @@ digambari
 digambarkan
 digamblangkan
 digamit
-digamiti
 digamitkan
 digampangkan
 diganas
@@ -7649,7 +7635,6 @@ digigil
 digigili
 digigilkan
 digigit
-digigiti
 digigitkan
 digilakan
 digilap
@@ -7959,7 +7944,6 @@ dihilangkan
 dihimbau
 dihimbaukan
 dihimpit
-dihimpiti
 dihimpitkan
 dihimpun
 dihimpuni
@@ -8044,7 +8028,6 @@ dijagalkan
 dijahatkan
 dijahilkan
 dijahit
-dijahiti
 dijahitkan
 dijaja
 dijajah
@@ -8097,7 +8080,6 @@ dijangkau
 dijangkaui
 dijangkaukan
 dijangkit
-dijangkiti
 dijangkitikan
 dijangkitkan
 dijangkungkan
@@ -8170,7 +8152,6 @@ dijengukkan
 dijeniuskan
 dijenuhkan
 dijepit
-dijepiti
 dijepitkan
 dijepret
 dijepretkan
@@ -8181,7 +8162,6 @@ dijerih
 dijerihi
 dijerihkan
 dijerit
-dijeriti
 dijeritkan
 dijernihkan
 dijerumus
@@ -8293,7 +8273,6 @@ dikain
 dikaini
 dikainkan
 dikait
-dikaiti
 dikaitkan
 dikaji
 dikajikan
@@ -8460,7 +8439,6 @@ dikelim
 dikelimi
 dikelimkan
 dikelit
-dikeliti
 dikelitik
 dikelitikkan
 dikelitkan
@@ -8760,7 +8738,6 @@ dikukuskan
 dikulai
 dikulaikan
 dikulit
-dikuliti
 dikulitikan
 dikulitkan
 dikulum
@@ -8907,7 +8884,6 @@ dilanggar
 dilanggari
 dilanggarkan
 dilangit
-dilangiti
 dilangitkan
 dilangkah
 dilangkahi
@@ -9122,7 +9098,6 @@ diliku
 dilikui
 dilikukan
 dililit
-dililiti
 dililitkan
 dilimakan
 dilimpah
@@ -9440,6 +9415,9 @@ dimoyangkan
 dimual
 dimuali
 dimualkan
+dimuat
+dimuati
+dimuatkan
 dimubazirkan
 dimudahkan
 dimudakan
@@ -10599,7 +10577,6 @@ dipersedih
 dipersedihi
 dipersedihkan
 dipersedikit
-dipersedikiti
 dipersedikitkan
 dipersegar
 dipersegari
@@ -10616,7 +10593,6 @@ dipersekunder
 diperselektif
 diperselesai
 dipersempit
-dipersempiti
 dipersempitkan
 dipersempurna
 dipersempurnai
@@ -10673,7 +10649,6 @@ dipersukari
 dipersukarkan
 dipersukses
 dipersulit
-dipersuliti
 dipersulitkan
 dipersunyi
 dipersupel
@@ -10703,7 +10678,6 @@ diperteguhi
 diperteguhkan
 diperteknis
 dipertekun
-diperteliti
 dipertemporal
 dipertenang
 dipertenangi
@@ -10953,7 +10927,6 @@ dirajut
 dirajuti
 dirajutkan
 dirakit
-dirakiti
 dirakitkan
 dirakuskan
 diramahkan
@@ -11149,9 +11122,6 @@ dirongrongkan
 dironta
 dirontai
 dirontakan
-dirosak
-dirosaki
-dirosakkan
 diroyalkan
 dirugikan
 dirujuk
@@ -11178,7 +11148,6 @@ disabar
 disabari
 disabarkan
 disabit
-disabiti
 disabitkan
 disabuk
 disabuki
@@ -11204,7 +11173,6 @@ disaingi
 disaingkan
 disaji
 disajikan
-disakiti
 disakitkan
 disakralkan
 disaksikan
@@ -11449,7 +11417,6 @@ disepakkan
 disepatukan
 disepikan
 disepit
-disepiti
 disepitkan
 disepuh
 disepuhi
@@ -11672,7 +11639,6 @@ disumpah
 disumpahi
 disumpahkan
 disumpit
-disumpiti
 disumpitkan
 disunat
 disunati
@@ -11796,6 +11762,9 @@ ditandaikan
 ditandakan
 ditandangi
 ditandangkan
+ditandas
+ditandasi
+ditandaskan
 ditanggal
 ditanggali
 ditanggalkan
@@ -11893,7 +11862,6 @@ ditelanjang
 ditelanjangi
 ditelanjangkan
 ditelankan
-diteliti
 ditelitikan
 ditelungkup
 ditelungkupi
@@ -12160,7 +12128,10 @@ ditupai
 ditupaikan
 ditupang
 ditupangkan
+diturun
+dituruni
 diturunikan
+diturunkan
 diturut
 dituruti
 diturutkan
@@ -12312,6 +12283,7 @@ dodol
 dogmatis
 dokar
 dokter
+doktor
 doktrin
 dokumen
 dolak
@@ -12415,6 +12387,7 @@ elok
 elokan
 elus
 elusan
+emak
 emas
 emasan
 emban
@@ -12493,7 +12466,6 @@ evaluasi
 evolusi
 fabel
 faedah
-fail
 fajar
 fakir
 fakta
@@ -12521,7 +12493,6 @@ fikih
 fikir
 fikiran
 fiktif
-filem
 film
 filsafat
 final
@@ -12685,6 +12656,7 @@ gelagatan
 gelak
 gelakan
 gelang
+gelanggang
 gelap
 gelapan
 gelar
@@ -12963,7 +12935,6 @@ halangi
 halangian
 halau
 halauan
-halia
 halilintar
 halte
 halus
@@ -13022,7 +12993,6 @@ harmonis
 harta
 hartawan
 haru
-haruan
 harum
 haruman
 harung
@@ -13220,7 +13190,6 @@ impor
 imporan
 impulsif
 imun
-imuniti
 imut
 inang
 inangan
@@ -13388,7 +13357,6 @@ jangkau
 jangkauan
 jangkit
 jangkitan
-jangkiti
 jangkitian
 jangkrik
 jangkung
@@ -13965,6 +13933,7 @@ keasapan
 keasasan
 keasinan
 keasingan
+keaskaran
 keaslian
 keasmaan
 keaspalan
@@ -14302,7 +14271,6 @@ keberpindahan
 keberpisahan
 keberpuasaan
 kebersahabatan
-kebersahajaan
 kebersaingan
 kebersamaan
 kebersandaran
@@ -14640,7 +14608,6 @@ kecicilanan
 kecicitan
 kecil
 kecilan
-kecilian
 kecilokan
 kecincangan
 kecincinan
@@ -14677,7 +14644,6 @@ kecoretan
 kecorongan
 kecowokan
 kecuacaan
-kecubaan
 kecubitan
 kecucian
 kecucuan
@@ -14894,6 +14860,7 @@ kedodolan
 kedogmatisan
 kedokaran
 kedokteran
+kedoktoran
 kedoktrinan
 kedokumenan
 kedolakan
@@ -14968,6 +14935,7 @@ keelektrikan
 keelitan
 keelokan
 keelusan
+keemakan
 keemasan
 keembanan
 keembaraan
@@ -15025,7 +14993,6 @@ keeuroan
 keevolusian
 kefabelan
 kefaedahan
-kefailan
 kefajaran
 kefakiran
 kefaktaan
@@ -15051,7 +15018,6 @@ kefikihan
 kefikiran
 kefikiranan
 kefiktifan
-kefileman
 kefilman
 kefilsafatan
 kefinalan
@@ -15168,6 +15134,7 @@ kegeladakan
 kegelagatan
 kegelakan
 kegelangan
+kegelanggangan
 kegelapan
 kegelaran
 kegelasan
@@ -15332,7 +15299,6 @@ kehalalan
 kehalamanan
 kehalangan
 kehalauan
-kehaliaan
 kehalilintaran
 kehaltean
 kehalusan
@@ -16678,6 +16644,7 @@ kelontongan
 kelopak
 kelor
 kelorekan
+kelorian
 kelorongan
 kelosmenan
 kelotengan
@@ -16780,7 +16747,6 @@ kemala
 kemalaikatan
 kemalaman
 kemalan
-kemalangan
 kemalariaan
 kemalasan
 kemaluan
@@ -16937,6 +16903,7 @@ kemesinan
 kemeskipunan
 kemesraan
 kemesuman
+kemesyuaratan
 kemetaforaan
 kemeteoran
 kemeteran
@@ -17000,6 +16967,7 @@ kempis
 kempisan
 kemualan
 kemuaraan
+kemuatan
 kemubalighan
 kemubaziran
 kemudaan
@@ -17334,7 +17302,6 @@ keparibasaan
 keparitan
 keparkiran
 keparlemenan
-keparlimenan
 keparsialan
 kepartaian
 kepartikelan
@@ -17563,6 +17530,7 @@ keperangkatan
 keperangkoan
 keperantauan
 keperasaanan
+keperaturanan
 keperawatan
 keperayaanan
 keperbanan
@@ -17589,7 +17557,6 @@ keperisaian
 keperistiwaan
 keperiukan
 keperjumpaanan
-keperkahwinanan
 keperkaraan
 keperkasaan
 keperkemahanan
@@ -17711,6 +17678,7 @@ kepojokan
 kepokokan
 kepolaan
 kepolesan
+kepolisan
 kepolisian
 kepolitikan
 kepolitisan
@@ -18060,7 +18028,6 @@ kerongkong
 kerongkongan
 kerontaan
 kerontgenan
-kerosakan
 kerotanan
 kerotian
 keroyalan
@@ -18283,7 +18250,6 @@ keselempangan
 keselendangan
 keseleraan
 keselesaian
-keselesemaan
 keselewengan
 keselidikan
 keselimutan
@@ -18505,7 +18471,6 @@ kesodokan
 kesofaan
 kesokongan
 kesolaran
-kesolatan
 kesolidan
 kesombongan
 kesonaran
@@ -18701,6 +18666,7 @@ ketanamanan
 ketandaan
 ketandaian
 ketandanan
+ketandasan
 ketandukan
 ketangan
 ketanganan
@@ -18830,7 +18796,6 @@ ketenisan
 ketentangan
 ketentaraan
 ketentengan
-ketenteraan
 ketentuan
 ketenunan
 ketenunanan
@@ -18872,7 +18837,6 @@ ketersieran
 ketertarikan
 ketertiban
 ketertutupan
-keterungan
 ketesisan
 ketestimonian
 ketetanggaan
@@ -19173,6 +19137,8 @@ kewalaupunan
 kewaletan
 kewalian
 kewalikotaan
+kewanan
+kewangan
 kewangian
 kewanitaan
 kewarasan
@@ -19180,6 +19146,7 @@ kewarasatan
 kewargaan
 kewarganegaraan
 kewarisanan
+kewarkahan
 kewarnaan
 kewartaan
 kewartawanan
@@ -19487,7 +19454,6 @@ kuli
 kuliah
 kulit
 kulitan
-kuliti
 kulitian
 kulkas
 kulum
@@ -19682,7 +19648,6 @@ larang
 larangan
 laras
 lari
-larian
 larik
 larikan
 laris
@@ -19933,6 +19898,7 @@ lontar
 lontaran
 lontong
 lorek
+lori
 lorong
 lorongan
 losmen
@@ -20279,7 +20245,6 @@ melanggar
 melanggari
 melanggarkan
 melangit
-melangiti
 melangitkan
 melangka
 melangkah
@@ -20514,7 +20479,6 @@ meliku
 melikui
 melikukan
 melilit
-meliliti
 melilitkan
 melimakan
 melimpah
@@ -20945,7 +20909,6 @@ membabat
 membabati
 membabatkan
 membabit
-membabiti
 membabitkan
 membaca
 membacakan
@@ -21012,7 +20975,6 @@ membandingkan
 membangga
 membanggakan
 membangkit
-membangkiti
 membangkitkan
 membangkrut
 membangkrutkan
@@ -21134,7 +21096,6 @@ membelia
 membeliakan
 membelikan
 membelit
-membeliti
 membelitkan
 membelok
 membeloki
@@ -21370,7 +21331,6 @@ membujurkan
 membuka
 membukakan
 membukit
-membukiti
 membukitkan
 membukti
 membuktikan
@@ -22588,7 +22548,6 @@ mempersedih
 mempersedihi
 mempersedihkan
 mempersedikit
-mempersedikiti
 mempersedikitkan
 mempersegar
 mempersegari
@@ -22606,7 +22565,6 @@ memperselektif
 memperselesai
 mempersembahkan
 mempersempit
-mempersempiti
 mempersempitkan
 mempersempurna
 mempersempurnai
@@ -22666,7 +22624,6 @@ mempersukari
 mempersukarkan
 mempersukses
 mempersulit
-mempersuliti
 mempersulitkan
 mempersunyi
 mempersupel
@@ -22697,7 +22654,6 @@ memperteguhi
 memperteguhkan
 memperteknis
 mempertekun
-memperteliti
 mempertemporal
 mempertemukan
 mempertenang
@@ -22799,6 +22755,9 @@ memualkan
 memuas
 memuasakan
 memuaskan
+memuat
+memuati
+memuatkan
 memubazir
 memubazirkan
 memucat
@@ -23034,6 +22993,9 @@ menandaikan
 menandakan
 menandangi
 menandangkan
+menandas
+menandasi
+menandaskan
 menang
 menangan
 menanggal
@@ -23386,11 +23348,7 @@ mencoretkan
 mencorong
 mencorongi
 mencorongkan
-mencuba
-mencubai
-mencubakan
 mencubit
-mencubiti
 mencubitkan
 mencuci
 mencucikan
@@ -23632,7 +23590,6 @@ mendiet
 mendieti
 mendietkan
 mendikit
-mendikiti
 mendikitkan
 mendikte
 mendiktekan
@@ -23769,7 +23726,6 @@ menelanjang
 menelanjangi
 menelanjangkan
 menelankan
-meneliti
 menelitikan
 menelungkup
 menelungkupi
@@ -24151,7 +24107,6 @@ mengapatis
 mengapatiskan
 mengapikan
 mengapit
-mengapiti
 mengapitkan
 mengapung
 mengapungkan
@@ -24366,7 +24321,6 @@ mengekain
 mengekaini
 mengekainkan
 mengekait
-mengekaiti
 mengekaitkan
 mengekal
 mengekalkan
@@ -24428,7 +24382,6 @@ mengelim
 mengelimi
 mengelimkan
 mengelit
-mengeliti
 mengelitik
 mengelitikkan
 mengelitkan
@@ -24707,7 +24660,6 @@ menggambarkan
 menggamblang
 menggamblangkan
 menggamit
-menggamiti
 menggamitkan
 menggampangkan
 mengganas
@@ -24916,7 +24868,6 @@ menggigil
 menggigili
 menggigilkan
 menggigit
-menggigiti
 menggigitkan
 menggila
 menggilakan
@@ -25237,7 +25188,6 @@ menghilangkan
 menghimbau
 menghimbaukan
 menghimpit
-menghimpiti
 menghimpitkan
 menghimpun
 menghimpuni
@@ -25743,7 +25693,6 @@ mengulaskan
 mengulet
 menguletkan
 mengulit
-menguliti
 mengulitikan
 mengulitkan
 mengulum
@@ -25973,7 +25922,6 @@ menjahatkan
 menjahil
 menjahilkan
 menjahit
-menjahiti
 menjahitkan
 menjaja
 menjajah
@@ -26029,7 +25977,6 @@ menjangkau
 menjangkaui
 menjangkaukan
 menjangkit
-menjangkiti
 menjangkitikan
 menjangkitkan
 menjangkung
@@ -26105,7 +26052,6 @@ menjeniuskan
 menjenuh
 menjenuhkan
 menjepit
-menjepiti
 menjepitkan
 menjepret
 menjepretkan
@@ -26116,7 +26062,6 @@ menjerih
 menjerihi
 menjerihkan
 menjerit
-menjeriti
 menjeritkan
 menjernih
 menjernihkan
@@ -26362,6 +26307,8 @@ menupai
 menupaikan
 menupang
 menupangkan
+menurun
+menuruni
 menurunikan
 menurunkan
 menurut
@@ -26381,7 +26328,6 @@ menyabar
 menyabari
 menyabarkan
 menyabit
-menyabiti
 menyabitkan
 menyabuk
 menyabuki
@@ -26406,7 +26352,6 @@ menyahutkan
 menyaji
 menyajikan
 menyakit
-menyakiti
 menyakitkan
 menyakral
 menyakralkan
@@ -26687,7 +26632,6 @@ menyepatukan
 menyepi
 menyepikan
 menyepit
-menyepiti
 menyepitkan
 menyepuh
 menyepuhi
@@ -26928,7 +26872,6 @@ menyumpah
 menyumpahi
 menyumpahkan
 menyumpit
-menyumpiti
 menyumpitkan
 menyunat
 menyunati
@@ -27004,7 +26947,6 @@ merajuti
 merajutkan
 merak
 merakit
-merakiti
 merakitkan
 merakus
 merakuskan
@@ -27233,9 +27175,6 @@ merongrongkan
 meronta
 merontai
 merontakan
-merosak
-merosaki
-merosakkan
 meroyalkan
 merpati
 mertua
@@ -27267,6 +27206,7 @@ meskipun
 mesra
 mesraan
 mesum
+mesyuarat
 metafora
 meteor
 meter
@@ -27369,6 +27309,8 @@ moyangan
 mual
 mualan
 muara
+muat
+muatan
 mubaligh
 mubazir
 muda
@@ -27759,7 +27701,6 @@ parit
 parkir
 parkiran
 parlemen
-parlimen
 parsial
 partai
 partikel
@@ -27773,7 +27714,6 @@ pasal
 pasang
 pasangan
 pasar
-pasaraya
 paser
 paseran
 pasien
@@ -28287,6 +28227,7 @@ pelontong
 pelopor
 peloporan
 pelor
+pelori
 pelorong
 pelorongan
 peloteng
@@ -28374,7 +28315,6 @@ pemada
 pemadaan
 pemadah
 pemadahan
-pemadam
 pemadaman
 pemadan
 pemadanan
@@ -28594,7 +28534,6 @@ pematahari
 pematang
 pematangan
 pematematika
-pemateri
 pemati
 pematian
 pematin
@@ -28714,8 +28653,6 @@ pembarangkali
 pembarat
 pembarengan
 pembarenganan
-pembaris
-pembarisan
 pembarisanan
 pembarong
 pembarter
@@ -29298,7 +29235,6 @@ pemendidik
 pemendiri
 pemenduduk
 pemendukung
-pemeneliti
 pemenembak
 pemenentang
 pemenerbit
@@ -29383,6 +29319,7 @@ pemeranti
 pemeras
 pemerasaan
 pemerasan
+pemeraturan
 pemerawakan
 pemerawat
 pemerayap
@@ -29626,6 +29563,8 @@ pemualan
 pemuara
 pemuasa
 pemuasaan
+pemuat
+pemuatan
 pemucuk
 pemuda
 pemudi
@@ -29832,6 +29771,8 @@ penandaan
 penandai
 penandaian
 penandangan
+penandas
+penandasan
 penanding
 penanduk
 penangan
@@ -30119,8 +30060,6 @@ pencorong
 pencorongan
 pencowok
 pencuaca
-pencuba
-pencubaan
 pencubit
 pencubitan
 pencuci
@@ -30178,8 +30117,6 @@ pendahuluan
 pendakap
 pendakapan
 pendaki
-pendakwa
-pendakwaan
 pendakwah
 pendakwahan
 pendalam
@@ -30391,6 +30328,7 @@ pendobrakan
 pendodol
 pendokar
 pendokter
+pendoktor
 pendokumen
 pendolak
 pendolakan
@@ -30490,7 +30428,6 @@ penelepon
 peneleskop
 penelevisi
 penelinga
-peneliti
 penelitian
 peneluk
 penelungkup
@@ -30594,7 +30531,6 @@ penerong
 penerowongan
 penertib
 penertiban
-penerung
 penesis
 penetangga
 penetap
@@ -30648,7 +30584,6 @@ pengadat
 pengader
 pengaderan
 pengadik
-pengadil
 pengadilan
 pengadili
 pengadilian
@@ -30678,7 +30613,6 @@ pengajal
 pengajar
 pengajaran
 pengaji
-pengajian
 pengajuk
 pengajukan
 pengakak
@@ -30827,6 +30761,7 @@ pengangklung
 pengangkot
 pengangkung
 pengangkut
+pengangkutan
 pengangsa
 penganiaya
 penganiayaan
@@ -30834,7 +30769,6 @@ penganjak
 penganjakan
 penganjing
 penganjur
-penganjuran
 penganker
 pengantar
 pengantaran
@@ -30927,6 +30861,7 @@ pengasihan
 pengasin
 pengasing
 pengasingan
+pengaskar
 pengasma
 pengasrama
 pengasta
@@ -31044,7 +30979,6 @@ pengedua
 pengeduk
 pengedukan
 pengees
-pengefail
 pengefilm
 pengeflu
 pengegang
@@ -31391,13 +31325,14 @@ pengetong
 pengetoprak
 pengetrem
 pengetruk
-pengetua
 pengetumbar
 pengetupat
 pengeturunan
 pengeuntungan
 pengeuro
 pengewajiban
+pengewan
+pengewang
 pengewol
 pengeyen
 pengeyong
@@ -31512,6 +31447,7 @@ penggelagatan
 penggelak
 penggelakan
 penggelang
+penggelanggang
 penggelap
 penggelapan
 penggelar
@@ -32238,7 +32174,6 @@ penguliah
 pengulin
 pengulit
 pengulitan
-penguliti
 pengulitian
 pengulkas
 pengulos
@@ -32358,7 +32293,6 @@ pengutukan
 pengutusan
 penguyup
 penguyupan
-peniaga
 peniang
 peniarap
 peniarapan
@@ -32380,7 +32314,6 @@ penikus
 penila
 penilai
 penilaian
-penilam
 penilap
 penilapan
 penilik
@@ -32497,7 +32430,6 @@ penjangkau
 penjangkauan
 penjangkit
 penjangkitan
-penjangkiti
 penjangkitian
 penjangkrik
 penjanji
@@ -32772,6 +32704,8 @@ penupangan
 penuri
 penuris
 penurnamen
+penurun
+penurunan
 penurunian
 penurut
 penurutan
@@ -32837,7 +32771,6 @@ penyama
 penyamaan
 penyamak
 penyamakan
-penyaman
 penyamar
 penyamaran
 penyambal
@@ -33223,7 +33156,6 @@ penyofa
 penyokong
 penyokongan
 penyolar
-penyolat
 penyolek
 penyolekan
 penyonar
@@ -33354,7 +33286,6 @@ peperduan
 pepergaulanan
 pepergelanganan
 peperjumpaanan
-peperkahwinanan
 peperkaraan
 peperkemahanan
 peperkenalanan
@@ -33657,6 +33588,7 @@ perasi
 perasian
 perasinan
 perasingan
+peraskaran
 perasmaan
 peraspalan
 perasramaan
@@ -33679,6 +33611,7 @@ peratnaan
 peratoman
 peratu
 peratuan
+peraturan
 peraturanan
 perauditoran
 peraupan
@@ -33770,7 +33703,6 @@ perbanan
 perbancuhan
 perbandan
 perbandaraan
-perbandaran
 perbandengan
 perbandingan
 perbandulan
@@ -33811,6 +33743,7 @@ perbarongan
 perbarteran
 perbarutan
 perbasahan
+perbasan
 perbasisan
 perbasketan
 perbaskoman
@@ -34226,7 +34159,6 @@ percicilanan
 percicipan
 percicitan
 percikan
-percilian
 percilokan
 percincangan
 percincinan
@@ -34263,7 +34195,6 @@ percoretan
 percorongan
 percowokan
 percuacaan
-percubaan
 percubitan
 percucian
 percucuan
@@ -34472,6 +34403,7 @@ perdobrakan
 perdodolan
 perdokaran
 perdokteran
+perdoktoran
 perdoktrinan
 perdokumenan
 perdolakan
@@ -34581,6 +34513,7 @@ perelungan
 perelusan
 peremaja
 peremajaan
+peremakan
 pereman
 peremas
 peremasan
@@ -34698,7 +34631,6 @@ pereuroan
 perezekian
 perfabelan
 perfaedahan
-perfailan
 perfajaran
 perfakiran
 perfaktaan
@@ -34717,7 +34649,6 @@ perfestivalan
 perfikihan
 perfikiran
 perfikiranan
-perfileman
 perfilman
 perfilsafatan
 perfirasatan
@@ -34817,6 +34748,7 @@ pergeladakan
 pergelagatan
 pergelakan
 pergelangan
+pergelanggangan
 pergelapan
 pergelaran
 pergelasan
@@ -34980,7 +34912,6 @@ perhalamanan
 perhalangan
 perhalangian
 perhalauan
-perhaliaan
 perhalilintaran
 perhaltean
 perhalusan
@@ -35037,7 +34968,6 @@ perhembusan
 perhempasan
 perhendakan
 perhentakan
-perhentian
 perhentianan
 perheranan
 perhewanan
@@ -35286,7 +35216,6 @@ perjambanan
 perjambuan
 perjaminan
 perjampian
-perjamuan
 perjamuanan
 perjamuran
 perjandaan
@@ -35437,7 +35366,6 @@ perkafanan
 perkafean
 perkafiran
 perkaguman
-perkahwinan
 perkailan
 perkainan
 perkaisaran
@@ -36230,6 +36158,7 @@ perlonjongan
 perlontaran
 perlontongan
 perlorekan
+perlorian
 perlorongan
 perlosmenan
 perlotengan
@@ -36440,6 +36369,7 @@ permeriaman
 permesinan
 permeskipunan
 permesraan
+permesyuaratan
 permetaforaan
 permeteoran
 permeteran
@@ -36486,6 +36416,7 @@ permotoran
 permoyangan
 permualan
 permuaraan
+permuatan
 permubalighan
 permudaan
 permudian
@@ -36685,8 +36616,6 @@ perorbitan
 perorganan
 perorkesan
 perorkestraan
-perosak
-perosakan
 perotakan
 perotan
 perotanan
@@ -36795,7 +36724,6 @@ perparibasaan
 perparitan
 perparkiran
 perparlemenan
-perparlimenan
 perpartaian
 perpartikelan
 perparuan
@@ -37012,6 +36940,7 @@ perperangkoan
 perperantauan
 perperasaanan
 perperasan
+perperaturanan
 perperawatan
 perperayaanan
 perperempuanan
@@ -37115,6 +37044,7 @@ perpojokan
 perpokokan
 perpolaan
 perpolesan
+perpolisan
 perpolisian
 perpolitikan
 perpolongan
@@ -37392,7 +37322,6 @@ perselebritian
 perselempangan
 perselendangan
 perseleraan
-perselesemaan
 perselewengan
 perselidikan
 perselimutan
@@ -37591,7 +37520,6 @@ persodoran
 persofaan
 persokongan
 persolaran
-persolatan
 persolekan
 persombongan
 personaran
@@ -37772,6 +37700,7 @@ pertanda
 pertandaan
 pertandaian
 pertandanan
+pertandasan
 pertandingan
 pertandukan
 pertangan
@@ -37906,7 +37835,6 @@ pertenisan
 pertentangan
 pertentaraan
 pertentengan
-pertenteraan
 pertentuan
 pertenunan
 pertenunanan
@@ -37931,7 +37859,6 @@ perterompetan
 perterongan
 perterowongan
 perterowonganan
-perterungan
 pertesisan
 pertestimonian
 pertetanggaan
@@ -38068,7 +37995,6 @@ pertumpukan
 pertumpukanan
 pertunaan
 pertunaian
-pertunangan
 pertunanganan
 pertunasan
 pertundaan
@@ -38088,6 +38014,7 @@ pertupangan
 perturbinan
 perturisan
 perturnamenan
+perturunan
 perturutan
 pertusukan
 pertutupan
@@ -38253,10 +38180,13 @@ perwalaupunan
 perwaletan
 perwalian
 perwalikotaan
+perwanan
+perwangan
 perwangian
 perwanitaan
 perwargaan
 perwarisanan
+perwarkahan
 perwarnaan
 perwartaan
 perwartawanan
@@ -38480,6 +38410,7 @@ pokokan
 pola
 poles
 polesan
+polis
 polisi
 politik
 politis
@@ -38912,8 +38843,6 @@ rongrongan
 ronta
 rontaan
 rontgen
-rosak
-rosakan
 rotan
 roti
 royal
@@ -39289,6 +39218,7 @@ seasap
 seasas
 seasin
 seasing
+seaskar
 seasli
 seasma
 seaspal
@@ -39414,6 +39344,7 @@ sebaris
 sebarisan
 sebarong
 sebaru
+sebas
 sebasah
 sebasis
 sebasket
@@ -39855,7 +39786,6 @@ secewek
 secicak
 secicilan
 secicit
-secili
 secilok
 secincin
 secinderamata
@@ -40069,6 +39999,7 @@ sedodol
 sedogmatis
 sedokar
 sedokter
+sedoktor
 sedoktrin
 sedokumen
 sedolak
@@ -40129,6 +40060,7 @@ seelegan
 seelektrik
 seelit
 seelok
+seemak
 seemas
 seembara
 seember
@@ -40174,7 +40106,6 @@ seeuro
 seevolusi
 sefabel
 sefaedah
-sefail
 sefajar
 sefakir
 sefakta
@@ -40199,7 +40130,6 @@ sefestival
 sefikih
 sefikiran
 sefiktif
-sefilem
 sefilm
 sefilsafat
 sefinal
@@ -40294,6 +40224,7 @@ segejala
 segel
 segelan
 segelang
+segelanggang
 segelap
 segelar
 segelas
@@ -40415,7 +40346,6 @@ sehak
 sehakikat
 sehakim
 sehalaman
-sehalia
 sehalilintar
 sehalte
 sehalus
@@ -40548,7 +40478,6 @@ seimitasi
 seimpian
 seimpulsif
 seimun
-seimuniti
 seimut
 seinang
 seinap
@@ -41369,7 +41298,6 @@ selebar
 selebaran
 selebat
 selebay
-selebriti
 selecet
 selega
 selegal
@@ -41420,7 +41348,6 @@ selepat
 selera
 selereng
 selesai
-selesema
 selesung
 seleter
 seletih
@@ -41495,6 +41422,7 @@ selonjong
 selontar
 selontong
 selorek
+selori
 selorong
 selosmen
 seloteng
@@ -41720,6 +41648,7 @@ semeskipun
 semesra
 semesta
 semesum
+semesyuarat
 semetafora
 semeteor
 semeter
@@ -42098,7 +42027,6 @@ separibasa
 separit
 separkir
 separlemen
-separlimen
 separsial
 separtai
 separtikel
@@ -42244,7 +42172,6 @@ sependiri
 sependopo
 sependuduk
 sependukung
-sepeneliti
 sepenelitian
 sepenentang
 sepenerbit
@@ -42317,6 +42244,7 @@ seperangkat
 seperangko
 seperantau
 seperasaan
+seperaturan
 seperawat
 seperayaan
 seperban
@@ -42339,7 +42267,6 @@ seperisai
 seperistiwa
 seperiuk
 seperjumpaan
-seperkahwinan
 seperkara
 seperkasa
 seperkemahan
@@ -42445,6 +42372,7 @@ sepoi
 sepoin
 sepojok
 sepola
+sepolis
 sepolisi
 sepolitik
 sepolitis
@@ -42611,6 +42539,7 @@ serangkong
 seranjang
 seransel
 serantai
+serantau
 serap
 serapan
 serapat
@@ -42924,13 +42853,11 @@ seselasa
 seselasih
 seselat
 seselatan
-seselebriti
 seselektif
 seselempang
 seselendang
 seselera
 seselesai
-seselesema
 seselimut
 seselokan
 seselongsong
@@ -43106,7 +43033,6 @@ sesobat
 sesoda
 sesofa
 sesolar
-sesolat
 sesolid
 sesombong
 sesonar
@@ -43260,6 +43186,7 @@ setanah
 setanaman
 setanda
 setandan
+setandas
 setanduk
 setang
 setangan
@@ -43327,7 +43254,6 @@ setelepon
 seteleskop
 setelevisi
 setelinga
-seteliti
 seteluk
 setelunjuk
 setelur
@@ -43357,7 +43283,6 @@ setengkorak
 setengkuk
 setenis
 setentara
-setentera
 setentu
 setenun
 setenunan
@@ -43389,7 +43314,6 @@ seterowongan
 setersier
 setertib
 setertutup
-seterung
 setesis
 setestimoni
 setetangga
@@ -43631,11 +43555,14 @@ sewalaupun
 sewalet
 sewali
 sewalikota
+sewan
+sewang
 sewangi
 sewanita
 sewaras
 sewarga
 sewarisan
+sewarkah
 sewarna
 sewarta
 sewartawan
@@ -43803,7 +43730,6 @@ sofa
 sokong
 sokongan
 solar
-solat
 solek
 solekan
 solid
@@ -44033,7 +43959,6 @@ talas
 talempong
 talenta
 tali
-talian
 taman
 tamasya
 tamasyaan
@@ -44073,6 +43998,8 @@ tandai
 tandaian
 tandan
 tandang
+tandas
+tandasan
 tanding
 tanduk
 tang
@@ -44200,7 +44127,6 @@ telepon
 teleskop
 televisi
 telinga
-teliti
 telitian
 teluk
 telungkup
@@ -44263,7 +44189,6 @@ tentangan
 tentara
 tenteng
 tentengan
-tentera
 tentu
 tentuan
 tenun
@@ -44750,7 +44675,6 @@ tercopot
 tercorak
 tercoret
 tercorong
-tercuba
 tercubit
 tercuci
 tercucuk
@@ -45356,7 +45280,6 @@ terjanggal
 terjangka
 terjangkau
 terjangkit
-terjangkiti
 terjangkung
 terjanji
 terjantan
@@ -45646,7 +45569,6 @@ terkukuh
 terkukus
 terkulai
 terkulit
-terkuliti
 terkulum
 terkumandang
 terkumpul
@@ -45955,6 +45877,7 @@ termoral
 termos
 termoyang
 termual
+termuat
 termubazir
 termuda
 termudah
@@ -46035,7 +45958,6 @@ terorak
 terorganik
 terorisinal
 terorisme
-terosak
 terotentik
 terotonom
 teroval
@@ -46503,6 +46425,7 @@ tertampung
 tertanak
 tertanam
 tertandai
+tertandas
 tertanggal
 tertanggap
 tertangguh
@@ -46543,7 +46466,6 @@ tertekun
 tertelaah
 tertelan
 tertelanjang
-terteliti
 tertelungkup
 tertelusuri
 tertembak
@@ -46658,6 +46580,7 @@ tertuntun
 tertuntut
 tertupai
 tertupang
+terturun
 terturut
 tertusuk
 tertutup
@@ -46682,7 +46605,6 @@ terumum
 terumus
 terundang
 terundi
-terung
 terunggul
 terungkap
 terungkit
@@ -46963,6 +46885,8 @@ tupangan
 turbin
 turis
 turnamen
+turun
+turunan
 turuni
 turut
 turutan
@@ -47143,6 +47067,7 @@ walaupun
 walet
 wali
 walikota
+wang
 wangi
 wangian
 wanita
@@ -47150,6 +47075,7 @@ waras
 warasat
 warga
 warisan
+warkah
 warna
 warnaan
 warta

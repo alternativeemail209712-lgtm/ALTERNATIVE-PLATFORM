@@ -1,9 +1,18 @@
-# Words in the shared lists that are Malay-only forms and must NOT be accepted in Bahasa Indonesia.
-seluar katil tilam langsir tandas jiran makcik pakcik abah emak peguam askar kedai pejabat kilang stesen gelanggang
-pelancong kasut selipar akhbar jurutera peladang penternak bas lori jejaka atuk opah wan jururawat kuih ais apam
-pensyarah polis doktor basikal motosikal
-sijil kemahiran perisian wang lapan mac ogos jun julai disember isnin khamis jumaat krismas wisel
-rahsia jambatan
-# update 50: Malay-only forms that must not be accepted in Indonesian mode
-ubat makmal tetamu cikgu basikal sesawang peranti kerani pesakit universiti aktiviti kualiti kuantiti kapasiti identiti realiti populariti mobiliti fakulti produktiviti kreativiti efektiviti telefon televisyen muat turun pautan pentadbiran maklumat pengangkutan pelaburan penyelarasan peraturan antarabangsa serantau resipi bateri stesen kilang bomba lori
-nombor warkah mesyuarat
+# update 54: Malay-ONLY words: never a secret word, never accepted as a guess, never given derived forms in Bahasa Indonesia.
+abah akhbar apartmen arnab bahawa banjaran basikal berkahwin betik bilis bumbung canselor capati chalet
+cikgu comel degil dikahwini disember elaun emel epal estet fakulti garaj haruan isnin jambatan
+jejaka jiran julai jumaat jun jururawat jurutera kacak kahwin kahwini kapcai karipap kasut katil
+kedai keledek keli kemahiran kepelbagaian kepimpinan kerana kerani kerepek keropok keselesaan kesihatan ketam ketuhar
+khamis kicap kilang kobis kolej kondominium kopitiam korma kreativiti krismas kuetiau kuih laksa langsir
+lapan larian lawa lebuhraya lemang mac mahu makcik makmal markah matrikulasi mempelam mengahwini menternak
+mesej monorel motosikal nombor ogos opah oren pakcik pangsa pautan peguam pejabat pelancong pelancongan
+pemadam pembaris pemerkasaan pemuliharaan pencen pengajian penganjuran pengawas pengetua peniaga pensyarah penternak penyaman peperiksaan
+peranti perbandaran perbezaan perhentian perisian perjamuan perkahwinan perkhidmatan persekitaran pertunangan petola petrol ponteng popia
+rahsia resit sahaja salji segak selar selipar seluar sesawang siakap sijil siling skrin stesen
+sudu sukan syarikat tadika talapia talian tasik teksi telefon televisyen tembikai tempah tempoyak tetamu
+tilam tingkap tomato tosai tuala ubat ulam universiti wisel
+atuk stereng tayar brek klac ekzos resipi bateri sosej selesema selsema keretapi kanser sihat berkelah jururawat pendakwa pengadil jeneral gabenor parlimen parti pesakit suspek kemalangan
+rasmi merasmikan dirasmikan perasmian kualiti kuantiti aktiviti identiti realiti kapasiti populariti produktiviti efektiviti mobiliti stabiliti komuniti
+peladang pasaraya rekod rosak kerosakan merosakkan solat
+cili cuba mencuba percubaan dicuba fail filem halia
+tentera terung

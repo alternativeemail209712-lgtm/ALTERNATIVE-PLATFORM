@@ -39,6 +39,7 @@ import {
 } from "../blindle/blindle-answers.js";
 import { isValidGuessWord as enIsValid } from "../blindle/blindle-dictionary.js";
 import { getWordsForDifficulty as baseGetWordsForDifficulty } from "../blindle/blindle-difficulty.js";
+import { cleanExternalList } from "./lang/lang-stem.mjs"; // update 54
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.resolve(__dirname, "../../data");
@@ -181,6 +182,24 @@ const DEFAULT_URLS = {
   ms: ""
 };
 
+// update 54: words that exist ONLY in the other language (roots/<lang>-reject.txt) are stripped from any downloaded / dropped-in dictionary,
+// so a big external list can never put an Indonesian-only word into Malay mode (or a Malay-only word into Indonesian mode).
+function loadRejectWords(lang) {
+  const out = new Set();
+  for (const f of ["reject.txt", `${lang}-reject.txt`]) {
+    try {
+      for (const line of fs.readFileSync(path.join(__dirname, "lang", "roots", f), "utf8").split("\n")) {
+        if (line.trim().startsWith("#")) continue;
+        for (const w of line.trim().toLowerCase().split(/\s+/)) if (WORD_RE.test(w)) out.add(w);
+      }
+    } catch (e) {
+      // missing file: nothing to strip
+    }
+  }
+  return out;
+}
+const REJECT_WORDS = { id: loadRejectWords("id"), ms: loadRejectWords("ms") };
+
 function parseWordFile(text) {
   const out = new Set();
   for (const line of String(text || "").split(/\r?\n/)) {
@@ -209,7 +228,7 @@ async function loadBigDictionary(lang) {
   try {
     // 1) a file the host dropped into /data (or saved by an earlier download) is always used
     if (fs.existsSync(file)) {
-      const set = parseWordFile(fs.readFileSync(file, "utf8"));
+      const set = cleanExternalList(lang, parseWordFile(fs.readFileSync(file, "utf8")), REJECT_WORDS[lang]);
       if (set.size >= 500) {
         for (const w of set) BIG[lang].add(w);
         state.source = "bundled+file";
@@ -223,7 +242,7 @@ async function loadBigDictionary(lang) {
       for (const url of urls) {
         for (let attempt = 0; attempt < 2; attempt++) {
           try {
-            const set = parseWordFile(await fetchText(url, 20000));
+            const set = cleanExternalList(lang, parseWordFile(await fetchText(url, 20000)), REJECT_WORDS[lang]);
             if (set.size < 1000) throw new Error(`unexpectedly small list (${set.size})`);
             for (const w of set) merged.add(w);
             break;

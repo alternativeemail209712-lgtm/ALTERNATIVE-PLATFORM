@@ -1,10 +1,19 @@
-# Words in the shared lists that are Indonesian-only forms and must NOT be accepted in Bahasa Melayu (Malaysia).
-celana kamar dipan gorden kaus ponsel sopir satpam dosen perawat dokter apoteker pengacara bupati lurah polisi tentara
-pengemudi kuli stasiun kantor bis truk bioskop universitas puskesmas tetangga keponakan paman bibi sungkan alun pasukan
-mie wortel pepaya kol singkong kakao sosis oncom rawon pecel lalap lodeh botok pindang serundeng onde kemangi permen
-cokelat sirup limun bakso gado mobil sepeda
-delapan maret agustus juni juli desember senin kamis jumat surel peladen rupiah pilek lebaran natal bulutangkis
-sepatu kecamatan camat pulsa
-# update 50: Indonesian-only forms that must not be accepted in Malay (Malaysia) mode
-mobil sepeda kantor celana sopir supir dokter polisi tentara jenderal kolonel gubernur bupati walikota camat lurah kades ponsel surel kulkas parlemen partai koran baterai televisi stasiun resep dosen kondektur masinis satpam redaktur bioskop angkot sma smp puskesmas jomblo cewek cowok preman kamar unduh tautan kos kontrakan
-sembako narkoba losmen kondangan tagar halte
+# update 54: Indonesian-ONLY words: never a secret word, never accepted as a guess, never given derived forms in Bahasa Melayu (Malaysia).
+agustus aktivitas alay antre antri apartemen apoteker bahwa bakso bandara bandel banget baper baterai
+bersepatu bersepeda besok bioskop bis bocah botok bupati butuh camat capek celana cewek cokelat
+cowok cuek culun cumi daring daster dekil delapan desember dibutuhkan disehatkan dokter dongkrak dosen
+efektivitas fakultas fasilitas gado galau ganteng gaul gimana gitu gombal gorden gubernur halte handuk
+identitas integritas istri jaksa jenderal jomblo juli jumat juni kabupaten kades kakao kakek kamar
+kamis kantor kapabilitas kapasitas karena kebutuhan kecamatan kelinci kelurahan kemangi kemarin kepiting keponakan
+kesehatan knalpot kol komunitas kondektur kontrakan kopling koran kost kreativitas kualitas kuantitas kulkas lalap
+lebay lele lodeh losmen lumpia luring mager maret masinis mbak membutuhkan menit menyehatkan menyetir
+mie mobil mobilitas ngobrol ngomong nongkrong ojek oncom onde otoritas parlemen partai pasien pecel
+peladen pemda pemilu penyehatan penyetir perbedaan permen persneling pindai pindang ponsel popularitas pramuniaga preman
+prioritas probabilitas produktivitas pulsa puskesmas rawon realitas satpam sehat semangka sembako senin sensitivitas sepatu
+sepeda sepedaan seprai serundeng setir singkong sirup sopir sore sosis spion stabilitas stasiun surel
+swalayan tagar tautan televisi tentara terong tetangga tomat udah unduh unggah universitas walikota wortel
+alpukat apel becak begal bohlam jadwal kangen kasus klakson kompor rapor resmi meresmikan diresmikan peresmian seluler spanduk taksi telepon surga pemirsa pemulung doyan lemot mantul nyokap bokap gabut kepo
+bapakku ibuku
+obat obeng nomor rahasia rekor redaktur ritsleting salju skripsi sorga tauge toples truk uang wasit miliar montir omset
+brangkas amplop arsitek kondangan konyol loteng lansia liburan imut kinclong kampanye karcis khawatir mengkhawatirkan grosir
+rusak merusak coba jahe film
