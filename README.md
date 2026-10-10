@@ -1,4 +1,6 @@
 # TikTok LIVE Game Platform
+> **Update 55:** Indonesian and Malay secret words were filtered for obscure / rare / slang / technical / other-language words (guesses unchanged) - see `CHANGES_UPDATE_55.md`.
+>
 > **Update 49:** the Indonesian and Malay (Malaysia) word banks are about five times bigger (secret words and accepted guesses) - see `CHANGES_UPDATE_49.md` for the numbers and honest limits.
 >
 > **Update 48:** every word game (all except FLAGLE and TRAVLE) can now be played in **English, Bahasa Indonesia, Bahasa Melayu (Malaysia)** or any of **4 mixes** - Settings -> Word language - see `CHANGES_UPDATE_48.md`.

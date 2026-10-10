@@ -223,6 +223,19 @@ function buildLang(lang) {
   const nosecret = new Set();
   for (const f of ["nosecret.txt", `${lang}-nosecret.txt`]) for (const [w] of readRoots(path.join(ROOTS, f), "P")) nosecret.add(w);
   for (const w of nosecret) secret.delete(w);
+  // update 55: quality filter - obscure / rare / slang / technical words are never a SECRET word (they stay guessable).
+  //   <lang>-obscure.txt       : these exact words only
+  //   <lang>-obscure-stems.txt : rare roots; their affixed forms (diXXX, meXXX, berXXX, peXXXan ...) are dropped as secrets too
+  const obscure = new Set();
+  for (const [w] of readRoots(path.join(ROOTS, `${lang}-obscure.txt`), "P")) obscure.add(w);
+  const obscureStems = new Set();
+  for (const [w] of readRoots(path.join(ROOTS, `${lang}-obscure-stems.txt`), "P")) { obscure.add(w); obscureStems.add(w); }
+  for (const w of obscure) secret.delete(w);
+  {
+    const validAll = new Set([...dict, ...ext, ...secret.keys()]);
+    for (const w of obscureStems) validAll.delete(w);
+    for (const w of [...secret.keys()]) if (derivedOfRejected(w, obscureStems, validAll)) secret.delete(w);
+  }
   const reject = new Set();
   for (const f of ["reject.txt", `${lang}-reject.txt`]) for (const [w] of readRoots(path.join(ROOTS, f), "P")) reject.add(w);
   for (const w of reject) { secret.delete(w); dict.delete(w); }
