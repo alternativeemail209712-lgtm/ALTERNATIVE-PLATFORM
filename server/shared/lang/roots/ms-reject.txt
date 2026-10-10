@@ -1,0 +1,10 @@
+# Words in the shared lists that are Indonesian-only forms and must NOT be accepted in Bahasa Melayu (Malaysia).
+celana kamar dipan gorden kaus ponsel sopir satpam dosen perawat dokter apoteker pengacara bupati lurah polisi tentara
+pengemudi kuli stasiun kantor bis truk bioskop universitas puskesmas tetangga keponakan paman bibi sungkan alun pasukan
+mie wortel pepaya kol singkong kakao sosis oncom rawon pecel lalap lodeh botok pindang serundeng onde kemangi permen
+cokelat sirup limun bakso gado mobil sepeda
+delapan maret agustus juni juli desember senin kamis jumat surel peladen rupiah pilek lebaran natal bulutangkis
+sepatu kecamatan camat pulsa
+# update 50: Indonesian-only forms that must not be accepted in Malay (Malaysia) mode
+mobil sepeda kantor celana sopir supir dokter polisi tentara jenderal kolonel gubernur bupati walikota camat lurah kades ponsel surel kulkas parlemen partai koran baterai televisi stasiun resep dosen kondektur masinis satpam redaktur bioskop angkot sma smp puskesmas jomblo cewek cowok preman kamar unduh tautan kos kontrakan
+sembako narkoba losmen kondangan tagar halte

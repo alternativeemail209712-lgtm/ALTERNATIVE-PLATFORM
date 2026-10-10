@@ -1,0 +1,9 @@
+# Words in the shared lists that are Malay-only forms and must NOT be accepted in Bahasa Indonesia.
+seluar katil tilam langsir tandas jiran makcik pakcik abah emak peguam askar kedai pejabat kilang stesen gelanggang
+pelancong kasut selipar akhbar jurutera peladang penternak bas lori jejaka atuk opah wan jururawat kuih ais apam
+pensyarah polis doktor basikal motosikal
+sijil kemahiran perisian wang lapan mac ogos jun julai disember isnin khamis jumaat krismas wisel
+rahsia jambatan
+# update 50: Malay-only forms that must not be accepted in Indonesian mode
+ubat makmal tetamu cikgu basikal sesawang peranti kerani pesakit universiti aktiviti kualiti kuantiti kapasiti identiti realiti populariti mobiliti fakulti produktiviti kreativiti efektiviti telefon televisyen muat turun pautan pentadbiran maklumat pengangkutan pelaburan penyelarasan peraturan antarabangsa serantau resipi bateri stesen kilang bomba lori
+nombor warkah mesyuarat
