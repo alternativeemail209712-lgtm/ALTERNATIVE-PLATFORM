@@ -10,6 +10,7 @@
 // The game servers read these at start-up; no network needed.
 import fs from "fs";
 import path from "path";
+import { derivedOfRejected, OTHER_LANG_RE } from "../server/shared/lang/lang-stem.mjs";
 import { fileURLToPath } from "url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -159,8 +160,8 @@ const EXT_BY_CLASS = {
   A: [me, pe, memper, diper, se, peAn, an, meI, diI, memperI, diperI, memperKan, diperKan],
   Z: [pe, peAn, an, meI, diI, memperI, diperI, memperKan, diperKan],
   // noun-like roots (the existing plain-word lists and the new broad noun roots)
-  Y: [me, di, pe, peAn, meKan, diKan, meI, diI, ter, an, memper, diper],
-  P: [me, di, peAn, meKan, diKan, meI, diI, ter, an]
+  Y: [me, di, pe, peAn, meKan, diKan, meI, diI, ter, memper, diper],
+  P: [me, di, peAn, meKan, diKan, meI, diI, ter]
 };
 export function derive(root, cls) {
   const out = [];
@@ -185,7 +186,7 @@ function buildLang(lang) {
   const secret = new Map(); // word -> "core" | "hard"
   const dict = new Set();
   const add = (w, tier) => {
-    if (!WORD_RE.test(w) || BAD_RE.test(w)) return;
+    if (!WORD_RE.test(w) || BAD_RE.test(w) || OTHER_LANG_RE[lang].test(w)) return;
     dict.add(w);
     if (tier === "core") secret.set(w, "core");
     else if (tier === "hard" && secret.get(w) !== "core") secret.set(w, "hard");
@@ -201,7 +202,7 @@ function buildLang(lang) {
     if (EXT_BY_CLASS[cls] && w.length >= 3) {
       for (const fn of EXT_BY_CLASS[cls]) {
         let d; try { d = fn(w); } catch (e) { continue; }
-        if (d && d.length <= 17 && WORD_RE.test(d) && !BAD_RE.test(d) && !EXT_BAD_RE.test(d)) ext.add(d);
+        if (d && d.length <= 17 && WORD_RE.test(d) && !BAD_RE.test(d) && !EXT_BAD_RE.test(d) && !OTHER_LANG_RE[lang].test(d)) ext.add(d);
       }
     }
     // the root itself
@@ -217,7 +218,7 @@ function buildLang(lang) {
   for (const w of [...oldTok(COMMON_CORE), ...oldTok(own.core)]) add(w, "core");
   for (const w of [...oldTok(COMMON_HARD), ...oldTok(own.hard)]) add(w, "hard");
   // explicit extra words (already fully formed)
-  for (const [w] of readRoots(path.join(ROOTS, `${lang}-extra-dict.txt`), "P")) dict.add(w);
+  for (const [w] of readRoots(path.join(ROOTS, `${lang}-extra-dict.txt`), "P")) if (!OTHER_LANG_RE[lang].test(w)) dict.add(w);
   // wrong-for-this-language words and sensitive words are removed from the SECRET list (still guessable if real)
   const nosecret = new Set();
   for (const f of ["nosecret.txt", `${lang}-nosecret.txt`]) for (const [w] of readRoots(path.join(ROOTS, f), "P")) nosecret.add(w);
@@ -226,6 +227,16 @@ function buildLang(lang) {
   for (const f of ["reject.txt", `${lang}-reject.txt`]) for (const [w] of readRoots(path.join(ROOTS, f), "P")) reject.add(w);
   for (const w of reject) { secret.delete(w); dict.delete(w); }
   for (const w of secret.keys()) dict.add(w);
+  // update 54: also drop AFFIXED forms of any one-language-only word (berobat, perkantoran, bertetangga ...), unless a real shared stem explains the word
+  const valid = new Set([...dict, ...ext, ...secret.keys()]);
+  for (const r of reject) valid.delete(r);
+  const stemReject = new Set([...reject].filter((r) => r.length >= 4));
+  for (let pass = 0; pass < 6; pass++) { // repeat until nothing more is removed (an affixed form may only be explained by another affixed form)
+    let removed = 0;
+    for (const set of [dict, ext]) for (const w of [...set]) if (derivedOfRejected(w, stemReject, valid)) { set.delete(w); valid.delete(w); removed++; }
+    for (const w of [...secret.keys()]) if (derivedOfRejected(w, stemReject, valid)) { secret.delete(w); dict.delete(w); valid.delete(w); removed++; }
+    if (!removed) break;
+  }
   for (const w of reject) ext.delete(w);
   for (const w of dict) ext.delete(w);
   return { secret, dict, ext, roots: roots.length };

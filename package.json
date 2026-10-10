@@ -1,6 +1,6 @@
 {
   "name": "tiktok-live-game-platform",
-  "version": "2.27.0",
+  "version": "2.28.0",
   "private": true,
   "type": "module",
   "description": "A TikTok LIVE game platform hosting fourteen independent games (Flagle Live, TRAVLE Live, Blindle, Findle Live, CROSSDLE Live, TWISTLE Live, Oracle, Colorblindle, Colordle, Structle, Textle, Rangedle, Codedle, Shapedle) behind one game-selector screen, each reading real audience chat as guesses. Word games can be played in English, Bahasa Indonesia, Bahasa Melayu (Malaysia) or any mix.",
@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node server.js",
     "build:lexicon": "node tools/build-lexicon.mjs",
+    "audit:lexicon": "node tools/audit-lexicon.mjs",
     "import:wordlist": "node tools/import-wordlist.mjs"
   },
   "engines": {
