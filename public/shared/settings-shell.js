@@ -189,10 +189,9 @@
       '<div class="csWin" role="dialog" aria-modal="true" aria-label="Settings">' +
         '<header class="csHead"><div class="csHeadTitle"><span class="csGear" aria-hidden="true">⚙️</span><div><h2>' + esc(ad.gameTitle === "Settings" ? "Settings" : ad.gameTitle) + '</h2>' +
         (gameName ? "<p>" + esc(gameName) + "</p>" : "") + '</div></div>' +
-        '<label class="csSearch"><span aria-hidden="true">🔎</span><input type="search" placeholder="Search settings…" aria-label="Search settings" /></label>' +
         '<button type="button" class="csClose" aria-label="Close settings">✕</button></header>' +
         '<div class="csBody"><nav class="csNav" aria-label="Settings categories"></nav><main class="csMain"></main></div>' +
-        '<footer class="csFoot"><div class="csChips"></div><div class="csFootMsg"></div><div class="csFootBtns"></div></footer>' +
+        '<footer class="csFoot"><div class="csChips csGone"></div><div class="csFootBtns"></div></footer>' +
       "</div>";
     document.body.appendChild(root);
     S.root = root; S.win = $(".csWin", root); S.nav = $(".csNav", root); S.main = $(".csMain", root); S.foot = $(".csFoot", root);
@@ -208,19 +207,16 @@
 
     // footer: status chips + apply proxy
     out.chips.forEach(function (c) { $(".csChips", root).appendChild(c); c.classList.add("csChip"); });
-    if (out.apply) {
-      out.apply.classList.add("csGone");
-      var proxy = mk("button", "csApply"); proxy.type = "button";
-      proxy.textContent = clean(out.apply.textContent).replace(/\s*&amp;\s*/g, " & ") || "Apply settings";
-      proxy.addEventListener("click", function () { out.apply.click(); flashMsg("Applied ✓"); });
-      $(".csFootBtns", root).appendChild(proxy);
-      S.applyProxy = proxy;
-      $(".csFootMsg", root).textContent = "Settings marked “Needs Apply” take effect when you press Apply. Everything else saves instantly.";
-      if (out.applyNote) out.applyNote.classList.add("csGone");
-    } else {
-      $(".csFootMsg", root).textContent = "Changes are saved as you make them.";
-    }
-    if (out.apply && out.applyNote && out.applyNote.id === "settings-status") out.applyNote.classList.remove("csGone"); // Flagle shows live status text
+    // footer: one button - Save & Apply. It presses the game's own Apply, then closes the settings.
+    var proxy = mk("button", "csApply"); proxy.type = "button"; proxy.textContent = "Save & Apply";
+    proxy.addEventListener("click", function () {
+      try { if (out.apply) out.apply.click(); } catch (e) { console.warn(e); }
+      setTimeout(function () { var c = $(ad.close); if (c) c.click(); else forceClose(); }, 120);
+    });
+    $(".csFootBtns", root).appendChild(proxy);
+    S.applyProxy = proxy;
+    if (out.apply) out.apply.classList.add("csGone");
+    if (out.applyNote) out.applyNote.classList.add("csGone");
 
     // cards -> panes
     out.cards.forEach(function (card) { place(card, ad); });
@@ -237,7 +233,6 @@
     $(".csClose", root).addEventListener("click", function () { var c = $(ad.close); if (c) c.click(); else forceClose(); });
     root.addEventListener("mousedown", function (e) { if (e.target === root) { var c = $(ad.close); if (c) c.click(); else forceClose(); } });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && S.open) { var c = $(ad.close); if (c) c.click(); } });
-    $(".csSearch input", root).addEventListener("input", function () { S.search = this.value.trim().toLowerCase(); applySearch(); });
 
     nav();
     return true;
@@ -277,11 +272,11 @@
       html += '<button type="button" class="csNavBtn' + (S.active === x.id ? " on" : "") + '" data-cat="' + x.id + '"><span class="csNavIcon">' + x.icon + '</span><span class="csNavText"><b>' + esc(x.label) + "</b><small>" + c[x.id] + (c[x.id] === 1 ? " section" : " sections") + "</small></span></button>";
     });
     S.nav.innerHTML = html;
-    $$(".csNavBtn", S.nav).forEach(function (b) { b.addEventListener("click", function () { select(b.getAttribute("data-cat"), true); }); });
+    $$(".csNavBtn", S.nav).forEach(function (b) { b.addEventListener("click", function () { select(b.getAttribute("data-cat")); }); });
     if (!c[S.active]) { var first = CATS.filter(function (x) { return c[x.id]; })[0]; if (first) S.active = first.id; }
     paint();
   }
-  function select(id, userClick) { S.active = id; if (userClick) { var s = $(".csSearch input", S.root); s.value = ""; S.search = ""; } applySearch(); paint(); if (S.main) S.main.scrollTop = 0; }
+  function select(id) { S.active = id; applySearch(); paint(); if (S.main) S.main.scrollTop = 0; }
   function paint() {
     $$(".csNavBtn", S.nav).forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-cat") === S.active); });
     var searching = !!S.search;
@@ -302,7 +297,7 @@
     S.none.hidden = !q || any;
     paint();
   }
-  function goTo(id) { if (!S.built) return; select(id, true); }
+  function goTo(id) { if (!S.built) return; select(id); }
 
   var msgTimer = null;
   function flashMsg(t) { var m = $(".csFootMsg", S.root); if (!m) return; var old = m.getAttribute("data-old") || m.textContent; m.setAttribute("data-old", old); m.textContent = t; m.classList.add("flash"); clearTimeout(msgTimer); msgTimer = setTimeout(function () { m.textContent = old; m.classList.remove("flash"); }, 1800); }

@@ -72,23 +72,58 @@ html.csLock{ overflow:hidden; }
 :where(.csWin) .textInput{ padding:7px 10px; border-radius:10px; border:1.5px solid var(--theme-line,#d9be93); background:var(--theme-surface-2,#f2e4c8); color:inherit; font:inherit; }
 :where(.csWin) .sectionNote{ margin:6px 0 10px; font-size:12px; }
 :where(.csWin) .miniStatus{ margin:6px 0 0; font-size:12px; min-height:16px; color:#25703e; font-weight:700; }
-/* phones: sidebar becomes a row of tabs, window fills the screen */
-@media (max-width:720px){
-  .csOverlay{ padding:0; }
-  .csWin{ width:100%; height:100%; border-radius:0; border:0; }
-  .csHead{ flex-wrap:wrap; padding:10px 12px; gap:8px; }
-  .csHeadTitle p{ display:none; }
-  .csSearch{ order:3; flex:1 1 100%; max-width:none; margin:0; }
-  .csClose{ margin-left:auto; }
-  .csBody{ grid-template-columns:1fr; grid-template-rows:auto 1fr; }
-  .csNav{ flex-direction:row; overflow-x:auto; padding:8px; border-right:0; border-bottom:2px solid var(--theme-line,#d9be93); }
-  .csNavBtn{ flex:0 0 auto; width:auto; padding:7px 12px; }
-  .csNavText small{ display:none; }
-  .csNavIcon{ font-size:18px; }
-  .csMain{ padding:12px 12px 20px; }
-  .csCards{ grid-template-columns:1fr; }
-  .csFootBtns{ width:100%; } .csApply{ width:100%; }
-}
+/*PHONES*/
 @media (prefers-reduced-motion:reduce){ .csWin{ animation:none; } .csMain{ scroll-behavior:auto; } }
 .csWin select{ background-color:var(--theme-surface-2,#f2e4c8) !important; color:var(--theme-ink,#5b4636) !important; border-color:var(--theme-line,#d9be93) !important; }
 .csCard .settingsField{ margin:0 0 14px; } .csCard .settingsField input[type=number]{ width:100%; }
+
+/* smaller, tidier header + ribbon (update 59) */
+.csHead{ padding:9px 14px; gap:10px; }
+.csGear{ font-size:19px; }
+.csHeadTitle h2{ font-size:15px; }
+.csHeadTitle p{ font-size:10.5px; }
+.csClose{ margin-left:auto; width:30px; height:30px; font-size:13px; }
+.csBody{ grid-template-columns:190px minmax(0,1fr); }
+.csNavBtn{ padding:7px 10px; gap:8px; }
+.csNavIcon{ font-size:17px; }
+.csNavText b{ font-size:12.5px; }
+.csNavText small{ font-size:10.5px; }
+.csPaneHead h2{ font-size:16px; }
+.csPaneHead p{ font-size:12px; margin-bottom:10px; }
+.csCardTitle{ font-size:14px; }
+.csCardIcon{ font-size:17px; }
+.csBadge{ font-size:9.5px; padding:2px 8px; }
+.csFoot{ justify-content:flex-end; padding:9px 14px; }
+.csApply{ padding:10px 26px; font-size:14px; }
+.csMain, .csCard{ min-width:0; }
+.csMain{ overflow-x:hidden; }
+.csCard{ max-width:100%; overflow-wrap:anywhere; }
+.csCard select, .csCard input:not([type=checkbox]):not([type=radio]):not([type=range]), .csCard textarea{ max-width:100%; }
+.csCard > *{ max-width:100%; }
+.csWin{ height:min(780px,100%); }
+@media (max-width:720px){
+  .csOverlay{ padding:0; align-items:stretch; }
+  .csWin{ width:100%; height:100vh; height:100dvh; max-height:none; border-radius:0; border:0; }
+  .csHead{ padding:7px 10px; }
+  .csGear{ font-size:17px; }
+  .csHeadTitle h2{ font-size:14px; }
+  .csHeadTitle p{ display:none; }
+  .csBody{ grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr); }
+  .csNav{ flex-direction:row; gap:4px; overflow-x:auto; overflow-y:hidden; padding:6px 8px; border-right:0; border-bottom:2px solid var(--theme-line,#d9be93); -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .csNav::-webkit-scrollbar{ display:none; }
+  .csNavBtn{ flex:0 0 auto; width:auto; padding:5px 10px; gap:5px; border-radius:999px; }
+  .csNavText small{ display:none; }
+  .csNavText b{ font-size:12px; white-space:nowrap; }
+  .csNavIcon{ font-size:14px; }
+  .csMain{ padding:10px 10px 16px; }
+  .csPaneHead p{ display:none; }
+  .csPaneHead h2{ font-size:14px; margin-bottom:8px; }
+  .csCards{ grid-template-columns:minmax(0,1fr); gap:10px; }
+  .csCard{ padding:10px 12px 12px !important; border-radius:13px; }
+  .csCardHead{ margin-bottom:8px; padding-bottom:7px; gap:7px; flex-wrap:wrap; }
+  .csHelp{ font-size:11.5px !important; }
+  .csFoot{ padding:8px 10px calc(8px + env(safe-area-inset-bottom)); }
+  .csApply{ width:100%; padding:11px; }
+}
+.csWin .csClose{ width:30px !important; height:30px !important; min-width:30px; padding:0 !important; border-radius:50% !important; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+@media (max-width:720px){ .csFootBtns{ width:100%; margin:0; } }

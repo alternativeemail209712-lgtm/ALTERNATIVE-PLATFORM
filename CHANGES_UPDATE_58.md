@@ -26,3 +26,9 @@ The side drawer is replaced by a centred workspace:
 - sticky footer with connection status and the Apply button
 - the game's original controls are moved, not rebuilt, so everything still works; if the workspace ever fails to build, the old panel stays usable.
 Files: `public/shared/settings-shell.js/.css`, `hints.js/.css`, `server/shared/hint-config-store.js`, `word-hints.js`.
+
+## Follow-up (same update): phone fit + simpler Settings
+- Phone layout rebuilt: the window fills the screen (dynamic height), no sideways scrolling, compact header, slim pill-shaped section ribbon that scrolls sideways.
+- Smaller header ("Settings") and section labels/icons, still clearly readable.
+- Search removed.
+- Footer now holds one button, **Save & Apply**: it applies every chosen setting and closes Settings automatically (the mode/TikTok status and the "Needs Apply" sentence were removed from the footer).
