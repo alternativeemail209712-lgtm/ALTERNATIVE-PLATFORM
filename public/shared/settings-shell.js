@@ -187,9 +187,10 @@
     gameName = clean(gameName).slice(0, 40);
     root.innerHTML =
       '<div class="csWin" role="dialog" aria-modal="true" aria-label="Settings">' +
-        '<header class="csHead"><span class="csGear" aria-hidden="true">⚙️</span><nav class="csNav" aria-label="Settings sections"></nav>' +
+        '<header class="csHead"><div class="csHeadTitle"><span class="csGear" aria-hidden="true">⚙️</span><div><h2>' + esc(ad.gameTitle === "Settings" ? "Settings" : ad.gameTitle) + '</h2>' +
+        (gameName ? "<p>" + esc(gameName) + "</p>" : "") + '</div></div>' +
         '<button type="button" class="csClose" aria-label="Close settings">✕</button></header>' +
-        '<div class="csBody"><main class="csMain"></main></div>' +
+        '<div class="csBody"><nav class="csNav" aria-label="Settings categories"></nav><main class="csMain"></main></div>' +
         '<footer class="csFoot"><div class="csChips csGone"></div><div class="csFootBtns"></div></footer>' +
       "</div>";
     document.body.appendChild(root);
