@@ -453,6 +453,7 @@
       board.querySelectorAll('.attempt-row').forEach((n) => n.remove());
       roundBanner.classList.add('hidden');
       hintsRow.classList.add('hidden');
+      renderHintUi(game, null);
       resetKeyboard();
       lastRenderedRoundNumber = null;
       lastRenderedAttemptCount = 0;
@@ -484,6 +485,7 @@
     if (keyAutoColorChanged) renderKeyboard(round.attempts);
 
     renderHints(round);
+    renderHintUi(game, round);
     renderBanner(round, game.leaderboard || []);
   }
 
@@ -534,6 +536,17 @@
     row.appendChild(decoySet);
 
     return row;
+  }
+
+  // update 58: 3 hint types + host settings via the shared CraftHints module.
+  function renderHintUi(game, round) {
+    if (!window.CraftHints) return;
+    CraftHints.render({
+      status: round && round.status === 'active' ? 'live' : 'idle',
+      hints: round ? round.hintLog || [] : [],
+      hintNote: round ? round.hintNote : null,
+      hintConfig: game.hintConfig,
+    });
   }
 
   function renderHints(round) {
@@ -705,7 +718,16 @@
 
   startRoundBtn.addEventListener('click', () => socket.emit('host:startRound'));
   skipRoundBtn.addEventListener('click', () => socket.emit('host:skipRound'));
-  hintBtn.addEventListener('click', () => socket.emit('host:giveHint'));
+  if (window.CraftHints) {
+    CraftHints.attach({
+      button: hintBtn,
+      chips: document.getElementById('hintChips'),
+      send: (type) => socket.emit('host:giveHint', { type }),
+      sendConfig: (patch) => socket.emit('host:setHintConfig', patch),
+    });
+  } else {
+    hintBtn.addEventListener('click', () => socket.emit('host:giveHint'));
+  }
   revealBtn.addEventListener('click', () => socket.emit('host:revealAnswer'));
   resetLeaderboardBtn.addEventListener('click', () => {
     if (confirm('Reset the leaderboard for everyone? This cannot be undone.')) {

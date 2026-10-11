@@ -1,4 +1,6 @@
 # TikTok LIVE Game Platform
+> **Update 58:** every game now has 3 hint types with host customisation (Settings -> Hints) and a redesigned Settings workspace - see `CHANGES_UPDATE_58.md`.
+>
 > **Update 57:** Indonesian / Malay cross-language clean-up - see `CHANGES_UPDATE_57.md`.
 >
 > **Update 56:** Indonesian and Malay SECRET words are now ROOT WORDS FIRST (affixed words only when everyday, hard tier) after a second quality pass: Indonesian 2,967 / Malay 2,887 answers, guesses unchanged - see `CHANGES_UPDATE_56.md`.
