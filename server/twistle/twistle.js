@@ -38,6 +38,8 @@ import { Diagnostics } from './twistle-diagnostics.js';
 import { TikTokManager } from './twistle-tiktok.js';
 import { evaluateGuess, pickSymbolMap, conceptsEqual, parseGuess, SYMBOL_POOL } from './twistle-engine.js';
 import { getStrictFit, setStrictFit } from '../shared/strict-fit-store.js';
+import * as HC from '../shared/hint-config-store.js'; // update 58: three hint types + host hint settings
+import * as WH from '../shared/word-hints.js';
 import { getStarterWord, setStarterWord } from '../shared/starter-word-store.js';
 
 // Points - identical to BLINDLE (solving is worth 10x a plain valid guess).
@@ -124,6 +126,10 @@ export async function registerTwistle(app, rootIo, options = {}) {
     endReason: null, // 'guessed' | 'revealed'
     hintsUsed: 0,
     hintSuggestions: [],
+    hints: [], // update 58: every hint given this round ({type, text, ...})
+    hintLastAt: 0,
+    hintAutoAt: 0,
+    hintNote: null,
     lastWinInfo: null, // { username, points, word, avatarUrl }
     lastRejection: null, // { word, reason, at } - a brief on-screen toast, BLINDLE-style
     rejectionToastSeconds: DEFAULT_REJECTION_TOAST_SECONDS,
@@ -234,6 +240,10 @@ export async function registerTwistle(app, rootIo, options = {}) {
     game.endReason = null;
     game.hintsUsed = 0;
     game.hintSuggestions = [];
+    game.hints = [];
+    game.hintLastAt = 0;
+    game.hintAutoAt = 0;
+    game.hintNote = null;
     game.lastWinInfo = null;
     game.lastRejection = null;
     game.roundScores.clear();
@@ -371,7 +381,7 @@ export async function registerTwistle(app, rootIo, options = {}) {
   // A word that fits every clue so far (never the secret itself): for every
   // guess already on the board, it would have produced the very same row of
   // symbol meanings.
-  function useHint() {
+  function suggestHint() {
     if (game.status !== 'live') return;
     let candidates = getWordsForDifficulty(ANSWER_WORDS, difficultyIndex, game.wordLength, game.difficulty);
     candidates = candidates.filter((w) => w !== game.secretWord && !game.guessed.has(w));
@@ -383,6 +393,50 @@ export async function registerTwistle(app, rootIo, options = {}) {
     game.hintSuggestions.push(candidates[Math.floor(Math.random() * candidates.length)]);
     game.hintsUsed += 1;
     broadcastState();
+  }
+
+  // update 58: three hint types (Word idea / Reveal a letter / Rule out letters) + the host's hint settings
+  const HINT_GAME_ID = 'twistle';
+  let hintAutoBusy = false;
+  function useHint(payload, isAuto = false) {
+    if (game.status !== 'live') return;
+    const now = Date.now();
+    const chk = HC.checkHint(HINT_GAME_ID, payload && payload.type, game.hintsUsed, game.hintLastAt, now, isAuto);
+    if (!chk.ok) { game.hintNote = { text: chk.reason, at: now }; broadcastState(); return; }
+    game.hintNote = null;
+    let hint = null;
+    if (chk.type === 'suggest') {
+      const before = game.hintSuggestions.length;
+      suggestHint();
+      if (game.hintSuggestions.length > before) {
+        const word = game.hintSuggestions[game.hintSuggestions.length - 1];
+        hint = { type: 'suggest', word, text: 'Try: ' + word.toUpperCase() };
+      }
+    } else if (chk.type === 'letter') {
+      hint = WH.letterHint(game.secretWord, game.hints);
+      if (hint) game.hintsUsed += 1;
+    } else if (chk.type === 'rule') {
+      hint = WH.ruleHint(game.secretWord, game.hints, []);
+      if (hint) game.hintsUsed += 1;
+    }
+    if (!hint) { game.hintNote = { text: 'Nothing more to reveal with that hint - try another type.', at: now }; broadcastState(); return; }
+    game.hints.push({ ...hint, at: now, auto: Boolean(isAuto) });
+    game.hintLastAt = now;
+    broadcastState();
+  }
+  // automatic hint: after every N guesses the host chose in Settings -> Hints (0 = off)
+  function maybeAutoHint() {
+    if (hintAutoBusy || game.status !== 'live') return;
+    const n = HC.getHintConfig(HINT_GAME_ID).autoAfterGuesses;
+    if (!n) return;
+    const made = game.rows.filter((g) => !g.isStarter).length;
+    if (made < game.hintAutoAt + n) return;
+    game.hintAutoAt = made;
+    hintAutoBusy = true;
+    try {
+      const t = HC.pickAutoType(HINT_GAME_ID, game.hints.map((h) => h.type));
+      if (t) useHint({ type: t }, true);
+    } finally { hintAutoBusy = false; }
   }
 
   function applySettings(s) {
@@ -542,6 +596,9 @@ export async function registerTwistle(app, rootIo, options = {}) {
         usedLetters,
         hintsUsed: game.hintsUsed,
         hintSuggestions: game.hintSuggestions,
+        hints: game.hints,
+        hintConfig: HC.publicHintInfo('twistle', game.hintsUsed, game.hintLastAt),
+        hintNote: game.hintNote,
         lastWinInfo: game.lastWinInfo,
         lastRejection: game.lastRejection,
         strictFit: game.strictFit,
@@ -577,6 +634,7 @@ export async function registerTwistle(app, rootIo, options = {}) {
   // Updates are coalesced (many guesses in the same instant -> one broadcast).
   let broadcastPending = false;
   function broadcastState(lightweight = false) {
+    maybeAutoHint();
     if (broadcastPending) return;
     broadcastPending = true;
     const t = setTimeout(() => {
@@ -642,7 +700,8 @@ export async function registerTwistle(app, rootIo, options = {}) {
     socket.on('host:playAgain', guarded('playAgain', () => startRound()));
     socket.on('host:revealAnswer', guarded('revealAnswer', () => revealAnswer()));
     socket.on('host:skipRound', guarded('skipRound', () => skipRound()));
-    socket.on('host:useHint', guarded('useHint', () => useHint()));
+    socket.on('host:useHint', guarded('useHint', (payload) => useHint(payload)));
+    socket.on('host:setHintConfig', guarded('setHintConfig', (payload) => { HC.setHintConfig('twistle', payload); broadcastState(); }));
 
     socket.on('host:setSecretWord', guarded('setSecretWord', (payload, ack) => {
       reply(ack, setSecretWord(payload && payload.word));

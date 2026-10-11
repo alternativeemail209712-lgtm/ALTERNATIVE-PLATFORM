@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 
 import { GameEngine, WORD_LENGTH_OPTIONS, NEXT_ROUND_DELAY_OPTIONS, getWordLanguage, getAnswerPool } from './crossdle-engine.js';
 import { loadDictionary, getLoadInfo, getWordList } from './crossdle-dictionary.js';
+import * as HC from '../shared/hint-config-store.js';
 import { Diagnostics } from './crossdle-diagnostics.js';
 import { TikTokManager } from './crossdle-tiktok.js';
 import { TestModeSimulator } from './crossdle-testMode.js';
@@ -221,11 +222,20 @@ export async function registerCrossdle(app, rootIo, options = {}) {
       }
     });
 
-    socket.on('host:giveHint', () => {
+    socket.on('host:giveHint', (payload) => {
       try {
-        engine.giveHint();
+        engine.giveHint(payload && payload.type);
       } catch (err) {
         diagnostics.logError('socket.host:giveHint', err);
+      }
+    });
+
+    socket.on('host:setHintConfig', (patch) => {
+      try {
+        HC.setHintConfig('crossdle', patch);
+        io.emit('game:update', engine.getPublicState());
+      } catch (err) {
+        diagnostics.logError('socket.host:setHintConfig', err);
       }
     });
 

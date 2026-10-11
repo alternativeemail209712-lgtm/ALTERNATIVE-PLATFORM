@@ -44,6 +44,8 @@ import { ANSWER_WORDS as EN_ANSWER_WORDS, MIN_WORD_LENGTH } from "../blindle/bli
 import { Engagement } from "../engagement/engagement-hub.js";
 import { resolveHostAvatar, adoptHostAvatar, isHostUser, collectUserObjects } from "../shared/host-avatar.js";
 import { getStrictFit, setStrictFit } from "../shared/strict-fit-store.js";
+import * as HC from "../shared/hint-config-store.js"; // update 58: three hint types + host hint settings
+import * as WH from "../shared/word-hints.js";
 import { getStarterWord, setStarterWord } from "../shared/starter-word-store.js";
 import { getKeyAutoColor, setKeyAutoColor } from "../shared/key-autocolor-store.js";
 import { getSymbolPack } from "../shared/symbol-pack-store.js";
@@ -342,6 +344,10 @@ const game = {
   roundNumber: 0, // bumps every time a new round starts - the page uses it to clear its manual colors
   hintsUsed: 0,
   hintSuggestions: [],
+  hints: [], // update 58: every hint given this round ({type, text, ...})
+  hintLastAt: 0,
+  hintAutoAt: 0,
+  hintNote: null,
   lastRejection: null,
   // false (default): any real, not-yet-guessed word is accepted. true: BLINDLE's rule - the guess
   // must also fit the colors of every guess already on the board.
@@ -495,6 +501,10 @@ function startRound(overrideWord) {
   game.guesses = [];
   game.hintsUsed = 0;
   game.hintSuggestions = [];
+  game.hints = [];
+  game.hintLastAt = 0;
+  game.hintAutoAt = 0;
+  game.hintNote = null;
   game.lastRejection = null;
   game.lastWinInfo = null;
   game.roundScores.clear();
@@ -583,7 +593,7 @@ function endGame() {
 // letter pattern as the symbol row, then words that reproduce as many of the colors on the board as
 // possible. Never the answer itself, never a word already on the board and never the same hint twice.
 // Picked at random among the few best fits so repeated hints vary.
-function useHint() {
+function suggestHint() {
   if (game.status !== "live") return;
 
   let candidates = getWordsForDifficulty(ANSWER_WORDS, difficultyIndex, game.wordLength, game.difficulty);
@@ -609,6 +619,50 @@ function useHint() {
   game.hintSuggestions.push(suggestion);
   game.hintsUsed += 1;
   broadcastState();
+}
+
+// update 58: three hint types (Word idea / Reveal a letter / Rule out letters) + the host's hint settings
+const HINT_GAME_ID = "shapedle";
+let hintAutoBusy = false;
+function useHint(payload, isAuto = false) {
+  if (game.status !== "live") return;
+  const now = Date.now();
+  const chk = HC.checkHint(HINT_GAME_ID, payload && payload.type, game.hintsUsed, game.hintLastAt, now, isAuto);
+  if (!chk.ok) { game.hintNote = { text: chk.reason, at: now }; broadcastState(); return; }
+  game.hintNote = null;
+  let hint = null;
+  if (chk.type === "suggest") {
+    const before = game.hintSuggestions.length;
+    suggestHint();
+    if (game.hintSuggestions.length > before) {
+      const word = game.hintSuggestions[game.hintSuggestions.length - 1];
+      hint = { type: "suggest", word, text: "Try: " + word.toUpperCase() };
+    }
+  } else if (chk.type === "letter") {
+    hint = WH.letterHint(game.secretWord, game.hints);
+    if (hint) game.hintsUsed += 1;
+  } else if (chk.type === "rule") {
+    hint = WH.ruleHint(game.secretWord, game.hints, []);
+    if (hint) game.hintsUsed += 1;
+  }
+  if (!hint) { game.hintNote = { text: "Nothing more to reveal with that hint - try another type.", at: now }; broadcastState(); return; }
+  game.hints.push({ ...hint, at: now, auto: Boolean(isAuto) });
+  game.hintLastAt = now;
+  broadcastState();
+}
+// automatic hint: after every N guesses the host chose in Settings -> Hints (0 = off)
+function maybeAutoHint() {
+  if (hintAutoBusy || game.status !== "live") return;
+  const n = HC.getHintConfig(HINT_GAME_ID).autoAfterGuesses;
+  if (!n) return;
+  const made = game.guesses.filter((g) => !g.isStarter).length;
+  if (made < game.hintAutoAt + n) return;
+  game.hintAutoAt = made;
+  hintAutoBusy = true;
+  try {
+    const t = HC.pickAutoType(HINT_GAME_ID, game.hints.map((h) => h.type));
+    if (t) useHint({ type: t }, true);
+  } finally { hintAutoBusy = false; }
 }
 
 function getLeaderboard(map) {
@@ -890,6 +944,9 @@ function buildStatePayload() {
       streak: game.streak,
       hintsUsed: game.hintsUsed,
       hintSuggestions: game.hintSuggestions,
+      hints: game.hints,
+      hintConfig: HC.publicHintInfo("shapedle", game.hintsUsed, game.hintLastAt),
+      hintNote: game.hintNote,
       lastRejection: game.lastRejection,
       strictFit: game.strictFit,
       wordLanguage,
@@ -942,6 +999,7 @@ function buildRosterPayload() {
 
 let broadcastPending = false;
 function broadcastState(lightweight = false) {
+  maybeAutoHint();
   if (!nsp) return; // not mounted yet - nothing to broadcast to
   if (broadcastPending) return;
   broadcastPending = true;
@@ -1002,7 +1060,11 @@ function handleClientAction(ws, msg) {
       endGame();
       break;
     case "use_hint":
-      useHint();
+      useHint(payload);
+      break;
+    case "set_hint_config":
+      HC.setHintConfig("shapedle", payload);
+      broadcastState();
       break;
     case "set_secret_word": {
       const result = setSecretWord(String((payload && payload.word) || ""));
