@@ -1,4 +1,4 @@
-// build-lexicon.mjs  (update 49)
+// build-lexicon.mjs  (update 49, secret-word quality filter: updates 55 + 56)
 // Builds the Indonesian / Malay word banks from the ROOT lists in server/shared/lang/roots/
 // using the real affix rules (meN-, peN-, ber-, ter-, di-, -an, -kan, -i, ke-an, per-an ...).
 //
@@ -10,7 +10,7 @@
 // The game servers read these at start-up; no network needed.
 import fs from "fs";
 import path from "path";
-import { derivedOfRejected, OTHER_LANG_RE } from "../server/shared/lang/lang-stem.mjs";
+import { derivedOfRejected, OTHER_LANG_RE, rootStems } from "../server/shared/lang/lang-stem.mjs";
 import { fileURLToPath } from "url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -235,6 +235,27 @@ function buildLang(lang) {
     const validAll = new Set([...dict, ...ext, ...secret.keys()]);
     for (const w of obscureStems) validAll.delete(w);
     for (const w of [...secret.keys()]) if (derivedOfRejected(w, obscureStems, validAll)) secret.delete(w);
+  }
+  // update 56: ROOT WORDS FIRST. A secret word is either
+  //   * a root / plain word (no affix found)           -> everyday tier "core" (up to 8 letters) or "hard" (9+ letters)
+  //   * an affixed word (meN-, ber-, ter-, peN-, -an, ke-an ...) -> only when it is on affix-lexical-ok.txt, OR it is a ber- verb / ke-an noun of a
+  //     root on affix-common-stems.txt; it is then always tier "hard", so rounds lean on root words first. Passive di- forms are never secrets.
+  // Everything removed here stays GUESSABLE (the dictionary is not touched).
+  {
+    const readSet = (f) => new Set(readRoots(path.join(ROOTS, f), "P").map((r) => r[0]));
+    const commonStems = readSet("affix-common-stems.txt");
+    const lexOk = readSet("affix-lexical-ok.txt");
+    const rootWords = new Set(roots.map((r) => r[0]));
+    for (const w of [...oldTok(COMMON_CORE), ...oldTok(own.core), ...oldTok(COMMON_HARD), ...oldTok(own.hard)]) rootWords.add(w);
+    for (const w of [...secret.keys()]) {
+      const st = [...rootStems(w)];
+      const affixed = !lexOk.has(w) && st.some((s) => rootWords.has(s));
+      if (!affixed && !lexOk.has(w)) { secret.set(w, w.length >= 9 ? "hard" : "core"); continue; }
+      // only ber- forms and ke-an nouns of a common root are allowed by rule; pe-/per-/-an/ter-/meN- words must be listed in affix-lexical-ok.txt
+      const byRule = w.length <= 12 && st.some((s) => commonStems.has(s)) && (/^(ber|be)[a-z]/.test(w) || /^ke[a-z]+an$/.test(w));
+      const ok = lexOk.has(w) || byRule;
+      if (ok) secret.set(w, "hard"); else secret.delete(w);
+    }
   }
   const reject = new Set();
   for (const f of ["reject.txt", `${lang}-reject.txt`]) for (const [w] of readRoots(path.join(ROOTS, f), "P")) reject.add(w);

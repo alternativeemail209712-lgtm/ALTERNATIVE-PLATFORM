@@ -31,6 +31,7 @@ resmi rasmi|rekor rekod|rusak rosak|coba cuba|jahe halia|film filem|sirup sirap|
 kualitas kualiti|kuantitas kuantiti|aktivitas aktiviti|kreativitas kreativiti|identitas identiti|kapasitas kapasiti|komunitas komuniti|stabilitas stabiliti
 pensiun pencen|perbedaan perbezaan|kepemimpinan kepimpinan|salju salji|surga syurga|nomor nombor|obat ubat|taksi teksi|truk lori|uang wang
 kampanye kempen|karcis tiket|arsitek arkitek|miliar bilion|tauge taugeh|wasit pengadil|omset pusing|sembako barang|pulsa kredit|surel emel
+kecepatan kelajuan|fisika fizik|kondisi keadaan|impor import|ekspor eksport|informasi maklumat|beda beza|jembatan jambatan|pikiran fikiran|film filem|jadwal jadual|kendaraan kenderaan|keuangan kewangan|olimpiade olimpik|otomatis automatik|otonomi autonomi|sendok sudu|sastrawan sasterawan|triliun trilion|persen peratus|standar standard|teknis teknikal|konkret konkrit|keramik seramik|ubin jubin|akuntan akauntan|insinyur jurutera|bagian bahagian
 `.trim().split(/\s*\|\s*|\n/).map((p) => p.trim().split(/\s+/)).filter((p) => p.length === 2);
 // words that are valid in BOTH on purpose (not leaks): kereta, kemarin->ID only etc. are handled by the table only where truly exclusive
 // borderline words (real but rare / mostly the other language): guessable, but NEVER a secret word -> listed in <lang>-nosecret.txt

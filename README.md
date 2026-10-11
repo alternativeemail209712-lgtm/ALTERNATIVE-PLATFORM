@@ -1,4 +1,8 @@
 # TikTok LIVE Game Platform
+> **Update 57:** Indonesian / Malay cross-language clean-up - see `CHANGES_UPDATE_57.md`.
+>
+> **Update 56:** Indonesian and Malay SECRET words are now ROOT WORDS FIRST (affixed words only when everyday, hard tier) after a second quality pass: Indonesian 2,967 / Malay 2,887 answers, guesses unchanged - see `CHANGES_UPDATE_56.md`.
+>
 > **Update 55:** Indonesian and Malay secret words were filtered for obscure / rare / slang / technical / other-language words (guesses unchanged) - see `CHANGES_UPDATE_55.md`.
 >
 > **Update 49:** the Indonesian and Malay (Malaysia) word banks are about five times bigger (secret words and accepted guesses) - see `CHANGES_UPDATE_49.md` for the numbers and honest limits.
