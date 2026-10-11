@@ -32,3 +32,7 @@ Files: `public/shared/settings-shell.js/.css`, `hints.js/.css`, `server/shared/h
 - Smaller header ("Settings") and section labels/icons, still clearly readable.
 - Search removed.
 - Footer now holds one button, **Save & Apply**: it applies every chosen setting and closes Settings automatically (the mode/TikTok status and the "Needs Apply" sentence were removed from the footer).
+
+## Follow-up 2
+- Settings header: no title text - gear icon at the far left, the scrollable section ribbon in the middle, close button at the far right.
+- Footer: ribbon removed; only a small, smaller-font **Save & Apply** button floats at the bottom right.

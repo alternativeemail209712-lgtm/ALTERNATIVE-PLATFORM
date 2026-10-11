@@ -127,3 +127,21 @@ html.csLock{ overflow:hidden; }
 }
 .csWin .csClose{ width:30px !important; height:30px !important; min-width:30px; padding:0 !important; border-radius:50% !important; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
 @media (max-width:720px){ .csFootBtns{ width:100%; margin:0; } }
+
+/* update 60: ribbon lives in the header (gear left, close right); footer = one small floating button */
+.csWin{ position:relative; }
+.csHead{ padding:6px 10px; gap:8px; }
+.csGear{ flex:0 0 auto; font-size:17px; }
+.csClose{ margin-left:0 !important; flex:0 0 auto; }
+.csHead .csNav{ flex:1 1 auto; min-width:0; flex-direction:row !important; gap:4px; overflow-x:auto; overflow-y:hidden; padding:2px 0 !important; background:none !important; border:0 !important; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.csHead .csNav::-webkit-scrollbar{ display:none; }
+.csHead .csNavBtn{ flex:0 0 auto; width:auto; padding:5px 10px; gap:5px; border-radius:999px; }
+.csHead .csNavText small{ display:none; }
+.csHead .csNavText b{ font-size:12px; white-space:nowrap; }
+.csHead .csNavIcon{ font-size:14px; }
+.csBody{ grid-template-columns:minmax(0,1fr) !important; grid-template-rows:minmax(0,1fr) !important; }
+.csMain{ padding-bottom:64px !important; }
+.csFoot{ position:absolute; right:12px; bottom:12px; padding:0 !important; background:none !important; border:0 !important; pointer-events:none; width:auto; }
+.csFootBtns{ width:auto !important; pointer-events:auto; }
+.csApply{ width:auto !important; padding:8px 18px !important; font-size:12.5px !important; box-shadow:0 3px 10px var(--theme-shadow,rgba(0,0,0,.3)); }
+@media (max-width:720px){ .csHead{ padding:5px 8px; } .csFoot{ right:10px; bottom:calc(10px + env(safe-area-inset-bottom)); } }
