@@ -119,3 +119,27 @@ tulen tumpas tumpeng tumpukan tunda tungau tunggul tungku tunjang tuntas tuntun 
 ulung umbar umbul umpat umpet universe unjuk untai urai uraian urap urbanisasi urgen usap usil usung utas utopis utusan valuta vegetasi vertikal 
 vihara volatil voli wacana wadah wadi wafat wahana wahyu waisak wajan wajik walet warasat warkah wawasan wazir wibawa wijen wisel wisma yakinkan 
 yakut yayasan yong yuridis zahir zamrud zapin ziarah zirah 
+
+# update 56: second quality pass (rare / archaic / regional / other-language / jargon roots)
+acah acuh ahad ajal alim alur anti anut apit arca arit asak asuh awet buai budu cela ciut daki dara daur dera 
+duku enau epik esak etis fana gaib haru iris isap jati juru kait kala keji kosa kris kubu kutu laga liat liku 
+ludo mara mumi nadi olok omel opah papa pari pori raba riak sagu siar tuas ulur umbi
+bajak bakau balut barak basmi belit benam beruk bursa cecah cekal cetus curam dalil dodol fatwa garap genta 
+hilir juzuk kanak kerat kolot kudis lorek sepit suguh umrah wakaf zikir
+angker anjung bahagi cantum cekung engkau granit kalang khabar kronik kudrat kudung lawang pintal piston 
+piting plasma retina sonata sorban sorong taifun tambak tambat tandan taufan terkam timbun titian unggas 
+ungkit uterus vulgar zaitun
+adaptif auditor bendang bendung cekatan cekodok elastis energik geladak genetik geraham gersang habitat 
+imitasi kalsium kembara khidmat langsat liberal mashyur masyhur mekanik mekanis serambi terjang ustazah
+antropologi sosiologi paradigma parameter metropolis kualitatif kaligrafi manuskrip kelenteng sayembara 
+sandiwara dirgahayu kedondong kerjasama ketiadaan koordinat dermawan dihakkan dinihari
+# update 56: passive di- forms are never secret words
+diketahui dilaksanakan diselenggarakan
+# update 56: Indonesian-flavoured / non-standard-for-Malay / odd generated forms (still accepted as guesses where real; never a secret)
+kendaraan kesempatan kesulitan keberhasilan keterampilan kesepakatan kepanjangan keberagaman kelestarian keterbukaan perusahaan pengusaha
+penerjemah menerjemahkan memperkirakan mempersilakan perlombaan pemerintah pemerintahan lingkungan informasi investasi observasi gravitasi
+kompetisi konstitusi mayoritas minoritas prioritas kreativitas realistis dramatis fantastis sistematis strategis subjektif objektif
+bergengsi terjadi perbaikan pelayanan penerapan kelambatan kedinginan kepanasan kerendahan keringanan kesempitan ketebalan kedalaman
+jawaban persiapan peradaban pembicaraan berhasil berpikir pikiran kelelawar sekretaris bersenyum mengehakkan citarasa peribadi sempadan
+berkenaan cempedak pengucilan perangai kelabu merpati
+ember elang

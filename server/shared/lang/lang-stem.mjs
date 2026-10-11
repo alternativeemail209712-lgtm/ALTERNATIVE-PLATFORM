@@ -56,3 +56,35 @@ export function cleanExternalList(lang, words, rejectWords) {
   for (const w of [...out]) if (derivedOfRejected(w, rejected, out)) out.delete(w);
   return out;
 }
+
+// ---------- update 56: stems for the "roots first" secret-word filter ----------
+// Like candidateStems(), but it also keeps the consonant that stays after a nasal prefix (membaca -> baca, mencari -> cari,
+// mengambil -> ambil) and restores the dropped one (memukul -> pukul, menulis -> tulis, mengirim -> kirim, menyapu -> sapu).
+const NASAL = {
+  mem: ["", "p"], men: ["", "t"], meng: ["", "k"], meny: ["s"], menge: [""], me: [""],
+  pem: ["", "p"], pen: ["", "t"], peng: ["", "k"], peny: ["s"], penge: [""], pe: [""]
+};
+const PLAIN = ["di", "ke", "se", "ber", "ter", "per", "memper", "diper", "pel", "be", "te"];
+const SUF2 = ["", "an", "kan", "i", "nya", "kannya", "kah", "lah"];
+export function rootStems(w) {
+  const out = new Set();
+  const pre = [["", [""]]];
+  for (const [p, leads] of Object.entries(NASAL)) pre.push([p, leads]);
+  for (const p of PLAIN) pre.push([p, p === "be" || p === "te" ? ["r"] : [""]]);
+  pre.push(["keber", [""]], ["keter", [""]], ["keper", [""]], ["kese", [""]], ["perse", [""]], ["pere", [""]]);
+  for (const [p, leads] of pre) {
+    if (!w.startsWith(p)) continue;
+    for (const s of SUF2) {
+      if (s && !w.endsWith(s)) continue;
+      if (p === "" && s === "") continue;
+      const core = w.slice(p.length, s ? w.length - s.length : w.length);
+      if (core.length < 3) continue;
+      for (const l of leads) {
+        const c = l + core;
+        if (c.length >= 4 && c !== w) out.add(c);
+      }
+      if (p === "pel") out.add("ajar");
+    }
+  }
+  return out;
+}

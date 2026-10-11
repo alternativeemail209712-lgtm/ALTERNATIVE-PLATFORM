@@ -37,9 +37,6 @@ agakan
 agama
 agar
 agenda
-agih
-agihan
-agihkan
 agresif
 agung
 agungan
@@ -104,7 +101,6 @@ alir
 aliran
 alis
 aljabar
-almari
 alpa
 alpukat
 aluan
@@ -317,9 +313,7 @@ bagan
 bagi
 bagian
 bagus
-bahagi
 bahagia
-bahagian
 bahan
 bahanan
 bahang
@@ -375,8 +369,6 @@ balutan
 bambang
 bambu
 bambuan
-bancuh
-bancuhan
 band
 bandar
 bandara
@@ -768,8 +760,6 @@ beragam
 beragama
 beragar
 beragenda
-beragih
-beragihkan
 beragu
 beragung
 beragustus
@@ -825,7 +815,6 @@ beralir
 beraliran
 beralis
 beraljabar
-beralmari
 beralpa
 beralpukat
 beralu
@@ -1006,7 +995,6 @@ berbagai
 berbagan
 berbagi
 berbagian
-berbahagi
 berbahagia
 berbahan
 berbahang
@@ -1047,7 +1035,6 @@ berbalut
 berbambang
 berbambu
 berban
-berbancuh
 berband
 berbandar
 berbandara
@@ -1374,7 +1361,6 @@ bercair
 bercairan
 bercakap
 bercakar
-bercakera
 bercakram
 bercakrawala
 bercalak
@@ -1873,8 +1859,6 @@ berfenomena
 berferi
 berfestival
 berfikih
-berfikir
-berfikiran
 berfilm
 berfilsafat
 berfirasat
@@ -2216,7 +2200,6 @@ berhonorarium
 berhorizon
 berhormat
 berhortikultura
-berhospital
 berhotel
 berhubung
 berhubungan
@@ -2360,7 +2343,6 @@ berizin
 berjabat
 berjabatan
 berjadi
-berjadual
 berjadwal
 berjaga
 berjagal
@@ -2556,7 +2538,6 @@ berkalender
 berkaleng
 berkali
 berkaligrafi
-berkalimah
 berkalimat
 berkalkun
 berkalor
@@ -3081,7 +3062,6 @@ berlafal
 berlafaz
 berlaga
 berlagak
-berlagenda
 berlagu
 berlahan
 berlahap
@@ -3632,7 +3612,6 @@ bernazar
 bernegara
 bernegeri
 bernelayan
-bernenas
 bernenda
 bernenek
 berneon
@@ -4041,7 +4020,6 @@ berperawakan
 berperawat
 berperayaan
 berperempuan
-berperibadi
 berperibahasa
 berperigi
 berperih
@@ -4904,8 +4882,6 @@ berterik
 berterompah
 berterompet
 berterong
-berterowong
-berterowongan
 bertesis
 bertestimoni
 bertetangga
@@ -5528,7 +5504,6 @@ cakap
 cakapan
 cakar
 cakaran
-cakera
 cakram
 cakrawala
 cakup
@@ -6021,9 +5996,6 @@ diafektifkan
 diagak
 diagaki
 diagakkan
-diagih
-diagihi
-diagihkan
 diagnosis
 diagresifkan
 diagung
@@ -6235,9 +6207,7 @@ dibagaikan
 dibagi
 dibagikan
 dibaguskan
-dibahagi
 dibahagiakan
-dibahagikan
 dibahan
 dibahani
 dibahankan
@@ -6271,9 +6241,6 @@ dibalutkan
 dibambu
 dibambui
 dibambukan
-dibancuh
-dibancuhi
-dibancuhkan
 dibandar
 dibandari
 dibandarkan
@@ -7368,9 +7335,6 @@ difatwai
 difatwakan
 difavoritkan
 difemininkan
-difikir
-difikiri
-difikirkan
 difiktifkan
 difinalkan
 difisikkan
@@ -8016,9 +7980,6 @@ dijabati
 dijabatkan
 dijadi
 dijadikan
-dijadual
-dijaduali
-dijadualkan
 dijaga
 dijagai
 dijagakan
@@ -12401,7 +12362,6 @@ embusan
 emosi
 emosional
 empang
-empangan
 empas
 empasan
 empat
@@ -12490,8 +12450,6 @@ fenomena
 feri
 festival
 fikih
-fikir
-fikiran
 fiktif
 film
 filsafat
@@ -13093,7 +13051,6 @@ horizontal
 hormat
 hormatan
 hortikultura
-hospital
 hotel
 hubung
 hubungan
@@ -13293,8 +13250,6 @@ jabatan
 jabatanan
 jadi
 jadian
-jadual
-jadualan
 jadwal
 jaga
 jagaan
@@ -13603,7 +13558,6 @@ kaleng
 kali
 kalian
 kaligrafi
-kalimah
 kalimat
 kalkun
 kalor
@@ -13777,8 +13731,6 @@ keagakan
 keagamaan
 keagaran
 keagendaan
-keagihan
-keagihkanan
 keagresifan
 keagungan
 keagustusan
@@ -13827,7 +13779,6 @@ kealiran
 kealiranan
 kealisan
 kealjabaran
-kealmarian
 kealpaan
 kealpukatan
 kealuan
@@ -13987,7 +13938,6 @@ kebagian
 kebagianan
 kebagusan
 kebahagiaan
-kebahagian
 kebahanan
 kebahangan
 kebaharian
@@ -14031,7 +13981,6 @@ kebalutan
 kebambangan
 kebambuan
 kebanan
-kebancuhan
 kebandan
 kebandaraan
 kebandaran
@@ -14341,7 +14290,6 @@ kebilanganan
 kebilasan
 kebilikan
 kebiluran
-kebimbangan
 kebimbitan
 kebinaanan
 kebinaran
@@ -14492,7 +14440,6 @@ kecairan
 kecairanan
 kecakapan
 kecakaran
-kecakeraan
 kecakraman
 kecakrawalaan
 kecalakan
@@ -15015,8 +14962,6 @@ kefenomenaan
 keferian
 kefestivalan
 kefikihan
-kefikiran
-kefikiranan
 kefiktifan
 kefilman
 kefilsafatan
@@ -15331,7 +15276,6 @@ keharapanan
 kehargaan
 keharian
 keharimauan
-keharmonian
 keharmonikaan
 keharmonisan
 kehartaan
@@ -15409,7 +15353,6 @@ kehorizonan
 kehorizontalan
 kehormatan
 kehortikulturaan
-kehospitalan
 kehotelan
 kehubungan
 kehubunganan
@@ -15558,7 +15501,6 @@ keizinan
 kejabatan
 kejabatanan
 kejadian
-kejadualan
 kejadwalan
 kejagaan
 kejagalan
@@ -15780,7 +15722,6 @@ kekalenderan
 kekalengan
 kekalian
 kekaligrafian
-kekalimahan
 kekalimatan
 kekalkunan
 kekaloran
@@ -16363,7 +16304,6 @@ kelafalan
 kelafazan
 kelagaan
 kelagakan
-kelagendaan
 kelagian
 kelaguan
 kelahanan
@@ -16375,7 +16315,6 @@ kelahiran
 kelai
 kelaian
 kelainan
-kelajuan
 kelajuran
 kelak
 kelakaran
@@ -17090,7 +17029,6 @@ kenegatifan
 kenegerian
 kenekatan
 kenelayanan
-kenenasan
 kenendaan
 kenenekan
 keneonan
@@ -17546,7 +17484,6 @@ keperempuanan
 kepergaulanan
 kepergelanganan
 kepergian
-keperibadian
 keperibahasaan
 keperigian
 keperihan
@@ -18582,7 +18519,6 @@ kesurgaan
 kesuruhan
 kesurutan
 kesusahan
-kesusasteraan
 kesusastraan
 kesusilaan
 kesusu
@@ -18830,7 +18766,6 @@ keternakan
 keterompahan
 keterompetan
 keterongan
-keterowongan
 keterowonganan
 ketersediaan
 ketersieran
@@ -19138,7 +19073,6 @@ kewaletan
 kewalian
 kewalikotaan
 kewanan
-kewangan
 kewangian
 kewanitaan
 kewarasan
@@ -19543,7 +19477,6 @@ laga
 lagaan
 lagak
 lagakan
-lagenda
 lagi
 lagu
 laguan
@@ -20922,10 +20855,8 @@ membagi
 membagikan
 membagus
 membaguskan
-membahagi
 membahagia
 membahagiakan
-membahagikan
 membahan
 membahani
 membahankan
@@ -20963,9 +20894,6 @@ membalutkan
 membambu
 membambui
 membambukan
-membancuh
-membancuhi
-membancuhkan
 membandar
 membandari
 membandarkan
@@ -21576,9 +21504,6 @@ memfavorit
 memfavoritkan
 memfeminin
 memfemininkan
-memfikir
-memfikiri
-memfikirkan
 memfiktif
 memfiktifkan
 memfinal
@@ -23897,9 +23822,6 @@ mengagaki
 mengagakkan
 mengaget
 mengagetkan
-mengagih
-mengagihi
-mengagihkan
 mengagresif
 mengagresifkan
 mengagum
@@ -25908,9 +25830,6 @@ menjabati
 menjabatkan
 menjadi
 menjadikan
-menjadual
-menjaduali
-menjadualkan
 menjaga
 menjagai
 menjagakan
@@ -27440,7 +27359,6 @@ negatif
 negeri
 nekat
 nelayan
-nenas
 nenda
 nenek
 neon
@@ -28567,9 +28485,7 @@ pembagai
 pembagaian
 pembagi
 pembagian
-pembahagi
 pembahagia
-pembahagian
 pembahan
 pembahanan
 pembaharuan
@@ -28614,8 +28530,6 @@ pembalut
 pembalutan
 pembambu
 pembambuan
-pembancuh
-pembancuhan
 pembandar
 pembandara
 pembandaran
@@ -29418,8 +29332,6 @@ pemfatwa
 pemfatwaan
 pemfebruari
 pemferi
-pemfikir
-pemfikiran
 pemfilsafat
 pemfisika
 pemfitnah
@@ -30465,7 +30377,6 @@ penenaga
 penenagaan
 penenang
 penenangan
-penenas
 penenda
 penendang
 penendangan
@@ -30528,7 +30439,6 @@ penernak
 penernakan
 penerompet
 penerong
-penerowongan
 penertib
 penertiban
 penesis
@@ -30597,8 +30507,6 @@ pengagak
 pengagakan
 pengagama
 pengagar
-pengagih
-pengagihan
 pengagum
 pengaguman
 pengagung
@@ -32375,8 +32283,6 @@ penjabatan
 penjabatanan
 penjadi
 penjadian
-penjadual
-penjadualan
 penjaga
 penjagaan
 penjagal
@@ -33350,8 +33256,6 @@ peragamaan
 peragaman
 peragaran
 peragendaan
-peragihan
-peragihkanan
 peragu
 peraguan
 peragungan
@@ -33425,7 +33329,6 @@ peraliran
 peraliranan
 peralisan
 peraljabaran
-peralmarian
 peralpaan
 peralpukatan
 peraluan
@@ -33656,7 +33559,6 @@ perbagaian
 perbaganan
 perbagian
 perbagianan
-perbahagian
 perbahanan
 perbahangan
 perbahasaan
@@ -33700,7 +33602,6 @@ perbambangan
 perbambuan
 perban
 perbanan
-perbancuhan
 perbandan
 perbandaraan
 perbandengan
@@ -34054,7 +33955,6 @@ percairan
 percairanan
 percakapan
 percakaran
-percakeraan
 percakraman
 percakrawalaan
 percakupan
@@ -34647,8 +34547,6 @@ perfenomenaan
 perferian
 perfestivalan
 perfikihan
-perfikiran
-perfikiranan
 perfilman
 perfilsafatan
 perfirasatan
@@ -35008,7 +34906,6 @@ perhonorariuman
 perhorizonan
 perhormatan
 perhortikulturaan
-perhospitalan
 perhotelan
 perhubungan
 perhubunganan
@@ -35034,7 +34931,6 @@ perias
 periasan
 peribadahan
 peribadatan
-peribadi
 peribahasa
 peribaratan
 peribu
@@ -35184,7 +35080,6 @@ perizinan
 perjabatan
 perjabatanan
 perjadian
-perjadualan
 perjadwalan
 perjagaan
 perjagalan
@@ -35389,7 +35284,6 @@ perkalenderan
 perkalengan
 perkalian
 perkaligrafian
-perkalimahan
 perkalimatan
 perkalkunan
 perkaloran
@@ -35932,7 +35826,6 @@ perlafalan
 perlafazan
 perlagaan
 perlagakan
-perlagendaan
 perlaguan
 perlahan
 perlahanan
@@ -36500,7 +36393,6 @@ pernazaran
 pernegaraan
 pernegerian
 pernelayanan
-pernenasan
 pernendaan
 pernenekan
 perneonan
@@ -36944,7 +36836,6 @@ perperaturanan
 perperawatan
 perperayaanan
 perperempuanan
-perperibadian
 perperibahasaan
 perperigian
 perperihan
@@ -37857,7 +37748,6 @@ perterimaan
 perterompahan
 perterompetan
 perterongan
-perterowongan
 perterowonganan
 pertesisan
 pertestimonian
@@ -39084,7 +38974,6 @@ seagak
 seagama
 seagar
 seagenda
-seagihkan
 seagresif
 seagung
 seagustus
@@ -39127,7 +39016,6 @@ sealir
 sealiran
 sealis
 sealjabar
-sealmari
 sealpa
 sealpukat
 sealu
@@ -39704,7 +39592,6 @@ secair
 secairan
 secakap
 secakar
-secakera
 secakram
 secakrawala
 secalak
@@ -40128,7 +40015,6 @@ sefenomena
 seferi
 sefestival
 sefikih
-sefikiran
 sefiktif
 sefilm
 sefilsafat
@@ -40424,7 +40310,6 @@ sehorizon
 sehorizontal
 sehormat
 sehortikultura
-sehospital
 sehotel
 sehubungan
 sehujan
@@ -40714,7 +40599,6 @@ sekalender
 sekaleng
 sekali
 sekaligrafi
-sekalimah
 sekalimat
 sekalkun
 sekalor
@@ -41208,7 +41092,6 @@ selacur
 selada
 seladang
 selafal
-selagenda
 selagi
 selagu
 selahan
@@ -41819,7 +41702,6 @@ senegatif
 senegeri
 senekat
 senelayan
-senenas
 senenda
 senenek
 seneon
@@ -42258,7 +42140,6 @@ seperempat
 seperempuan
 sepergaulan
 sepergelangan
-seperibadi
 seperibahasa
 seperigi
 seperingkat
@@ -43309,8 +43190,6 @@ seternak
 seterompah
 seterompet
 seterong
-seterowong
-seterowongan
 setersier
 setertib
 setertutup
@@ -44229,7 +44108,6 @@ teradu
 teraduk
 terafektif
 teragak
-teragih
 teragresif
 teragu
 teragung
@@ -44366,7 +44244,6 @@ terbadik
 terbagai
 terbagi
 terbagus
-terbahagi
 terbahagia
 terbahan
 terbahari
@@ -44384,7 +44261,6 @@ terbalas
 terbalik
 terbalut
 terbambu
-terbancuh
 terbandar
 terbandel
 terbang
@@ -44903,7 +44779,6 @@ terfatal
 terfatwa
 terfavorit
 terfeminin
-terfikir
 terfiktif
 terfinal
 terfisik
@@ -45251,7 +45126,6 @@ teriuh
 terjabat
 terjabatan
 terjadi
-terjadual
 terjaga
 terjagal
 terjahat
@@ -45961,8 +45835,6 @@ terorisme
 terotentik
 terotonom
 teroval
-terowong
-terowongan
 teroyak
 teroyal
 terpacu

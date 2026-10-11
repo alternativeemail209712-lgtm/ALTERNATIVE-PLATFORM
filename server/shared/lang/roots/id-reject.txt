@@ -16,3 +16,7 @@ rasmi merasmikan dirasmikan perasmian kualiti kuantiti aktiviti identiti realiti
 peladang pasaraya rekod rosak kerosakan merosakkan solat
 cili cuba mencuba percubaan dicuba fail filem halia
 tentera terung
+
+# update 57: Malay-ONLY words found in shared root lists (never accepted / never secret in Bahasa Indonesia mode)
+agih agihkan almari bancuh bahagi fail filem fikir fikiran hospital jadual kalimah kenderaan kewajipan kesusasteraan sastera lagenda gerabak jurutera yuran cakera mandur majlis nenas peribadi sedut skru juruteknik terowong kejohanan pingat jurulatih olimpik tarawih terawih wuduk khutbah automatik autonomi autentik standard teknikal trilion peratus kewangan konkrit seramik jubin tukul empangan sasterawan  keharmonian kebimbangan
+kelajuan kepantasan kejohanan

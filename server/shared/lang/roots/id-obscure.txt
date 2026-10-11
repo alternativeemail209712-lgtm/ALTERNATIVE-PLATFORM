@@ -118,3 +118,35 @@ umpat umpet universe unjuk untai urai uraian urap urbanisasi urgen usap usil usu
 wadah wadi wafat wahana wahyu waisak wajan wajik walet walikota warasat warkah wawasan wazir wibawa wijen wiraswasta wisel wisma yakinkan yakut 
 yayasan yong yuridis zahir zamrud zapin ziarah zirah 
 sadis sadistis
+
+# update 56: second quality pass (rare / archaic / regional / other-language / jargon roots)
+abon acah acuh ahad ajal alim alur anti anut apik apit arca aren arit asak asri asuh awam awet ayem
+bapa bros buai bual cela cepu ciut daki dara daur dera dobi duit duku ecer edan enau epik esak etis fana feri 
+gips haru huni iris isap jati jemu juru kait kala keji kosa kris kubu kupu kutu laga lele liat liku liur ludo 
+lusa mara mumi nadi olok omel opor padu papa pari pasu paya picu pori raba rayu reka riak riuh sagu siar teri 
+tong tuas ulet ulur umbi undi usik
+bajak bakau bakul balut barak basmi basuh becak becek belia belit benam beruk bomoh budak buluh bursa calar 
+canai cakap cawan cecah cekal celup cetek cetus cicit cucuk cukur curam
+dadar dakap dakwa dalil dedah degup dodol fatwa fikih fikir garap gegar genta gigih gilas gurau habuk hafaz 
+halau hilir hulur imbas insaf intai iring iuran jajah jerat jilid jimat juzuk
+kanak kayuh kebas kerat keris kisar kolot kopor korek kuala kuali kudis lafaz lagak laman lanun lasak latah 
+lawat lazat lebuh lembu letup limau lipan lipas lobak lorek
+nafas nenas padan patin pelik pujuk rabun rebah risau saman sarat semai sepit silam suguh umrah waduk wakaf
+tawan tepis tutur usang warta waras zikir
+anjak anjur
+almari angker anjung bahagi bahang bakpao bancuh bupati cadang cantum cekung cendol cergas coklat daring 
+engkau granit hantar hutang kalang khabar kongsi kopiah kronik kudrat kudung lawang lembap papaya perigi 
+periuk petang pintal piston piting plasma putera puteri rentak retina sokong sonata sorban sorong subang 
+tabiat taifun takraw tambak tambat tandan taufan terkam timbun titian tudung tumbuk umpama unggah unggas 
+ungkit uterus vanili vulgar zaitun
+adaptif apabila auditor belalai bendang bendung cekatan cengkih elastis energik geladak genetik geraham 
+gersang habitat hakikat imbalan imitasi isyarat kabilah kalsium kantung kembara khidmat lagenda langsat 
+liberal mangkuk mashyur masyhur mekanik mekanis muncung perkara pinggan ringgit senarai serambi songket 
+songkok sungkan terjang tongkol uniform ustazah apoteker
+antropologi sosiologi paradigma parameter metropolis kualitatif kaligrafi manuskrip kelenteng sayembara 
+sandiwara dirgahayu idulfitri kedondong kerjasama ketiadaan koordinat dermawan dihakkan dinihari elektrik 
+hospital cendawan
+# update 56: passive di- forms are never secret words
+diketahui dilaksanakan diselenggarakan
+# update 56: leftovers found in the second skim (non-standard, Malay-flavoured or rare)
+bersenyum mengehakkan citarasa peribadi sempadan berkenaan cempedak pindang pengucilan pembaharuan perangai kelabu

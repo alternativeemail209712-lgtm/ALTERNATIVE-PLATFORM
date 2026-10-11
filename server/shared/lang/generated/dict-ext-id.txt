@@ -212,7 +212,6 @@ berbadaian
 berbadikkan
 berbagaikan
 berbagikan
-berbahagikan
 berbahankan
 berbahas
 berbahaskan
@@ -229,7 +228,6 @@ berbalaskan
 berbalikkan
 berbalutkan
 berbambukan
-berbancuhkan
 berbandarkan
 berbangkitkan
 berbangunkan
@@ -687,7 +685,6 @@ berestuikan
 berestukan
 beretaskan
 berfatwakan
-berfikirkan
 berfitnahkan
 berfotokan
 bergabungkan
@@ -986,7 +983,6 @@ berisyaratkan
 berjabatankan
 berjabatkan
 berjadikan
-berjadualkan
 berjagakan
 berjagalkan
 berjahitkan
@@ -2302,7 +2298,6 @@ diagarkan
 diagenda
 diagendai
 diagendakan
-diagihkani
 diagresifi
 diagustus
 diagustusi
@@ -2381,8 +2376,6 @@ dialiskan
 dialjabar
 dialjabari
 dialjabarkan
-dialmari
-dialmarikan
 dialpa
 dialpai
 dialpakan
@@ -3349,9 +3342,6 @@ dicagak
 dicagaki
 dicagakkan
 dicakari
-dicakera
-dicakerai
-dicakerakan
 dicakram
 dicakrami
 dicakramkan
@@ -4134,9 +4124,6 @@ difestivalkan
 difikih
 difikihi
 difikihkan
-difikiran
-difikirani
-difikirankan
 difiktifi
 difilm
 difilmi
@@ -4662,9 +4649,6 @@ dihorizontali
 dihortikultura
 dihortikulturai
 dihortikulturakan
-dihospital
-dihospitali
-dihospitalkan
 dihotel
 dihoteli
 dihotelkan
@@ -5032,9 +5016,6 @@ dikalengi
 dikalengkan
 dikaligrafi
 dikaligrafikan
-dikalimah
-dikalimahi
-dikalimahkan
 dikalimat
 dikalimati
 dikalimatkan
@@ -6179,9 +6160,6 @@ diladangkan
 dilafal
 dilafali
 dilafalkan
-dilagenda
-dilagendai
-dilagendakan
 dilahan
 dilahani
 dilahankan
@@ -7243,9 +7221,6 @@ dinekati
 dinelayan
 dinelayani
 dinelayankan
-dinenas
-dinenasi
-dinenaskan
 dinenda
 dinendai
 dinendakan
@@ -7897,9 +7872,6 @@ diperagaki
 diperagakkan
 diperagama
 diperagenda
-diperagih
-diperagihi
-diperagihkan
 diperagresifi
 diperagresifkan
 diperagungi
@@ -7975,7 +7947,6 @@ diperalir
 diperaliran
 diperaliri
 diperalirkan
-diperalmari
 diperalpa
 diperalu
 diperalui
@@ -8243,10 +8214,8 @@ diperbagian
 diperbagikan
 diperbagusi
 diperbaguskan
-diperbahagi
 diperbahagiai
 diperbahagiakan
-diperbahagikan
 diperbahan
 diperbahang
 diperbahani
@@ -8300,9 +8269,6 @@ diperbambu
 diperbambui
 diperbambukan
 diperban
-diperbancuh
-diperbancuhi
-diperbancuhkan
 diperbandar
 diperbandari
 diperbandarkan
@@ -8844,7 +8810,6 @@ dipercakapi
 dipercakapkan
 dipercakar
 dipercakarkan
-dipercakera
 dipercakrawala
 dipercakup
 dipercakupkan
@@ -9659,9 +9624,6 @@ diperfenomena
 diperferi
 diperfestival
 diperfikih
-diperfikir
-diperfikiri
-diperfikirkan
 diperfiktifi
 diperfiktifkan
 diperfilm
@@ -10409,7 +10371,6 @@ diperhorizontali
 diperhormati
 diperhormatkan
 diperhortikultura
-diperhospital
 diperhotel
 diperhubung
 diperhubungi
@@ -10452,8 +10413,6 @@ diperhutani
 diperhutankan
 diperibadah
 diperibadat
-diperibadi
-diperibadikan
 diperibahasa
 diperibahasai
 diperibahasakan
@@ -10669,9 +10628,6 @@ diperjabati
 diperjabatkan
 diperjadi
 diperjadikan
-diperjadual
-diperjaduali
-diperjadualkan
 diperjadwal
 diperjaga
 diperjagai
@@ -11046,7 +11002,6 @@ diperkaleng
 diperkali
 diperkaligrafi
 diperkalikan
-diperkalimah
 diperkalimat
 diperkaluk
 diperkalung
@@ -11593,7 +11548,6 @@ diperlagak
 diperlagakan
 diperlagaki
 diperlagakkan
-diperlagenda
 diperlagikan
 diperlagu
 diperlagui
@@ -12517,7 +12471,6 @@ dipernegeri
 dipernekati
 dipernekatkan
 dipernelayan
-dipernenas
 dipernenda
 dipernenek
 diperneon
@@ -18427,9 +18380,6 @@ meladangkan
 melafal
 melafali
 melafalkan
-melagenda
-melagendai
-melagendakan
 melahan
 melahani
 melahankan
@@ -20532,8 +20482,6 @@ memeriahi
 memeriam
 memeriami
 memeriamkan
-memeribadi
-memeribadikan
 memeribahasa
 memeribahasai
 memeribahasakan
@@ -20756,9 +20704,6 @@ memfestivalkan
 memfikih
 memfikihi
 memfikihkan
-memfikiran
-memfikirani
-memfikirankan
 memfiktifi
 memfilsafat
 memfilsafati
@@ -21100,9 +21045,6 @@ memperagaki
 memperagakkan
 memperagama
 memperagenda
-memperagih
-memperagihi
-memperagihkan
 memperagresifi
 memperagresifkan
 memperagungi
@@ -21172,7 +21114,6 @@ memperalir
 memperaliran
 memperaliri
 memperalirkan
-memperalmari
 memperalpa
 memperalu
 memperalui
@@ -21408,10 +21349,8 @@ memperbagian
 memperbagikan
 memperbagusi
 memperbaguskan
-memperbahagi
 memperbahagiai
 memperbahagiakan
-memperbahagikan
 memperbahan
 memperbahang
 memperbahani
@@ -21464,9 +21403,6 @@ memperbambang
 memperbambu
 memperbambui
 memperbambukan
-memperbancuh
-memperbancuhi
-memperbancuhkan
 memperbandar
 memperbandari
 memperbandarkan
@@ -21998,7 +21934,6 @@ mempercakapi
 mempercakapkan
 mempercakar
 mempercakarkan
-mempercakera
 mempercakrawala
 mempercakup
 mempercakupkan
@@ -22796,9 +22731,6 @@ memperfenomena
 memperferi
 memperfestival
 memperfikih
-memperfikir
-memperfikiri
-memperfikirkan
 memperfiktifi
 memperfiktifkan
 memperfilm
@@ -23534,7 +23466,6 @@ memperhorizon
 memperhorizontali
 memperhormati
 memperhormatkan
-memperhospital
 memperhotel
 memperhubung
 memperhubungi
@@ -23771,9 +23702,6 @@ memperjabati
 memperjabatkan
 memperjadi
 memperjadikan
-memperjadual
-memperjaduali
-memperjadualkan
 memperjadwal
 memperjaga
 memperjagai
@@ -24143,7 +24071,6 @@ memperkaleng
 memperkali
 memperkaligrafi
 memperkalikan
-memperkalimah
 memperkalimat
 memperkaluk
 memperkalung
@@ -24676,7 +24603,6 @@ memperlagak
 memperlagakan
 memperlagaki
 memperlagakkan
-memperlagenda
 memperlagikan
 memperlagu
 memperlagui
@@ -25640,7 +25566,6 @@ mempernegeri
 mempernekati
 mempernekatkan
 mempernelayan
-mempernenas
 mempernenda
 mempernenek
 memperneon
@@ -28622,9 +28547,6 @@ mencagak
 mencagaki
 mencagakkan
 mencakari
-mencakera
-mencakerai
-mencakerakan
 mencakram
 mencakrami
 mencakramkan
@@ -29200,9 +29122,6 @@ menemulawakkan
 menenaga
 menenagai
 menenari
-menenas
-menenasi
-menenaskan
 menenda
 menendai
 menendakan
@@ -29299,12 +29218,8 @@ menerompetkan
 menerong
 menerongi
 menerongkan
-menerowong
-menerowongan
 menerowongani
 menerowongankan
-menerowongi
-menerowongkan
 menersieri
 menertibi
 menertutupi
@@ -29419,7 +29334,6 @@ mengagenda
 mengagendai
 mengagendakan
 mengageti
-mengagihkani
 mengagresifi
 mengagustus
 mengagustusi
@@ -29524,9 +29438,6 @@ mengalfabeti
 mengalfabetkan
 mengaligrafi
 mengaligrafikan
-mengalimah
-mengalimahi
-mengalimahkan
 mengalimat
 mengalimati
 mengalimatkan
@@ -29543,8 +29454,6 @@ mengaljabarkan
 mengalkun
 mengalkuni
 mengalkunkan
-mengalmari
-mengalmarikan
 mengalor
 mengalori
 mengalorkan
@@ -31296,9 +31205,6 @@ menghorizonkan
 menghorizontali
 menghortikultura
 menghortikulturai
-menghospital
-menghospitali
-menghospitalkan
 menghotel
 menghoteli
 menghotelkan
@@ -34307,8 +34213,6 @@ peladaan
 peladangan
 pelafal
 pelafalan
-pelagenda
-pelagendaan
 pelagi
 pelagian
 pelahanan
@@ -35513,8 +35417,6 @@ pemergelanganan
 pemeriah
 pemeriahan
 pemeriaman
-pemeribadi
-pemeribadian
 pemeribahasaan
 pemerigi
 pemerigian
@@ -35638,7 +35540,6 @@ pemfestival
 pemfestivalan
 pemfikih
 pemfikihan
-pemfikiranan
 pemfiktif
 pemfiktifan
 pemfilsafatan
@@ -36204,8 +36105,6 @@ pencadanganan
 pencadasan
 pencagak
 pencagakan
-pencakera
-pencakeraan
 pencakraman
 pencakrawalaan
 pencalak
@@ -36592,7 +36491,6 @@ penemporalan
 penemulawakan
 penenar
 penenaran
-penenasan
 penendaan
 penendanganan
 penenekan
@@ -36643,7 +36541,6 @@ penerompah
 penerompahan
 penerompetan
 penerongan
-penerowong
 penerowonganan
 penersier
 penersieran
@@ -36714,8 +36611,6 @@ pengagenda
 pengagendaan
 pengaget
 pengagetan
-pengagihkan
-pengagihkanan
 pengagresif
 pengagresifan
 pengagustusan
@@ -36774,16 +36669,12 @@ pengalfabetan
 pengaligrafi
 pengaligrafian
 pengalim
-pengalimah
-pengalimahan
 pengaliman
 pengalimatan
 pengaliranan
 pengalisan
 pengaljabaran
 pengalkunan
-pengalmari
-pengalmarian
 pengaloran
 pengalpa
 pengalpaan
@@ -37707,8 +37598,6 @@ penghorizonan
 penghorizontal
 penghorizontalan
 penghortikultura
-penghospital
-penghospitalan
 penghotelan
 penghubunganan
 penghuluan
@@ -39447,7 +39336,6 @@ seadang
 seadili
 seadu
 seaduk
-seagih
 seajaib
 seajak
 seajar
@@ -39484,13 +39372,11 @@ sebabat
 sebabit
 sebagai
 sebagi
-sebahagi
 sebahas
 sebaji
 sebakar
 sebalas
 sebalut
-sebancuh
 sebanding
 sebangun
 sebantah
@@ -39709,7 +39595,6 @@ seentak
 seeram
 seerti
 seesak
-sefikir
 sefitnah
 segabung
 segada
@@ -39874,7 +39759,6 @@ seisak
 seisap
 sejabat
 sejadi
-sejadual
 sejaga
 sejagal
 sejahit
@@ -40779,8 +40663,6 @@ teragam
 teragama
 teragar
 teragenda
-teragihi
-teragihkan
 teragui
 teragungi
 teragungkan
@@ -40851,7 +40733,6 @@ teraliri
 teralirkan
 teralis
 teraljabar
-teralmari
 teralpa
 teralpukat
 teralui
@@ -41069,7 +40950,6 @@ terbagaikan
 terbagan
 terbagian
 terbagikan
-terbahagikan
 terbahang
 terbahani
 terbahankan
@@ -41114,8 +40994,6 @@ terbambang
 terbambui
 terbambukan
 terban
-terbancuhi
-terbancuhkan
 terband
 terbandara
 terbandari
@@ -41534,7 +41412,6 @@ tercairkan
 tercakapi
 tercakapkan
 tercakarkan
-tercakera
 tercakram
 tercakrawala
 tercakupkan
@@ -42230,9 +42107,6 @@ terfenomena
 terferi
 terfestival
 terfikih
-terfikiran
-terfikiri
-terfikirkan
 terfilm
 terfilsafat
 terfirasat
@@ -42750,7 +42624,6 @@ terhorizon
 terhormati
 terhormatkan
 terhortikultura
-terhospital
 terhotel
 terhubungan
 terhubungi
@@ -42933,8 +42806,6 @@ terjabatankan
 terjabati
 terjabatkan
 terjadikan
-terjaduali
-terjadualkan
 terjadwal
 terjagai
 terjagakan
@@ -43201,7 +43072,6 @@ terkalender
 terkaleng
 terkaligrafi
 terkalikan
-terkalimah
 terkalimat
 terkalkun
 terkalor
@@ -43872,7 +43742,6 @@ terlagai
 terlagakan
 terlagaki
 terlagakkan
-terlagenda
 terlagui
 terlagukan
 terlahan
@@ -44592,7 +44461,6 @@ ternazar
 ternegara
 ternegeri
 ternelayan
-ternenas
 ternenda
 ternenek
 terneon
@@ -44974,7 +44842,6 @@ terperdukan
 terperempuan
 terpergaulan
 terpergelangan
-terperibadi
 terperibahasa
 terperigi
 terperihi
