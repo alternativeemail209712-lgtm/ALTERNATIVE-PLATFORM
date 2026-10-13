@@ -838,11 +838,11 @@ function buildGuessBlock(guess, wordLength, metrics) {
 
   const rowEl = document.createElement("div");
   rowEl.className = "tileRow";
-  rowEl.style.gap = "0px";
-  // Neighbouring tiles with the same clue are grouped into one colored segment. Purple / pink segments get
-  // rounded outer ends (green stays square, like the reference board).
-  const segGap = metrics.gap; // 2px - the same gap the tile-size fit already budgets for
-  const radius = Math.max(4, Math.round(metrics.tileSize * 0.34)) + "px";
+  rowEl.style.gap = metrics.gap + "px";
+  // Every letter is its own tile (never joined to its neighbours). The shape shows the direction:
+  //   pink   (go backward) = rounded on the LEFT side only,
+  //   purple (go forward)  = rounded on the RIGHT side only,
+  //   green  (correct)     = the usual rounded tile of the other word games.
   for (let c = 0; c < wordLength; c++) {
     const tile = document.createElement("div");
     tile.style.width = metrics.tileSize + "px";
@@ -850,19 +850,11 @@ function buildGuessBlock(guess, wordLength, metrics) {
     tile.style.fontSize = metrics.fontSize + "px";
     if (guess) {
       const code = guess.clue[c];
-      const segStart = c === 0 || guess.clue[c - 1] !== code;
-      const segEnd = c === wordLength - 1 || guess.clue[c + 1] !== code;
-      tile.className = "tile filled fb" + code + (segStart ? " segStart" : "") + (segEnd ? " segEnd" : "");
+      tile.className = "tile filled fb" + code;
       tile.textContent = guess.word[c];
       tile.title = code === 0 ? "Correct letter" : code === 1 ? "Go forward - the hidden letter comes later in the alphabet" : "Go backward - the hidden letter comes earlier in the alphabet";
-      if (code !== 0) {
-        if (segStart) { tile.style.borderTopLeftRadius = radius; tile.style.borderBottomLeftRadius = radius; }
-        if (segEnd) { tile.style.borderTopRightRadius = radius; tile.style.borderBottomRightRadius = radius; }
-      }
-      if (segStart && c > 0) tile.style.marginLeft = segGap + "px";
     } else {
       tile.className = "tile current";
-      if (c > 0) tile.style.marginLeft = segGap + "px";
     }
     rowEl.appendChild(tile);
   }

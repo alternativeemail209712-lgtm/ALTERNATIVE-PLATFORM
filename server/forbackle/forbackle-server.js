@@ -4,7 +4,7 @@
 //     green  = same letter (correct)
 //     purple = go FORWARD  - the hidden letter comes AFTER your letter in the alphabet
 //     pink   = go BACKWARD - the hidden letter comes BEFORE your letter in the alphabet
-// The page groups neighbouring tiles of the same color into one colored segment (rounded ends).
+// Every tile stands alone: pink tiles are rounded on the left, purple tiles on the right, green tiles are the usual shape.
 // Everything else follows BLINDLE: unlimited guesses for the whole chat, an automatic starter
 // word opens each round, unlimited hints, Live / Test / Offline modes, host-set secret word,
 // difficulty tiers, win celebration + leaderboards.

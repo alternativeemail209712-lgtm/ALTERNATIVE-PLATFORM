@@ -460,12 +460,11 @@ button { cursor: pointer; }
 .tile.filled.fb2, .key.fb2, .legendChip.fb2, .legendTile.fb2 { background: var(--fb-back); color: var(--fb-back-ink); border-color: var(--fb-back-dark); box-shadow: inset 0 -3px 0 var(--fb-back-dark); }
 .tile.filled.fb0, .tile.filled.fb1, .tile.filled.fb2,
 .key.fb0, .key.fb1, .key.fb2 { font-weight: 800; }
-/* tiles of one segment touch each other: square inner edges, rounded outer ends (set per tile by the script) */
-.tile.filled.fb0, .tile.filled.fb1, .tile.filled.fb2 { border-radius: 0; }
-.tile.filled.fb0 { border-radius: 0 !important; } /* green segments stay square */
-/* no divider lines inside a segment - only its two outer ends keep the border */
-.tile.filled.fb1:not(.segStart), .tile.filled.fb2:not(.segStart) { border-left-width: 0; }
-.tile.filled.fb1:not(.segEnd), .tile.filled.fb2:not(.segEnd) { border-right-width: 0; }
+/* Each tile stands alone. Direction shows in the shape: pink = rounded LEFT side, purple = rounded RIGHT side,
+   green = the usual all-corners tile. */
+.tile.filled.fb0 { border-radius: 8px; }
+.tile.filled.fb1 { border-radius: 3px 40% 40% 3px / 3px 50% 50% 3px; }
+.tile.filled.fb2 { border-radius: 40% 3px 3px 40% / 50% 3px 3px 50%; }
 
 /* ============================================================
    Host controls (sticky bottom)
