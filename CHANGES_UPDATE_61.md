@@ -10,7 +10,7 @@ FORBACKLE is a BLINDLE copy built on the BETWEEN-O idea (it was cloned from RANG
 | Purple | go **forward** - the hidden letter comes *after* your letter in the alphabet |
 | Pink   | go **backward** - the hidden letter comes *before* your letter in the alphabet |
 
-Neighbouring tiles of the same color are grouped into one segment; purple / pink segments get rounded outer ends, green stays square (like the reference screenshots).
+Every letter is its own tile (tiles are never joined). Pink tiles are rounded on the left side only, purple tiles on the right side only, green tiles have the usual tile shape of the other word games.
 
 **Keyboard.** A small A-M / N-Z reference. No manual coloring, no number row. Every key colors itself from the board (all guesses of the round, not only the visible ones): green if that letter was ever matched in the right spot, otherwise the color it had in the latest guess that used it. Host can switch it off in Settings -> "Auto-color keyboard keys".
 
