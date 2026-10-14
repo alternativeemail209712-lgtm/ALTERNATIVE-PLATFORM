@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GAME CHROME - shared by BLINDLE, CROSSDLE, TWISTLE, ORACLE, COLORBLINDLE, COLORDLE, STRUCTLE, TEXTLE, RANGEDLE, CODEDLE, SHAPEDLE, FORBACKLE.
+   GAME CHROME - shared by BLINDLE, CROSSDLE, TWISTLE, ORACLE, COLORBLINDLE, COLORDLE, STRUCTLE, TEXTLE, RANGEDLE, CODEDLE, SHAPEDLE, FORBACKLE, SHIFTLE.
    Loaded AFTER each game's own stylesheet so it wins where they overlap.
 
    1. The reserved space above the game (TikTok's safe-top zone) now holds a
@@ -20,6 +20,11 @@ body[data-game="structle"]    { --hero-font: "Lilita One", "Fredoka", sans-serif
 body[data-game="textle"]       { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #0E9F45; --hero-spacing: .06em; }
 body[data-game="rangedle"]     { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #7B3FE4; --hero-spacing: .06em; }
 body[data-game="shapedle"]     { --hero-font: "Baloo 2", "Fredoka", sans-serif;         --hero-accent: #F2799F; --hero-spacing: .04em; }
+body[data-game="shiftle"]      { --hero-font: "Baloo 2", "Fredoka", sans-serif;         --hero-accent: #F5A3D0; --hero-spacing: .05em; }
+body[data-game="betweendle"]   { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #8F7413; --hero-spacing: .05em; }
+body[data-game="fixle"]        { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #4E8F5A; --hero-spacing: .07em; }
+body[data-game="comparable"]   { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #4A9FD6; --hero-spacing: .05em; }
+body[data-game="wordle"]       { --hero-font: "Righteous", "Fredoka", sans-serif;       --hero-accent: #2E7D32; --hero-spacing: .07em; }
 body[data-game="forbackle"]    { --hero-font: "Baloo 2", "Fredoka", sans-serif;         --hero-accent: #AE8BFF; --hero-spacing: .05em; }
 body[data-game="codedle"]      { --hero-font: "Lilita One", "Fredoka", sans-serif;      --hero-accent: #E0699C; --hero-spacing: .06em; }
 body[data-game="colordle"]     { --hero-font: "Baloo 2", "Fredoka", sans-serif;         --hero-accent: #2F9E8F; --hero-spacing: .03em; }
@@ -119,3 +124,17 @@ body[data-game="colorblindle"] { --hero-font: "Baloo 2", "Fredoka", sans-serif; 
 .titleFontChip.active{ border-style:solid; border-color:var(--theme-deep); background:var(--theme-surface-2); box-shadow:0 0 0 2px var(--theme-deep) inset; }
 .titleFontChip .tfSample{ max-width:100%; font-size:18px; line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .titleFontChip .tfName{ max-width:100%; font-size:10.5px; font-weight:700; color:var(--theme-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+
+/* ---- update 71: the top toolbar, ribbon and hero can NEVER be squeezed ----
+   .app is a fixed-height column that scrolls. When a round ends the win panel makes the content taller than the
+   screen; a flex column then shrinks every shrinkable child, and a toolbar with overflow:hidden shrinks to a thin
+   clipped strip. Fixed-size header parts keep their full height; the page scrolls instead. */
+.app > .heroBand,
+.app > .topbar,
+.app > .app-header,
+.app > .stk-bar,
+.app > #scoreTickerBar,
+.app > .toastSlot,
+.app > .controls { flex-shrink: 0; }
+.app > .topbar, .app > .app-header { min-height: min-content; }

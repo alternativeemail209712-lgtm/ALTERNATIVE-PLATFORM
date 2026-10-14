@@ -1,4 +1,19 @@
+> **Update 72:** new game FIXLE (Edge-O style: every guess is scored with matching prefix + matching suffix against the secret word; guesses are listed from the highest score to the lowest; a score of twice the word length wins and the winner earns exactly that many points; legend above the board) at `/fixle/`. See `CHANGES_UPDATE_72.md`.
+>
+> **Update 71:** fixed the top toolbar / ribbon being squashed into a thin strip after a round ends (the header parts can no longer shrink; the page scrolls instead). See `CHANGES_UPDATE_71.md`.
+>
+> **Update 70:** the highly customizable LEGENDS SETTINGS panel (position, size, grid of rows x columns, fonts, chip shape, order, texts, colors, extra entries, presets) now also works in WORDLE, BETWEENDLE and COMPARABLE. See `CHANGES_UPDATE_70.md`.
+>
+> **Update 69:** new game COMPARABLE (COMPAR-O style: blue consonant / orange vowel round tiles with comparison symbols; guesses must match the symbol row; green / grey clues; 1 point per fitting guess, 5 for solving) at `/comparable/`, added to the platform that already has BETWEENDLE. See `CHANGES_UPDATE_69.md`.
+>
+> **Update 67:** 🌏 Languages button + popup added to every word game; BETWEENDLE board simplified (gold circles = letters still possible, 2-item legend, out-of-range message). See `CHANGES_UPDATE_67.md`.
+
+> **Update 66:** new game BETWEENDLE (List-O style: every guess shows its alphabetical distance from the secret word and moves the lower / upper bound; legend above the board; 1 point for finding the word) at `/betweendle/`. See `CHANGES_UPDATE_66.md`.
+
+> **Update 65:** new game WORDLE (classic Word-O colors: every letter turns green / yellow / grey; self-coloring keyboard + legend above the board; 1 point per guess, 5 for solving) at `/wordle/` - see `CHANGES_UPDATE_65.md`.
 # TikTok LIVE Game Platform
+> **Update 63:** new game SHIFTLE (every letter turns white, pink or blue - and what the colors mean is SHUFFLED every round; self-coloring keyboard + legend; 1 point per guess, 5 for solving) at `/shiftle/` - see `CHANGES_UPDATE_63.md`.
+>
 > **Update 58:** every game now has 3 hint types with host customisation (Settings -> Hints) and a redesigned Settings workspace - see `CHANGES_UPDATE_58.md`.
 >
 > **Update 57:** Indonesian / Malay cross-language clean-up - see `CHANGES_UPDATE_57.md`.

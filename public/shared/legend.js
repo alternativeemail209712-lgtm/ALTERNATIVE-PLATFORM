@@ -147,6 +147,49 @@
         { id: "hidden", glyph: "?", label: "Meanings are revealed when the round ends", c: { bg: "rgba(127,127,160,.25)", fg: "var(--text, #fff)", bd: "rgba(127,127,160,.5)" } }
       ]
     },
+    wordle: {
+      title: "What the colors mean",
+      items: [
+        { id: "green", glyph: "A", label: "Green — right letter, right spot", c: V("--wd-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "yellow", glyph: "A", label: "Yellow — in the word, wrong spot", c: V("--wd-yellow", "#D9A700", "#1B1B1F", "#A98200") },
+        { id: "gray", glyph: "A", label: "Grey — not in the word", c: V("--wd-gray", "#858589", "#1B1B1F", "#606064") }
+      ]
+    },
+    betweendle: {
+      title: "Legend",
+      items: [
+        { id: "key", glyph: "a", label: "Gold circles — the letters a guess can still start with, between the lower and upper bound. Dimmed letters are out of range.", c: V("--bd-key", "#B8A038", "#1B1B1F", "#8C7A22") },
+        { id: "range", glyph: "!", label: "Outside range — a guess not between the lower and upper bound is skipped, and a short message pops up in the floating window.", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+      ]
+    },
+    fixle: {
+      title: "How the score works",
+      items: [
+        { id: "score", glyph: "12", label: "Score — matching prefix + matching suffix", c: V("--fx-latest", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "prefix", glyph: "S…", label: "Prefix — letters matching from the START", c: V("--fx-row", "#8A8A92", "#121214", "#6A6A72") },
+        { id: "suffix", glyph: "…T", label: "Suffix — letters matching from the END", c: V("--fx-row", "#8A8A92", "#121214", "#6A6A72") },
+        { id: "win", glyph: "2×", label: "Win — score of twice the word length (top row turns green)", c: V("--fx-found", "#4CAF50", "#FFFFFF", "#357A38") },
+        { id: "latest", glyph: "NEW", label: "Dark top row — the newest guess", c: V("--fx-latest", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "list", glyph: "↓", label: "Grey rows — all guesses, highest score first", c: V("--fx-row", "#8A8A92", "#121214", "#6A6A72") },
+        { id: "starter", glyph: "🎲", label: "Starter word — free first guess, no points", c: { bg: "transparent", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "float", glyph: "!", label: "Floating window — announces each new guess", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+      ]
+    },
+    comparable: {
+      title: "What the symbols and colors mean",
+      items: [
+        { id: "green", glyph: "A", label: "Green — correct letter, right spot", c: V("--cm-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "gray", glyph: "A", label: "Grey — incorrect letter", c: V("--cm-gray", "#858589", "#1B1B1F", "#606064") },
+        { id: "blue", glyph: "B", label: "Blue round tile — a consonant", c: V("--cm-blue", "#A9D6FB", "#1B1B1F", "#5B9BD0") },
+        { id: "orange", glyph: "A", label: "Orange round tile — a vowel", c: V("--cm-orange", "#FFB871", "#1B1B1F", "#D98A3A") },
+        { id: "lt", glyph: "<", label: "Between two letters — the right letter is larger (A is smallest, Z is largest)", c: { bg: "rgba(60,40,20,.12)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "gt", glyph: ">", label: "Between two letters — the right letter is smaller", c: { bg: "rgba(60,40,20,.12)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "eq", glyph: "=", label: "Between two letters — both letters are equal", c: { bg: "rgba(60,40,20,.12)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "up", glyph: "\u25B2", label: "Inside a blue tile — the next consonant is larger", c: V("--cm-blue", "#A9D6FB", "#1B1B1F", "#5B9BD0") },
+        { id: "down", glyph: "\u25BC", label: "Inside a blue tile — the next consonant is smaller", c: V("--cm-blue", "#A9D6FB", "#1B1B1F", "#5B9BD0") },
+        { id: "same", glyph: "\u2014", label: "Inside a blue tile — the next consonant is the same", c: V("--cm-blue", "#A9D6FB", "#1B1B1F", "#5B9BD0") }
+      ]
+    },
     crossdle: {
       title: "What the colors mean",
       items: [
@@ -234,7 +277,8 @@
       shape: "rounded", scale: 100, chipScale: 100, rowGap: 6, colGap: 10, maxWidth: 640,
       columns: 0, rows: 0, flow: "row", overflow: "grow", itemLayout: "side", cellFit: "equal", cellAlign: "auto",
       font: "default",
-      items: DEF.items.map(function (d) { return { id: d.id, enabled: true, label: d.label, glyph: d.glyph }; })
+      items: DEF.items.map(function (d) { return { id: d.id, enabled: true, label: d.label, glyph: d.glyph }; }),
+      removed: [] // ids of built-in entries the host deleted (they are not re-added until restored)
     };
   }
   function inList(list, v, fb) {
@@ -246,6 +290,7 @@
     return isFinite(n) ? Math.min(hi, Math.max(lo, Math.round(n))) : fb;
   }
   // Turns whatever was stored/received into a complete valid settings object.
+  function dm0() { return defMap(); }
   function normalize(raw) {
     var d = defaultSettings();
     if (!raw || typeof raw !== "object") return d;
@@ -272,12 +317,17 @@
       cellFit: inList(CELL_FITS, raw.cellFit, "equal"),
       cellAlign: inList(CELL_ALIGNS, raw.cellAlign, "auto"),
       font: inList(FONTS.map(function (f) { return f.id; }), raw.font, "default"),
-      items: []
+      items: [],
+      removed: []
     };
     var dm = defMap(), seen = {};
+    (Array.isArray(raw.removed) ? raw.removed : []).forEach(function (id) {
+      if (typeof id === "string" && dm0()[id] && o.removed.indexOf(id) < 0) o.removed.push(id);
+    });
     (Array.isArray(raw.items) ? raw.items : []).forEach(function (it) {
       if (!it || typeof it.id !== "string" || seen[it.id] || o.items.length >= MAX_ITEMS) return;
       var isDefault = !!dm[it.id];
+      if (isDefault && o.removed.indexOf(it.id) >= 0) return; // deleted by the host
       if (!isDefault && !/^x[a-z0-9]{1,10}$/.test(it.id)) return; // unknown ids from an old version are dropped
       seen[it.id] = 1;
       var n = {
@@ -291,7 +341,7 @@
     });
     // Entries the game has but the saved settings don't know about yet are appended.
     DEF.items.forEach(function (x) {
-      if (!seen[x.id]) o.items.push({ id: x.id, enabled: true, label: x.label, glyph: x.glyph });
+      if (!seen[x.id] && o.removed.indexOf(x.id) < 0) o.items.push({ id: x.id, enabled: true, label: x.label, glyph: x.glyph });
     });
     return o;
   }
@@ -637,6 +687,7 @@
       '<h5>Entries (order, text, colors)</h5>' +
       '<ul class="lgItems" id="lgItems"></ul>' +
       '<div class="lgRow"><button type="button" class="lgBtn" id="lgAdd">+ Add an entry</button>' +
+      '<button type="button" class="lgBtn" id="lgRestore">Restore removed entries</button>' +
       '<button type="button" class="lgBtn" id="lgReset">Reset legend to default</button></div>';
   }
 
@@ -705,9 +756,8 @@
         '<input type="text" class="lgGlyph" maxlength="6" title="Text inside the colored chip" placeholder="chip" value="' + esc(it.glyph) + '">' +
         '<input type="text" class="lgLabel" maxlength="80" title="Text next to the chip" placeholder="Meaning" value="' + esc(it.label) + '">' +
         '<input type="color" class="lgColor" title="Chip color" value="' + colorValue + '">' +
-        (d
-          ? '<button type="button" class="lgMini lgRst" title="Back to the game\'s own color"' + (it.color ? "" : " disabled") + ">↺</button>"
-          : '<button type="button" class="lgMini lgDel" title="Delete this entry">✕</button>');
+        (d ? '<button type="button" class="lgMini lgRst" title="Back to the game\'s own color"' + (it.color ? "" : " disabled") + ">↺</button>" : "") +
+        '<button type="button" class="lgMini lgDel" title="Delete this entry">✕</button>';
       ul.appendChild(li);
 
       // Always edit the CURRENT entry (looked up by id), never a captured object: if the settings object is
@@ -735,11 +785,14 @@
       var del = li.querySelector(".lgDel");
       if (del) del.addEventListener("click", function () {
         for (var k = 0; k < S.items.length; k++) if (S.items[k].id === it.id) { S.items.splice(k, 1); break; }
+        if (dm[it.id] && S.removed.indexOf(it.id) < 0) S.removed.push(it.id); // remember a deleted built-in entry
         commit(true);
       });
     });
     var add = panelRoot.querySelector("#lgAdd");
     if (add) add.disabled = S.items.length >= MAX_ITEMS;
+    var rs = panelRoot.querySelector("#lgRestore");
+    if (rs) { rs.disabled = !(S.removed && S.removed.length); rs.textContent = "Restore removed entries" + (S.removed && S.removed.length ? " (" + S.removed.length + ")" : ""); }
   }
 
   function wirePanel() {
@@ -782,6 +835,14 @@
       if (S.items.length >= MAX_ITEMS) return;
       var id = "x" + Math.random().toString(36).slice(2, 8);
       S.items.push({ id: id, enabled: true, label: "New meaning", glyph: "A", color: "#7B3FE4" });
+      commit(true);
+    });
+    on("lgRestore", "click", function () {
+      var dm = defMap();
+      (S.removed || []).forEach(function (id) {
+        if (dm[id] && S.items.length < MAX_ITEMS) S.items.push({ id: id, enabled: true, label: dm[id].label, glyph: dm[id].glyph });
+      });
+      S.removed = [];
       commit(true);
     });
     on("lgReset", "click", function () { resetAll(); });

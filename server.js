@@ -21,6 +21,11 @@
 //   /codedle/  - CODEDLE   (Socket.IO namespace /codedle)
 //   /shapedle/ - SHAPEDLE  (Socket.IO namespace /shapedle)
 //   /forbackle/ - FORBACKLE (Socket.IO namespace /forbackle)
+//   /shiftle/  - SHIFTLE   (Socket.IO namespace /shiftle)
+//   /wordle/   - WORDLE    (Socket.IO namespace /wordle)
+//   /betweendle/ - BETWEENDLE (Socket.IO namespace /betweendle)
+//   /comparable/ - COMPARABLE (Socket.IO namespace /comparable)
+//   /fixle/ - FIXLE (Socket.IO namespace /fixle)
 //
 // IMPORTANT: "./server/env-bridge.js" is imported FIRST, before any
 // game module. ES module imports are hoisted and evaluated in the
@@ -49,6 +54,11 @@ import { mountRangedle } from "./server/rangedle/rangedle-server.js";
 import { mountCodedle } from "./server/codedle/codedle-server.js";
 import { mountShapedle } from "./server/shapedle/shapedle-server.js";
 import { mountForbackle } from "./server/forbackle/forbackle-server.js";
+import { mountShiftle } from "./server/shiftle/shiftle-server.js";
+import { mountWordle } from "./server/wordle/wordle-server.js";
+import { mountBetweendle } from "./server/betweendle/betweendle-server.js";
+import { mountComparable } from "./server/comparable/comparable-server.js";
+import { mountFixle } from "./server/fixle/fixle-server.js";
 import { mountOracle } from "./server/oracle/oracle-server.js";
 import { mountColorblindle } from "./server/colorblindle/colorblindle-server.js";
 import { mountColordle } from "./server/colordle/colordle-server.js";
@@ -214,6 +224,41 @@ await mountShapedle(app, io, { mountPath: "/shapedle" });
 // Scoring: 1 point per guess on the board, 5 for solving the round. Own Socket.IO namespace /forbackle; reuses
 // BLINDLE's word bank + dictionary (loaded once).
 await mountForbackle(app, io, { mountPath: "/forbackle" });
+
+// SHIFTLE is a BLINDLE copy built on the SHUFFL-O idea: every letter of a guess is colored white, pink or blue, and what the
+// three colors MEAN (correct spot / wrong spot / not in the word) is shuffled again at the start of every round. The keyboard
+// colors itself with the same colors and a legend explains the current round's meanings (host can hide them). Scoring: 1 point
+// per guess on the board, 5 for solving the round. Own Socket.IO namespace /shiftle; reuses BLINDLE's word bank + dictionary
+// (loaded once).
+await mountShiftle(app, io, { mountPath: "/shiftle" });
+
+// WORDLE is a BLINDLE copy with the classic Word-O clue colors: every letter of a guess turns green (right spot), yellow
+// (wrong spot) or grey (not in the word). The keyboard colors itself with the same colors and a legend sits under the
+// floating message window, above the guess board. Scoring: 1 point per guess on the board, 5 for solving the round.
+// Own Socket.IO namespace /wordle; reuses BLINDLE's word bank + dictionary (loaded once).
+await mountWordle(app, io, { mountPath: "/wordle" });
+
+// BETWEENDLE is a BLINDLE copy built on the LIST-O idea: the secret word hides in one big alphabetical word list and every
+// guess shows its DISTANCE from the secret (distance 120 = 119 words between). A guess before the secret becomes the new
+// lower bound, a guess after it the new upper bound; distance 0 = found. A legend above the board explains every part.
+// Scoring: 1 point for the guess that finds the secret word. Own Socket.IO namespace /betweendle; reuses BLINDLE's word bank
+// + dictionary (loaded once).
+await mountBetweendle(app, io, { mountPath: "/betweendle" });
+
+// COMPARABLE is a BLINDLE copy built on the COMPAR-O idea: the board opens with a row of round tiles (blue = consonant,
+// orange = vowel) with comparison signs between them and arrows inside the blue ones; every guess must match that symbol row
+// and its letters turn green (right letter, right spot) or grey (incorrect). The keyboard colors itself with the same colors
+// and a legend explains the symbols and colors. Scoring: 1 point per guess on the board, 5 for solving the round.
+// Own Socket.IO namespace /comparable; reuses BLINDLE's word bank + dictionary (loaded once).
+await mountComparable(app, io, { mountPath: "/comparable" });
+
+// FIXLE is a BLINDLE copy built on the EDGE-O idea: every guess is scored with MATCHING PREFIX + MATCHING SUFFIX against the
+// secret word (letters that match from the start + letters that match from the end). The board lists the guesses from the
+// highest score to the lowest and repeats the newest guess in a darker top row. A score of twice the word length means the exact
+// word was found and the round is won. A legend above the board explains the score and every part of the screen.
+// Scoring: the guess that finds the secret word wins exactly that word's score (2 x its length). Own Socket.IO namespace /fixle;
+// reuses BLINDLE's word bank + dictionary (loaded once).
+await mountFixle(app, io, { mountPath: "/fixle" });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

@@ -100,6 +100,32 @@
       { id: "fwd", label: "Purple", hint: "go forward - the hidden letter comes later (tiles, legend & keys)", std: "#AE8BFF", stdDark: "#8A63E0", vars: ["--fb-fwd"], darkVars: ["--fb-fwd-dark"], inkVars: ["--fb-fwd-ink"] },
       { id: "back", label: "Pink", hint: "go backward - the hidden letter comes earlier (tiles, legend & keys)", std: "#FF9CCB", stdDark: "#E06FA6", vars: ["--fb-back"], darkVars: ["--fb-back-dark"], inkVars: ["--fb-back-ink"] }
     ],
+    shiftle: [
+      { id: "white", label: "White", hint: "one of the three shuffled clues (tiles, legend & keyboard keys)", std: "#FFFFFF", stdDark: "#B9B3A6", vars: ["--sf-white"], darkVars: ["--sf-white-dark"], inkVars: ["--sf-white-ink"] },
+      { id: "pink", label: "Pink", hint: "one of the three shuffled clues (tiles, legend & keyboard keys)", std: "#F5A3D0", stdDark: "#D474A8", vars: ["--sf-pink"], darkVars: ["--sf-pink-dark"], inkVars: ["--sf-pink-ink"] },
+      { id: "blue", label: "Blue", hint: "one of the three shuffled clues (tiles, legend & keyboard keys)", std: "#A9D6FB", stdDark: "#6BA9DC", vars: ["--sf-blue"], darkVars: ["--sf-blue-dark"], inkVars: ["--sf-blue-ink"] }
+    ],
+    betweendle: [
+      { id: "bound", label: "Grey", hint: "lower bound, upper bound and ? rows (the search window)", std: "#8F8F8F", stdDark: "#6E6E6E", vars: ["--bd-bound"], darkVars: ["--bd-bound-dark"], inkVars: ["--bd-bound-ink"] },
+      { id: "found", label: "Green", hint: "the secret word once it is found (distance 0)", std: "#4F8E4F", stdDark: "#376B37", vars: ["--bd-found"], darkVars: ["--bd-found-dark"], inkVars: ["--bd-found-ink"] },
+      { id: "key", label: "Gold", hint: "alphabet circles for the letters still possible", std: "#B8A038", stdDark: "#8C7A22", vars: ["--bd-key"], darkVars: ["--bd-key-dark"], inkVars: ["--bd-key-ink"] }
+    ],
+    fixle: [
+      { id: "row", label: "Grey", hint: "the guess rows, sorted from the highest score to the lowest (and the legend chip)", std: "#8A8A92", stdDark: "#6A6A72", vars: ["--fx-row"], darkVars: ["--fx-row-dark"], inkVars: ["--fx-row-ink"] },
+      { id: "latest", label: "Dark grey", hint: "the newest-guess row at the top and the score badges", std: "#3C3C40", stdDark: "#28282B", vars: ["--fx-latest"], darkVars: ["--fx-latest-dark"], inkVars: ["--fx-latest-ink"] },
+      { id: "found", label: "Green", hint: "the top row once the secret word is found (score = twice the word length)", std: "#4CAF50", stdDark: "#357A38", vars: ["--fx-found"], darkVars: ["--fx-found-dark"], inkVars: ["--fx-found-ink"] }
+    ],
+    comparable: [
+      { id: "green", label: "Green", hint: "right letter, right spot (tiles, legend & keyboard keys)", std: "#2E7D32", stdDark: "#1F5E24", vars: ["--cm-green"], darkVars: ["--cm-green-dark"], inkVars: ["--cm-green-ink"] },
+      { id: "gray", label: "Grey", hint: "incorrect letter (tiles, legend & keyboard keys)", std: "#858589", stdDark: "#606064", vars: ["--cm-gray"], darkVars: ["--cm-gray-dark"], inkVars: ["--cm-gray-ink"] },
+      { id: "blue", label: "Blue", hint: "consonant round tiles in the symbol row (and legend)", std: "#A9D6FB", vars: ["--cm-blue"], inkVars: ["--cm-blue-ink"] },
+      { id: "orange", label: "Orange", hint: "vowel round tiles in the symbol row (and legend)", std: "#FFB871", vars: ["--cm-orange"], inkVars: ["--cm-orange-ink"] }
+    ],
+    wordle: [
+      { id: "green", label: "Green", hint: "right letter, right spot (tiles, legend & keyboard keys)", std: "#2E7D32", stdDark: "#1F5E24", vars: ["--wd-green"], darkVars: ["--wd-green-dark"], inkVars: ["--wd-green-ink"] },
+      { id: "yellow", label: "Yellow", hint: "in the word, wrong spot (tiles, legend & keyboard keys)", std: "#D9A700", stdDark: "#A98200", vars: ["--wd-yellow"], darkVars: ["--wd-yellow-dark"], inkVars: ["--wd-yellow-ink"] },
+      { id: "gray", label: "Grey", hint: "not in the word (tiles, legend & keyboard keys)", std: "#858589", stdDark: "#606064", vars: ["--wd-gray"], darkVars: ["--wd-gray-dark"], inkVars: ["--wd-gray-ink"] }
+    ],
     shapedle: [
       { id: "green", label: "Green", hint: "right letter, right spot (tiles, legend & keys)", std: "#0E9F45", stdDark: "#087A32", vars: ["--sp-green"], darkVars: ["--sp-green-dark"], inkVars: ["--sp-green-ink"] },
       { id: "yellow", label: "Yellow", hint: "in the word, wrong spot (tiles, legend & keys)", std: "#E5B400", stdDark: "#B38C00", vars: ["--sp-yellow"], darkVars: ["--sp-yellow-dark"], inkVars: ["--sp-yellow-ink"] },
