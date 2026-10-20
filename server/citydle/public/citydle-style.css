@@ -402,6 +402,10 @@ button { cursor: pointer; }
   --cd-yellow: #E3B505; --cd-yellow-dark: #A98200; --cd-yellow-ink: #1B1B1F;    /* right country, wrong city */
   --cd-orange: #EE7B30; --cd-orange-dark: #B45514; --cd-orange-ink: #1B1B1F;    /* right continent, wrong country */
   --cd-gray:   #8A8A92; --cd-gray-dark:   #6A6A72; --cd-gray-ink:   #121214;    /* wrong continent */
+  --cd-dir:    #3C3C40; --cd-dir-dark:    #2B2B2E; --cd-dir-ink:    #F3F1E6;    /* the direction badge */
+  --cd-km:     #3C3C40; --cd-km-dark:     #2B2B2E; --cd-km-ink:     #F3F1E6;    /* the distance badge */
+  --cd-frame:  #3C3C40; --cd-frame-dark:  #2B2B2E; --cd-frame-ink:  #FFFFFF;    /* the frame of the newest guess */
+  --cd-ring:   #FFD700;                                                          /* the ring of the winning row */
 }
 
 /* ============================================================
@@ -905,23 +909,36 @@ body[data-game="fixle"] .toolbarRow .lengthBadge {
 .cdLv1 .cdPill, .fxRow.fx-list.cdLv1 .fxPill { background: var(--cd-yellow); color: var(--cd-yellow-ink); }
 .cdLv2 .cdPill, .fxRow.fx-list.cdLv2 .fxPill { background: var(--cd-orange); color: var(--cd-orange-ink); }
 .cdLv3 .cdPill, .fxRow.fx-list.cdLv3 .fxPill { background: var(--cd-gray);   color: var(--cd-gray-ink); }
-/* the newest guess: the darker shade of its own color, with an outline, so it stands out at the very top */
-.cdRow.fx-latest { padding: 3px; border-radius: 9px; background: var(--fx-latest); }
-.cdRow.fx-latest.cdLv0 .fxPill { background: var(--cd-green-dark);  color: var(--cd-green-ink); }
-.cdRow.fx-latest.cdLv1 .fxPill { background: var(--cd-yellow-dark); color: var(--cd-yellow-ink); }
-.cdRow.fx-latest.cdLv2 .fxPill { background: var(--cd-orange-dark); color: var(--cd-orange-ink); }
-.cdRow.fx-latest.cdLv3 .fxPill { background: var(--cd-gray-dark);   color: var(--cd-gray-ink); }
-.cdRow.fx-latest.found { background: var(--cd-green); }
-.cdRow.fx-latest.found .fxPill { background: var(--cd-green); color: var(--cd-green-ink); }
+/* the newest guess: the SAME tile color as every other row (so the colors are always exactly the ones you picked), with a frame around it */
+.cdRow.fx-latest { padding: 3px; border-radius: 9px; background: var(--cd-frame); }
+.cdRow.fx-latest.cdLv0 .fxPill { background: var(--cd-green);  color: var(--cd-green-ink); }
+.cdRow.fx-latest.cdLv1 .fxPill { background: var(--cd-yellow); color: var(--cd-yellow-ink); }
+.cdRow.fx-latest.cdLv2 .fxPill { background: var(--cd-orange); color: var(--cd-orange-ink); }
+.cdRow.fx-latest.cdLv3 .fxPill { background: var(--cd-gray);   color: var(--cd-gray-ink); }
+.cdRow.fx-latest.found { background: var(--cd-ring); }
 .cdRow .cdDir { flex: 0 0 52px; min-width: 0; padding: 0; font-size: 26px; line-height: 1; }
 .cdRow .cdKm { flex: 0 0 100px; min-width: 0; padding: 0 4px; font-size: clamp(12px, 3.6vw, 16px); white-space: nowrap; }
-.cdRow.fx-latest .cdDir, .cdRow.fx-latest .cdKm { background: var(--fx-latest-dark); }
-.cdRow.fx-latest.found .cdDir, .cdRow.fx-latest.found .cdKm { background: var(--cd-green-dark); }
-.cdRow.winner .fxPill { box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.75); }
+.cdRow.winner .fxPill { box-shadow: 0 0 0 3px var(--cd-ring); }
+.cdRow .cdDir { background: var(--cd-dir); color: var(--cd-dir-ink); }
+.cdRow .cdKm { background: var(--cd-km); color: var(--cd-km-ink); }
 
 /* readability tweaks: long city names wrap instead of being cut, the newest row keeps light text on its darker shade */
 .cdPill { padding: 5px 34px 5px 38px; }
 .cdCity { white-space: normal; text-overflow: clip; overflow: visible; font-size: clamp(13px, 3.9vw, 18px); line-height: 1.1; overflow-wrap: anywhere; }
 .cdRow .cdKm { flex-basis: 88px; font-size: clamp(11px, 3.3vw, 15px); }
 .cdColHead .cdColKm { flex-basis: 88px; }
-.cdRow.fx-latest.cdLv1 .fxPill, .cdRow.fx-latest.cdLv2 .fxPill, .cdRow.fx-latest.cdLv3 .fxPill { color: #F3F1E6; }
+
+/* Settings -> City colors */
+.cdcPresets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; }
+.cdcBtn { font-size: 12px; padding: 5px 10px; }
+.cdcGroup { border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; margin: 0 0 10px; }
+.cdcGroup h5 { margin: 0 0 6px; font-size: 13px; }
+.cdcRow { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; }
+.cdcSample { flex: 0 0 38px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font: 800 13px var(--font-display); border: 1px solid rgba(0,0,0,.25); }
+.cdcLabel { flex: 1 1 auto; min-width: 0; }
+.cdcPick { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.cdcPick small { font-size: 10px; opacity: .7; }
+.cdcPick input[type="color"] { width: 38px; height: 24px; padding: 0; border: 1px solid var(--border); border-radius: 6px; background: none; }
+.cdcReset { border: 1px solid var(--border); background: transparent; color: inherit; border-radius: 999px; width: 26px; height: 26px; cursor: pointer; }
+.cdRow.fx-latest.found .cdDir { background: var(--cd-dir); color: var(--cd-dir-ink); }
+.cdRow.fx-latest.found .cdKm { background: var(--cd-km); color: var(--cd-km-ink); }

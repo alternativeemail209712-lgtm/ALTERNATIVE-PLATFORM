@@ -34,6 +34,7 @@ import { resolveHostAvatar, adoptHostAvatar, isHostUser } from "../shared/host-a
 import * as HC from "../shared/hint-config-store.js"; // update 58: three hint types + host hint settings
 import * as WH from "../shared/word-hints.js";
 import { getStarterWord, setStarterWord } from "../shared/starter-word-store.js";
+import { getColors, patchColors, resetColors } from "../shared/citydle-colors-store.js"; // update 95: the host's colors for every part
 
 import { PlatformHub } from "../shared/platform-hub.js";
 function safely(label, fn) {
@@ -661,6 +662,7 @@ function buildStatePayload() {
       hintConfig: HC.publicHintInfo("citydle", game.hintsUsed, game.hintLastAt),
       hintNote: game.hintNote,
       lastRejection: game.lastRejection,
+      colors: getColors(), // update 95: colors of the tiles / badges / frame - the page AND the legend follow them
       starterWord: game.starterWord,
       lastWinInfo: game.lastWinInfo,
       autoContinue: game.autoContinue,
@@ -778,6 +780,14 @@ function handleClientAction(ws, msg) {
       ws.emit("offline_guess_result", result);
       break;
     }
+    case "set_colors":
+      patchColors(payload);
+      broadcastState(true);
+      break;
+    case "reset_colors":
+      resetColors();
+      broadcastState(true);
+      break;
     case "set_starter_word":
       game.starterWord = setStarterWord("citydle", Boolean(payload && payload.on));
       broadcastState();

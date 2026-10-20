@@ -198,6 +198,16 @@ el.leaderboardOverlay.addEventListener("click", (e) => { if (e.target === el.lea
 
 el.helpBtn.addEventListener("click", () => { el.howToOverlay.hidden = false; });
 
+// 🎨 shortcut: opens Settings straight on the "City colors" card
+const cdColorsBtn = document.getElementById("cdColorsBtn");
+if (cdColorsBtn) cdColorsBtn.addEventListener("click", () => {
+  el.settingsBtn.click();
+  setTimeout(() => {
+    if (window.CraftSettings && window.CraftSettings.goTo) window.CraftSettings.goTo("look");
+    const card = document.getElementById("cdColorsSection");
+    if (card && card.scrollIntoView) card.scrollIntoView({ block: "start" });
+  }, 60);
+});
 el.closeHowTo.addEventListener("click", () => { el.howToOverlay.hidden = true; });
 el.closeHowTo2.addEventListener("click", () => { el.howToOverlay.hidden = true; });
 el.howToOverlay.addEventListener("click", (e) => { if (e.target === el.howToOverlay) el.howToOverlay.hidden = true; });
@@ -497,6 +507,7 @@ let lastTilesSignature = "";
 function render(state) {
   lastState = state;
   if (window.ScoreTicker) window.ScoreTicker.update(state); // update 47: scrolling top-scorers ticker
+  if (window.CitydleColors) { CitydleColors.update(state.game.colors, (type, payload) => send(type, payload)); CitydleColors.build(); } // update 95: city colors
   detectWinTransition(state.game);
   renderHeader(state);
   renderModeUI(state.game);

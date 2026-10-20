@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="/shared/settings-shell.css" />
 <link rel="stylesheet" href="/shared/game-colors.css" />
 <link rel="stylesheet" href="/shared/color-shades.css" />
-<script src="/shared/color-shades.js" data-game="citydle"></script>
+<script src="citydle-colors.js"></script>
 <link rel="stylesheet" href="/shared/legend.css" />
 <script src="/shared/legend.js" data-game="citydle"></script>
 <script src="/shared/title-font.js" defer></script>
@@ -53,6 +53,7 @@
         <span class="modeBadge" id="modeBadge">TEST</span>
         <span class="lengthBadge" id="lengthBadge">🌍 cities</span>
         <button class="iconBtn" id="hintBtn" type="button" aria-label="Use a hint">💡</button>
+        <button class="iconBtn" id="cdColorsBtn" type="button" aria-label="Customize colors" title="City colors">🎨</button>
         <button class="iconBtn" id="helpBtn" type="button" aria-label="How to play">❓</button>
         <button class="iconBtn" id="leaderboardBtn" type="button" aria-label="Leaderboard">🏆</button>
         <button class="iconBtn" id="settingsBtn" type="button" aria-label="Settings">⚙️</button>
@@ -226,10 +227,10 @@
         </div>
       </div>
 
-      <div class="drawerSection">
-        <h4>Color shades</h4>
-        <p class="sectionNote">Choose how strong each color looks: green (the right city), yellow (right country), orange (right continent), grey (wrong continent) and the dark direction / distance badges. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away - no new round needed - and every screen connected to this game follows.</p>
-        <div id="shadePicker"></div>
+      <div class="drawerSection" id="cdColorsSection">
+        <h4>City colors</h4>
+        <p class="sectionNote">Pick the color of every part of the game: the four city tiles (and their text), the direction badge, the distance badge, the frame around the newest guess and the ring around the winner. Every change applies right away on every connected screen and is remembered. <strong>The legend always shows the same colors</strong> - change a color here or on a legend chip and the other follows.</p>
+        <div id="cdColorsBody"></div>
       </div>
 
       <div class="drawerSection">
