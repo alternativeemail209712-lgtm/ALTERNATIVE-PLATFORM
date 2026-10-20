@@ -695,6 +695,7 @@ function renderModeUI(g) {
 function renderLengthBadge(g) {
   el.lengthBadge.hidden = !g.showLengthBadge;
   el.lengthBadge.textContent = g.status === "idle" ? "— letters" : g.wordLength + " letters";
+  if (window.LengthPanel) LengthPanel.update(g); // update 90: the shared word length panel
   // keep the Settings switches in step with the server (it is the source of truth)
   el.showLengthBadgeToggle.checked = !!g.showLengthBadge;
   el.showEmptyTilesToggle.checked = !!g.showEmptyTiles;
