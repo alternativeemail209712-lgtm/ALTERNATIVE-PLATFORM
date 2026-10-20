@@ -158,8 +158,8 @@
     betweendle: {
       title: "Legend",
       items: [
-        { id: "key", glyph: "a", label: "Gold circles — the letters a guess can still start with, between the lower and upper bound. Dimmed letters are out of range.", c: V("--bd-key", "#B8A038", "#1B1B1F", "#8C7A22") },
-        { id: "range", glyph: "!", label: "Outside range — a guess not between the lower and upper bound is skipped, and a short message pops up in the floating window.", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+        { id: "key", glyph: "IN", label: "Green letters — the start shared by the lower and upper word; the secret word starts with it too.", c: V("--bd-key", "#2E8B3D", "#F3F1E6", "#1F6A2B") },
+        { id: "range", glyph: "!", label: "Outside range — a guess not between the two bounds is skipped; a message pops up in the floating window.", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
       ]
     },
     fixle: {
@@ -173,6 +173,53 @@
         { id: "list", glyph: "↓", label: "Grey rows — all guesses, highest score first", c: V("--fx-row", "#8A8A92", "#121214", "#6A6A72") },
         { id: "starter", glyph: "🎲", label: "Starter word — free first guess, no points", c: { bg: "transparent", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
         { id: "float", glyph: "!", label: "Floating window — announces each new guess", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+      ]
+    },
+    citydle: {
+      title: "What the colors, arrow and distance mean",
+      items: [
+        { id: "green", glyph: "✓", label: "Green — the right city (round won)", c: V("--cd-green", "#4CAF50", "#FFFFFF", "#357A38") },
+        { id: "yellow", glyph: "A", label: "Yellow — right country, but the wrong city", c: V("--cd-yellow", "#E3B505", "#1B1B1F", "#A98200") },
+        { id: "orange", glyph: "A", label: "Orange — right continent, but the wrong country", c: V("--cd-orange", "#EE7B30", "#1B1B1F", "#B45514") },
+        { id: "gray", glyph: "A", label: "Grey — wrong continent (and so the wrong country)", c: V("--cd-gray", "#8A8A92", "#121214", "#6A6A72") },
+        { id: "arrow", glyph: "↗", label: "Arrow — the direction to guess next, toward the secret city", c: V("--fx-latest", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "km", glyph: "km", label: "Distance — how many kilometers the guessed city is from the secret city", c: V("--fx-latest", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "latest", glyph: "NEW", label: "Framed top row — the newest guess", c: V("--fx-latest", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "list", glyph: "↓", label: "Rows below — all guesses, nearest city first", c: V("--cd-gray", "#8A8A92", "#121214", "#6A6A72") },
+        { id: "score", glyph: "+5", label: "Score — 5 points for the guess that finds the secret city", c: V("--cd-green", "#4CAF50", "#FFFFFF", "#357A38") },
+        { id: "starter", glyph: "🎲", label: "Starter city — free first guess, no points", c: { bg: "transparent", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "float", glyph: "!", label: "Floating window — announces each new guess", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+      ]
+    },
+    linedle: {
+      title: "What the waves, pillars and colors mean",
+      items: [
+        { id: "pillar", glyph: "▮", label: "Pillars — one per letter of the secret word (5 pillars = a 5-letter word)", c: { bg: "rgba(60,40,20,.19)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "blue", glyph: "~", label: "Light-blue wave — the SECRET word: its height at each pillar is the letter there", c: V("--ln-wave", "#8FD3FF", "#06223d", "#4FA8E0") },
+        { id: "white", glyph: "~", label: "White wave — the latest guess, drawn the same way. Win = white sits exactly on blue", c: V("--ln-guess", "#FFFFFF", "#1B1B1F", "#CFD6E4") },
+        { id: "height", glyph: "A↕Z", label: "Height — the lower the line, the closer to A; the higher, the closer to Z (A bottom, Z top)", c: { bg: "rgba(60,40,20,.19)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "green", glyph: "A", label: "Green — right letter, right spot", c: V("--ln-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "yellow", glyph: "A", label: "Yellow — in the word, wrong spot", c: V("--ln-yellow", "#D9A700", "#1B1B1F", "#A98200") },
+        { id: "gray", glyph: "A", label: "Grey — not in the word", c: V("--ln-gray", "#858589", "#1B1B1F", "#606064") },
+        { id: "score", glyph: "+1", label: "Score — 1 point for the guess that solves the round", c: V("--ln-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "reveal", glyph: "★", label: "Round over — the letters appear under the pillars", c: V("--ln-wave", "#8FD3FF", "#06223d", "#4FA8E0") },
+        { id: "float", glyph: "!", label: "Floating window — announces each new guess or a skipped one", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
+      ]
+    },
+    minedle: {
+      title: "What the tiles, marks and colors mean",
+      items: [
+        { id: "num", glyph: "4", label: "Number — how many touching tiles (diagonals too) hold a letter of the secret word", c: { bg: "rgba(60,40,20,.19)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "blue", glyph: "A", label: "Blue (tap once) — the letter IS in the word; every same letter turns blue", c: V("--mn-blue", "#2A5CA8", "#fff", "#1B3F78") },
+        { id: "red", glyph: "A", label: "Red (tap twice) — the letter is NOT in the word", c: V("--mn-red", "#B86B6E", "#fff", "#8E4A4D") },
+        { id: "clear", glyph: "3×", label: "Tap three times — clears the mark (back to plain)", c: { bg: "rgba(60,40,20,.19)", fg: "var(--text, #222)", bd: "var(--border, rgba(0,0,0,.35))" } },
+        { id: "green", glyph: "A", label: "Green — right letter, right spot", c: V("--mn-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "yellow", glyph: "A", label: "Yellow — in the word, wrong spot", c: V("--mn-yellow", "#D9A700", "#1B1B1F", "#A98200") },
+        { id: "gray", glyph: "A", label: "Grey — not in the word", c: V("--mn-gray", "#858589", "#1B1B1F", "#606064") },
+        { id: "score", glyph: "+1", label: "Score — 1 point for the guess that solves the round", c: V("--mn-green", "#2E7D32", "#F3F1E6", "#1F5E24") },
+        { id: "bank", glyph: "AB", label: "Letter bank — all blue letters in one place; build guesses from them (reuse freely). The host can hide it", c: V("--mn-bank", "#1F8A8A", "#fff", "#146363") },
+        { id: "reveal", glyph: "★", label: "Round solved — every tile turns blue or red by itself to reveal which letters are in the word", c: V("--mn-blue", "#2A5CA8", "#fff", "#1B3F78") },
+        { id: "reset", glyph: "↺", label: "Reset marks button — wipes every blue / red mark (the host can hide it in Settings)", c: V("--mn-reset", "#7B4FC9", "#fff", "#57338F") }
       ]
     },
     comparable: {
