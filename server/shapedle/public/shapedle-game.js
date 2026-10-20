@@ -936,6 +936,7 @@ function renderModeUI(g) {
 
 function renderLengthBadge(g) {
   el.lengthBadge.textContent = g.status === "idle" ? "— letters" : g.wordLength + " letters";
+  if (window.LengthPanel) LengthPanel.update(g); // update 90: the shared word length panel
 }
 
 // Tile sizing combines two constraints so guesses always sit on one

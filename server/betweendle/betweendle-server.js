@@ -30,7 +30,7 @@ import { resolveHostAvatar, adoptHostAvatar, isHostUser } from "../shared/host-a
 import * as HC from "../shared/hint-config-store.js"; // update 58: three hint types + host hint settings
 import * as WH from "../shared/word-hints.js";
 import { getStarterWord, setStarterWord } from "../shared/starter-word-store.js";
-import { getLegendShow, setLegendShow } from "../shared/betweendle-settings-store.js";
+import { getLegendShow, setLegendShow, getCardDesign, setCardDesign, resetCardDesign } from "../shared/betweendle-settings-store.js";
 import { dictionaryState, loadDictionary } from "../blindle/blindle-dictionary.js";
 import { buildDifficultyIndex } from "../blindle/blindle-difficulty.js";
 import * as WL from "../shared/word-language.js"; // update 48: word language
@@ -112,9 +112,18 @@ function normalizeGuess(text) {
 // ONE sorted list of every word of the current word bank (all lengths, all ticked languages). Distances are measured in
 // positions of this list. A guess that is a real word but not in the list is still measured (it is placed where it would sit).
 let wordList = [];
+let commonWords = [];
 let wordIndex = new Map();
+// update 76: the list is EVERY word a viewer may guess (the full dictionary of the ticked languages, plus the secret words),
+// not just the ~8,600 curated secret words, so "distance 120" really means 119 real words lie between the guess and the secret.
+// It is rebuilt automatically whenever a dictionary finishes loading or the language changes (see ensureWordList).
+let wordListSignature = "";
 function buildWordList(answers) {
   const set = new Set();
+  const { sets, signature } = WL.guessWordSets(wordLanguage);
+  for (const src of sets) {
+    for (const w of src) if (w.length >= GUESS_MIN_LENGTH && w.length <= 24 && /^[a-z]+$/.test(w)) set.add(w);
+  }
   for (const k of Object.keys(answers || {})) {
     const arr = answers[k];
     if (!Array.isArray(arr)) continue;
@@ -125,6 +134,32 @@ function buildWordList(answers) {
   }
   wordList = [...set].sort();
   wordIndex = new Map(wordList.map((w, i) => [w, i]));
+  wordListSignature = signature;
+  // The curated, everyday secret words only. Starter words, hints and the Test Mode simulator suggest from THESE (the
+  // big dictionary is full of obscure words nobody would recognise).
+  const common = new Set();
+  for (const k of Object.keys(answers || {})) {
+    for (const raw of Array.isArray(answers[k]) ? answers[k] : []) {
+      const w = String(raw).toLowerCase();
+      if (/^[a-z]+$/.test(w)) common.add(w);
+    }
+  }
+  commonWords = [...common].sort();
+}
+// Rebuild the list when a dictionary has (re)loaded since it was built, and re-measure everything already on the board.
+function ensureWordList() {
+  const { signature } = WL.guessWordSets(wordLanguage);
+  if (signature === wordListSignature) return;
+  buildWordList(ANSWER_WORDS);
+  remeasureBoard();
+}
+function remeasureBoard() {
+  if (!game || !game.secretWord) return;
+  for (const g of game.guesses) g.distance = distanceTo(g.word, game.secretWord);
+  for (const k of ["lower", "upper"]) {
+    if (game[k]) game[k].distance = distanceTo(game[k].word, game.secretWord);
+  }
+  if (game.lastGuess) game.lastGuess.distance = distanceTo(game.lastGuess.word, game.secretWord);
 }
 // how many list words come before w (binary search)
 function rankOf(w) {
@@ -152,6 +187,9 @@ function distanceTo(guess, secret) {
   return lessThanGuess - atOrBelowSecret + 1;
 }
 // list words strictly between two words
+function commonBetween(lowWord, highWord) {
+  return commonWords.filter((w) => w > lowWord && w < highWord);
+}
 function wordsBetween(lowWord, highWord) {
   const start = rankOf(lowWord) + (wordIndex.has(lowWord) ? 1 : 0);
   const end = rankOf(highWord);
@@ -230,9 +268,11 @@ const game = {
   // Each is { word, distance, caller, avatarUrl, isStarter } or null while it is still the opening AAA / ZZZ.
   lower: null,
   upper: null,
-  lastGuess: null, // { word, distance, caller } - the newest accepted guess (lights up the alphabet circles)
+  lastGuess: null, // { word, distance, caller } - the newest accepted guess
   // Legend choice (remembered in data/betweendle-settings.json).
   legendShow: getLegendShow(),
+  // The look of the three boxes (update 83) - remembered in data/betweendle-settings.json, shown the same on every screen.
+  cardDesign: getCardDesign(),
   lastWinInfo: null, // { username, points, word } - set the instant a round is won
   recentComments: [],
   usedWords: new Set(),
@@ -275,6 +315,7 @@ function awardPoints(caller, points) {
 
 function processGuess(word, caller) {
   const avatarUrl = knownAvatars.get(caller) || null;
+  ensureWordList();
   const distance = distanceTo(word, game.secretWord);
   game.guesses.push({ word, distance, caller, avatarUrl });
   game.lastGuess = { word, distance, caller };
@@ -329,7 +370,7 @@ function attemptGuess(word, caller) {
 const STARTER_GUESS_LABEL = "🎲 Starter word";
 
 function pickStarterWord() {
-  const pool = wordList.filter((w) => w !== game.secretWord);
+  const pool = commonWords.filter((w) => w !== game.secretWord);
   if (pool.length === 0) return null;
   return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -338,6 +379,7 @@ function seedStarterGuess() {
   if (!game.starterWord) return;
   const starter = pickStarterWord();
   if (!starter) return;
+  ensureWordList();
   const distance = distanceTo(starter, game.secretWord);
   game.guesses.push({ word: starter, distance, caller: STARTER_GUESS_LABEL, avatarUrl: null, isStarter: true });
   game.lastGuess = { word: starter, distance, caller: STARTER_GUESS_LABEL };
@@ -454,9 +496,9 @@ function suggestHint() {
   const lowWord = game.lower ? game.lower.word : START_LOWER;
   const highWord = game.upper ? game.upper.word : START_UPPER;
   const onBoard = new Set(game.guesses.map((g) => g.word));
-  const candidates = wordsBetween(lowWord, highWord).filter(
-    (w) => w !== game.secretWord && !onBoard.has(w) && !game.hintSuggestions.includes(w)
-  );
+  const fits = (w) => w !== game.secretWord && !onBoard.has(w) && !game.hintSuggestions.includes(w);
+  let candidates = commonBetween(lowWord, highWord).filter(fits);
+  if (candidates.length === 0) candidates = wordsBetween(lowWord, highWord).filter(fits);
   if (candidates.length === 0) return;
   const mid = Math.floor(candidates.length / 2);
   const spread = Math.max(0, Math.floor(candidates.length * 0.1));
@@ -730,7 +772,7 @@ function startTestMode() {
       } else if (game.status === "live" && roll < 0.4) {
         const lowWord = game.lower ? game.lower.word : START_LOWER;
         const highWord = game.upper ? game.upper.word : START_UPPER;
-        const pool = wordsBetween(lowWord, highWord);
+        const pool = commonBetween(lowWord, highWord);
         text = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : FAKE_JUNK_WORDS[0];
       } else {
         text = FAKE_JUNK_WORDS[Math.floor(Math.random() * FAKE_JUNK_WORDS.length)];
@@ -755,6 +797,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let nsp = null;
 
 function buildStatePayload() {
+  ensureWordList(); // a dictionary may have finished loading: re-measure before the bounds are sent
   return {
     game: {
       mode: game.mode,
@@ -788,6 +831,7 @@ function buildStatePayload() {
       wordLanguageInfo: WL.describeLanguage(wordLanguage),
       starterWord: game.starterWord,
       legendShow: game.legendShow,
+      cardDesign: game.cardDesign,
       lastWinInfo: game.lastWinInfo,
       autoContinue: game.autoContinue,
       autoContinueDelaySeconds: game.autoContinueDelaySeconds,
@@ -906,6 +950,14 @@ function handleClientAction(ws, msg) {
       game.legendShow = setLegendShow(Boolean(payload && payload.on));
       broadcastState();
       break;
+    case "set_card_design":
+      game.cardDesign = setCardDesign(payload);
+      broadcastState();
+      break;
+    case "reset_card_design":
+      game.cardDesign = resetCardDesign();
+      broadcastState();
+      break;
     case "set_starter_word":
       game.starterWord = setStarterWord("betweendle", Boolean(payload && payload.on));
       broadcastState();
@@ -958,7 +1010,12 @@ function handleClientAction(ws, msg) {
 export async function mountBetweendle(app, io, options = {}) {
   const mountPath = options.mountPath || "/betweendle";
 
-  app.use(mountPath, express.static(path.join(__dirname, "public")));
+  app.use(mountPath, express.static(path.join(__dirname, "public"), {
+  // update 78: always revalidate pages / styles / scripts, so a new deploy shows up immediately (no stale cached CSS or JS)
+  setHeaders(res, filePath) {
+    if (/\.(html|css|js|mjs)$/i.test(filePath)) res.setHeader("Cache-Control", "no-cache");
+  }
+}));
   app.get(mountPath, (req, res) => {
     res.sendFile(path.join(__dirname, "public", "betweendle-index.html"));
   });

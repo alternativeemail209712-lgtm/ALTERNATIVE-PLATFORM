@@ -11,25 +11,28 @@
   href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/shared/theme.css" />
+<link rel="stylesheet" href="/shared/theme.css?v=90" />
 <script src="/shared/theme.js"></script>
 <script src="/shared/session.js"></script>
 <script src="/shared/platform-sync.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="betweendle-style.css" />
-<link rel="stylesheet" href="/shared/game-chrome.css" />
-<link rel="stylesheet" href="/shared/hints.css" />
-<link rel="stylesheet" href="/shared/settings-shell.css" />
-<link rel="stylesheet" href="/shared/game-colors.css" />
-<link rel="stylesheet" href="/shared/color-shades.css" />
-<script src="/shared/color-shades.js" data-game="betweendle"></script>
-<link rel="stylesheet" href="/shared/legend.css" />
-<script src="/shared/legend.js" data-game="betweendle"></script>
+<link rel="stylesheet" href="betweendle-style.css?v=90" />
+<link rel="stylesheet" href="/shared/game-chrome.css?v=90" />
+<link rel="stylesheet" href="/shared/hints.css?v=90" />
+<link rel="stylesheet" href="/shared/settings-shell.css?v=90" />
+<link rel="stylesheet" href="/shared/game-colors.css?v=90" />
+<link rel="stylesheet" href="/shared/color-shades.css?v=90" />
+<link rel="stylesheet" href="/shared/length-panel.css?v=90" />
+<script src="/shared/color-shades.js?v=90" data-game="betweendle"></script>
+<link rel="stylesheet" href="/shared/legend.css?v=90" />
+<script src="/shared/legend.js?v=90" data-game="betweendle"></script>
+<script src="/shared/length-panel-schema.js?v=90"></script>
+<script src="/shared/length-panel.js?v=90" data-game="betweendle" data-no-exact="1"></script>
 <script src="/shared/title-font.js" defer></script>
-<script src="/shared/score-ticker.js"></script>
+<script src="/shared/score-ticker.js?v=90"></script>
 <script src="/shared/word-language.js"></script>
-<script src="/shared/hints.js"></script>
-<script src="/shared/settings-shell.js"></script>
+<script src="/shared/hints.js?v=90"></script>
+<script src="/shared/settings-shell.js?v=90"></script>
 </head>
 <body data-game="betweendle">
   <div class="confettiLayer" id="confettiLayer" aria-hidden="true"></div>
@@ -65,12 +68,13 @@
     <div class="toastSlot"><div class="rejectionToast" id="rejectionToast" hidden></div></div>
 
     <main class="stage" id="stage">
-      <section class="round-card">
+      <section class="round-card bdPanelTarget" id="roundCard">
 
-        <!-- The guess board (like List-O): lower bound, the hidden word "?", upper bound, then the alphabet circles. -->
+
+        <!-- The guess board: three boxes - lower bound, the hidden word (shows the locked prefix, e.g. "IN?"), upper bound.
+             (update 83: the A-Z letter tiles are gone - BETWEENDLE has no keyboard.) -->
         <section class="bdBoard" id="bdBoard" aria-label="Guess board" hidden>
-        <div class="tilesWrap" id="tilesWrap"></div>
-          <div class="bdAlphabet" id="alphabet" aria-label="Letters of the latest guess"></div>
+          <div class="tilesWrap" id="tilesWrap"></div>
           <p class="bdStatus" id="boardStatus" aria-live="polite"></p>
         </section>
         <div class="hintChips" id="hintChips"></div>
@@ -80,8 +84,8 @@
           <p>Solo practice — type your guess in the box below.</p>
         </div>
 
+        <!-- update 84: after a round only the Play again button and the auto-continue countdown remain (centered); the winner is shown in the floating window -->
         <div class="resultBanner" id="resultBanner" hidden>
-          <p id="resultText"></p>
           <button class="btn btnGold" id="playAgainBtn" type="button">Play again</button>
           <p class="autoContinueNote" id="autoContinueNote" hidden></p>
         </div>
@@ -250,8 +254,14 @@
 
       <div class="drawerSection">
         <h4>Color shades</h4>
-        <p class="sectionNote">Choose how strong each board color (grey window rows, green found-word row, gold alphabet circles) looks. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away - no new round needed - and every screen connected to this game changes together.</p>
+        <p class="sectionNote">Choose how strong each board color (grey window rows, green found-word row, green locked-prefix letters) looks. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away - no new round needed - and every screen connected to this game changes together.</p>
         <div id="shadePicker"></div>
+      </div>
+
+      <div class="drawerSection" id="cardDesignSection">
+        <h4>Card design</h4>
+        <p class="sectionNote">Choose how the three boxes (lower bound, hidden word, upper bound) look, then fine-tune the colors, font, size, corners, border, shadow and spacing. Every change applies right away - no new round needed - and every screen connected to this game changes together. Your choice is remembered.</p>
+        <div id="cardDesignPicker"></div>
       </div>
 
       <div class="drawerSection">
@@ -407,7 +417,8 @@
         <li>Your guess updates the <strong>lower bound</strong> (top row, a word that comes <em>before</em> the secret word) or the <strong>upper bound</strong> (bottom row, a word that comes <em>after</em> it), narrowing down the search. The secret word is always hidden in the <strong>?</strong> row between them.</li>
         <li>The <strong>smaller the distance, the closer</strong> you are. If the distance is <strong>0</strong>, you found the secret word and the ? row turns green.</li>
         <li>A guess that falls outside the two bounds is skipped, and a short <em>"Word outside the allowed range"</em> message pops up in the floating window. A word already on the board is skipped too.</li>
-        <li>The <strong>gold alphabet circles</strong> show the letters a guess can still start with (the letters from the lower bound to the upper bound); the rest are dimmed. The legend above the board explains them (the host can hide it in Settings).</li>
+        <li>When the lower and upper words start with the same letters, those letters are <strong>locked</strong>: the secret word must start with them too. They turn <strong>green</strong> in the two bound words, and the middle box shows them followed by a <strong>?</strong> (for example <strong>IN?</strong>). The legend above the board explains it (the host can hide it in Settings).</li>
+        <li>The host can change how the three boxes look (design, colors, font, size, corners, border, shadow, captions) in <strong>Settings → Look &amp; sound → Card design</strong> (14 designs), including the panel behind the boxes.</li>
         <li><strong>Scoring (Live):</strong> 1 point for the guess that finds the secret word.</li>
         <li>💡 unlimited hints: suggest a word from the middle of the window, reveal a letter, or rule out letters. Difficulty (Normal/Medium/Hard/Random) sets how tricky the secret word is.</li>
         <li><strong>Live</strong> = real TikTok chat. <strong>Test</strong> = simulated chat, nothing saved. <strong>Offline</strong> = just you, type guesses directly.</li>
@@ -418,6 +429,6 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/shared/engagement.js"></script>
-  <script src="betweendle-game.js"></script>
+  <script src="betweendle-game.js?v=90"></script>
 </body>
 </html>

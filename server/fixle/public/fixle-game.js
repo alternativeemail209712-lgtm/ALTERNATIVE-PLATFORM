@@ -641,6 +641,7 @@ function renderModeUI(g) {
 
 function renderLengthBadge(g) {
   el.lengthBadge.textContent = g.status === "idle" ? "— letters" : g.wordLength + "-letter word";
+  if (window.LengthPanel) LengthPanel.update(g); // update 90: the shared word length panel
 }
 
 // ------------------------------------------------------------
