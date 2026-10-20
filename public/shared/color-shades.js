@@ -115,12 +115,12 @@
       { id: "latest", label: "Dark grey", hint: "the newest-guess row at the top and the score badges", std: "#3C3C40", stdDark: "#28282B", vars: ["--fx-latest"], darkVars: ["--fx-latest-dark"], inkVars: ["--fx-latest-ink"] },
       { id: "found", label: "Green", hint: "the top row once the secret word is found (score = twice the word length)", std: "#4CAF50", stdDark: "#357A38", vars: ["--fx-found"], darkVars: ["--fx-found-dark"], inkVars: ["--fx-found-ink"] }
     ],
-    citydle: [
-      { id: "green", label: "Green", hint: "the right city (the found city row and the legend)", std: "#4CAF50", stdDark: "#357A38", vars: ["--cd-green"], darkVars: ["--cd-green-dark"], inkVars: ["--cd-green-ink"] },
-      { id: "yellow", label: "Yellow", hint: "right country, wrong city", std: "#E3B505", stdDark: "#A98200", vars: ["--cd-yellow"], darkVars: ["--cd-yellow-dark"], inkVars: ["--cd-yellow-ink"] },
-      { id: "orange", label: "Orange", hint: "right continent, wrong country", std: "#EE7B30", stdDark: "#B45514", vars: ["--cd-orange"], darkVars: ["--cd-orange-dark"], inkVars: ["--cd-orange-ink"] },
-      { id: "gray", label: "Grey", hint: "wrong continent (and so wrong country)", std: "#8A8A92", stdDark: "#6A6A72", vars: ["--cd-gray"], darkVars: ["--cd-gray-dark"], inkVars: ["--cd-gray-ink"] },
-      { id: "latest", label: "Dark grey", hint: "the frame around the newest guess and the arrow / distance badges", std: "#3C3C40", stdDark: "#28282B", vars: ["--fx-latest"], darkVars: ["--fx-latest-dark"], inkVars: ["--fx-latest-ink"] }
+    expandle: [
+      { id: "start", label: "Purple", hint: "the free 3-letter start word", std: "#7B5EA7", stdDark: "#5A4380", vars: ["--ex-start"], darkVars: ["--ex-start-dark"], inkVars: ["--ex-start-ink"] },
+      { id: "carried", label: "Blue", hint: "letters carried over from the row below", std: "#3A7BD5", stdDark: "#2757A3", vars: ["--ex-carried"], darkVars: ["--ex-carried-dark"], inkVars: ["--ex-carried-ink"] },
+      { id: "added", label: "Gold", hint: "the one NEW letter of a row", std: "#F2B01E", stdDark: "#B9820A", vars: ["--ex-added"], darkVars: ["--ex-added-dark"], inkVars: ["--ex-added-ink"] },
+      { id: "frame", label: "Dark grey", hint: "the frame around the newest row", std: "#3C3C40", stdDark: "#28282B", vars: ["--ex-frame"], darkVars: ["--ex-frame-dark"], inkVars: ["--ex-frame-ink"] },
+      { id: "timer", label: "Green", hint: "the round clock and its bar", std: "#2E7D32", stdDark: "#1F5E24", vars: ["--ex-timer"], darkVars: ["--ex-timer-dark"], inkVars: ["--ex-timer-ink"] }
     ],
     linedle: [
       { id: "green", label: "Green", hint: "right letter, right spot (guess tiles, wave dots & legend)", std: "#2E7D32", stdDark: "#1F5E24", vars: ["--ln-green"], darkVars: ["--ln-green-dark"], inkVars: ["--ln-green-ink"] },
