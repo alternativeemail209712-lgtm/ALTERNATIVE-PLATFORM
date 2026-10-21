@@ -194,13 +194,11 @@
     expandle: {
       title: "What the colors and rows mean",
       items: [
-        { id: "start", glyph: "A", label: "Purple — the free start word (3 letters)", c: V("--ex-start", "#7B5EA7", "#FFFFFF", "#5A4380") },
-        { id: "carried", glyph: "A", label: "Blue — letters carried over (shuffled) from the row below", c: V("--ex-carried", "#3A7BD5", "#FFFFFF", "#2757A3") },
-        { id: "added", glyph: "+", label: "Gold — the one NEW letter added in that row", c: V("--ex-added", "#F2B01E", "#1B1B1F", "#B9820A") },
+        { id: "tile", glyph: "A", label: "Letter tiles — every letter of every row has this color", c: V("--ex-tile", "#3A7BD5", "#FFFFFF", "#2757A3") },
         { id: "rule", glyph: "↑", label: "Each row = the row below + exactly ONE new letter, shuffled into a real word (3, 4, 5, 6 letters ...)", c: V("--ex-frame", "#3C3C40", "#F3F1E6", "#28282B") },
         { id: "latest", glyph: "NEW", label: "Framed row on top — the newest word; only the first valid word per row counts", c: V("--ex-frame", "#3C3C40", "#F3F1E6", "#28282B") },
         { id: "timer", glyph: "60", label: "Clock — the round ends when it reaches zero (turns red in the last 10 seconds)", c: V("--ex-timer", "#2E7D32", "#FFFFFF", "#1F5E24") },
-        { id: "score", glyph: "+1", label: "Score — 1 point for every accepted word", c: V("--ex-added", "#F2B01E", "#1B1B1F", "#B9820A") },
+        { id: "score", glyph: "+1", label: "Score — 1 point for every accepted word", c: V("--ex-tile", "#3A7BD5", "#FFFFFF", "#2757A3") },
         { id: "float", glyph: "!", label: "Floating window — announces each new word", c: { bg: "transparent", fg: "var(--coral, #E5484D)", bd: "var(--coral, #E5484D)" } }
       ]
     },
@@ -419,15 +417,17 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
   function hexToRgb(hex) { var n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
-  // CITYDLE: the legend chips of the game's own colors are LINKED to the game (CitydleColors, citydle-colors.js)
-  function cdLinked(id) { return game === "citydle" && window.CitydleColors && window.CitydleColors.legendKey(id); }
-  // when the game colors change (Settings -> City colors, a preset, another screen) refresh the legend editor's color pickers
-  if (game === "citydle") window.addEventListener("citydle-colors", function () {
+  // CITYDLE / EXPANDLE: the legend chips of the game's own colors are LINKED to the game (CitydleColors / ExpandleColors).
+  // Changing a chip color here changes the game, and changing it in the game's Settings changes the chip.
+  function linkedApi() { return game === "citydle" ? window.CitydleColors : game === "expandle" ? window.ExpandleColors : null; }
+  function cdLinked(id) { var api = linkedApi(); return api && api.legendKey(id); }
+  if (game === "citydle" || game === "expandle") window.addEventListener(game + "-colors", function () {
+    var api = linkedApi();
     var lis = document.querySelectorAll("#lgItems li[data-lgid]");
     for (var i = 0; i < lis.length; i++) {
-      var part = window.CitydleColors && window.CitydleColors.legendKey(lis[i].dataset.lgid);
+      var part = api && api.legendKey(lis[i].dataset.lgid);
       var inp = lis[i].querySelector(".lgColor");
-      if (part && inp && document.activeElement !== inp) inp.value = window.CitydleColors.getPart(part);
+      if (part && inp && document.activeElement !== inp) inp.value = api.getPart(part);
     }
   });
   function inkFor(hex) {
@@ -819,7 +819,7 @@
       var d = dm[it.id];
       var li = document.createElement("li");
       li.className = "lgEdit" + (it.enabled ? "" : " off");
-      var colorValue = cdLinked(it.id) ? window.CitydleColors.getPart(cdLinked(it.id)) : (it.color || (d ? resolveHex(d.c.bg) : "#888888"));
+      var colorValue = cdLinked(it.id) ? linkedApi().getPart(cdLinked(it.id)) : (it.color || (d ? resolveHex(d.c.bg) : "#888888"));
       li.dataset.lgid = it.id;
       li.innerHTML =
         '<button type="button" class="lgMini lgUp" title="Move up"' + (idx === 0 ? " disabled" : "") + ">↑</button>" +
@@ -851,9 +851,9 @@
       li.querySelector(".lgOn").addEventListener("change", function (e) { var c = live(); if (!c) return; c.enabled = e.target.checked; li.classList.toggle("off", !c.enabled); commit(false); });
       li.querySelector(".lgGlyph").addEventListener("input", function (e) { var c = live(); if (!c) return; c.glyph = e.target.value; commit(false); });
       li.querySelector(".lgLabel").addEventListener("input", function (e) { var c = live(); if (!c) return; c.label = e.target.value; commit(false); });
-      li.querySelector(".lgColor").addEventListener("input", function (e) { var c = live(); if (!c) return; if (cdLinked(it.id)) { delete c.color; window.CitydleColors.setLegendPart(cdLinked(it.id), e.target.value); commit(false); return; } c.color = e.target.value; commit(false); var r = li.querySelector(".lgRst"); if (r) r.disabled = false; });
+      li.querySelector(".lgColor").addEventListener("input", function (e) { var c = live(); if (!c) return; if (cdLinked(it.id)) { delete c.color; linkedApi().setLegendPart(cdLinked(it.id), e.target.value); commit(false); return; } c.color = e.target.value; commit(false); var r = li.querySelector(".lgRst"); if (r) r.disabled = false; });
       var rst = li.querySelector(".lgRst");
-      if (rst) rst.addEventListener("click", function () { var c = live(); if (!c) return; delete c.color; if (cdLinked(it.id)) window.CitydleColors.resetLegendPart(cdLinked(it.id)); commit(true); });
+      if (rst) rst.addEventListener("click", function () { var c = live(); if (!c) return; delete c.color; if (cdLinked(it.id)) linkedApi().resetLegendPart(cdLinked(it.id)); commit(true); });
       var del = li.querySelector(".lgDel");
       if (del) del.addEventListener("click", function () {
         for (var k = 0; k < S.items.length; k++) if (S.items[k].id === it.id) { S.items.splice(k, 1); break; }
@@ -922,7 +922,7 @@
 
   function mountPanel() {
     // Same mount points the Color shades picker uses; the legend section goes right after it.
-    var picker = document.getElementById("shadePicker") || document.querySelector("[data-color-shades]");
+    var picker = document.getElementById("shadePicker") || document.querySelector("[data-color-shades]") || document.getElementById("cdColorsBody") || document.getElementById("exColorsBody"); // update 96: CITYDLE / EXPANDLE have no Color shades card - the legend settings go right after their own colors card
     if (!picker) return;
     var host = picker.closest(".drawerSection") || picker.closest(".host-card");
     if (!host || document.getElementById("legendSettings")) return;
