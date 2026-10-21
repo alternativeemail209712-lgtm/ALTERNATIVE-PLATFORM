@@ -183,7 +183,7 @@
         { id: "orange", glyph: "A", label: "Orange — right continent, but the wrong country", c: V("--cd-orange", "#EE7B30", "#1B1B1F", "#B45514") },
         { id: "gray", glyph: "A", label: "Grey — wrong continent (and so the wrong country)", c: V("--cd-gray", "#8A8A92", "#121214", "#6A6A72") },
         { id: "arrow", glyph: "↗", label: "Arrow — the direction to guess next, toward the secret city", c: V("--cd-dir", "#3C3C40", "#F3F1E6", "#28282B") },
-        { id: "km", glyph: "km", label: "Distance — how many kilometers the guessed city is from the secret city", c: V("--cd-km", "#3C3C40", "#F3F1E6", "#28282B") },
+        { id: "km", glyph: "km", label: "Distance — how far the guessed city is from the secret city (km or miles, chosen in Settings)", c: V("--cd-km", "#3C3C40", "#F3F1E6", "#28282B") },
         { id: "latest", glyph: "NEW", label: "Framed top row — the newest guess", c: V("--cd-frame", "#3C3C40", "#FFFFFF", "#28282B") },
         { id: "list", glyph: "↓", label: "Rows below — all guesses, nearest city first", c: V("--cd-gray", "#8A8A92", "#121214", "#6A6A72") },
         { id: "score", glyph: "+5", label: "Score — 5 points for the guess that finds the secret city", c: V("--cd-green", "#4CAF50", "#FFFFFF", "#357A38") },
