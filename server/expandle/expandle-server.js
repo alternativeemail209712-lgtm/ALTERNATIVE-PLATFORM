@@ -27,6 +27,7 @@ import { resolveHostAvatar, adoptHostAvatar, isHostUser } from "../shared/host-a
 import * as HC from "../shared/hint-config-store.js"; // update 58: three hint types + host hint settings
 import * as WH from "../shared/word-hints.js";
 import { getStarterWord, setStarterWord } from "../shared/starter-word-store.js";
+import { getColors, patchColors, resetColors } from "../shared/expandle-colors-store.js"; // update 96: one tile color, shared with the legend
 import { isValidShortWord, listShortWords } from "./short-words.js";
 import { dictionaryState, loadDictionary, getWordsOfLength } from "../blindle/blindle-dictionary.js";
 import * as WL from "../shared/word-language.js"; // update 48: word language
@@ -805,6 +806,7 @@ function buildStatePayload() {
       hintNote: game.hintNote,
       lastRejection: game.lastRejection,
       starterWord: game.starterWord,
+      colors: getColors(), // update 96: tile / frame / clock colors - the page AND the legend follow them
       lastWinInfo: game.lastWinInfo,
       autoContinue: game.autoContinue,
       autoContinueDelaySeconds: game.autoContinueDelaySeconds,
@@ -912,6 +914,14 @@ function handleClientAction(ws, msg) {
       ws.emit("offline_guess_result", result);
       break;
     }
+    case "set_colors":
+      patchColors(payload);
+      broadcastState(true);
+      break;
+    case "reset_colors":
+      resetColors();
+      broadcastState(true);
+      break;
     case "set_starter_word":
       game.starterWord = setStarterWord("expandle", Boolean(payload && payload.on));
       broadcastState();

@@ -21,8 +21,7 @@
 <link rel="stylesheet" href="/shared/hints.css" />
 <link rel="stylesheet" href="/shared/settings-shell.css" />
 <link rel="stylesheet" href="/shared/game-colors.css" />
-<link rel="stylesheet" href="/shared/color-shades.css" />
-<script src="/shared/color-shades.js" data-game="expandle"></script>
+<script src="expandle-colors.js"></script>
 <link rel="stylesheet" href="/shared/legend.css" />
 <script src="/shared/legend.js" data-game="expandle"></script>
 <script src="/shared/title-font.js" defer></script>
@@ -227,10 +226,10 @@
         </div>
       </div>
 
-      <div class="drawerSection">
-        <h4>Color shades</h4>
-        <p class="sectionNote">Choose how strong each color looks: the start word, the carried-over letters, the NEW letter, the frame of the newest row and the timer. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away and every screen connected to this game follows. The legend always shows the same colors.</p>
-        <div id="shadePicker"></div>
+      <div class="drawerSection" id="exColorsSection">
+        <h4>Colors</h4>
+        <p class="sectionNote">Every letter tile has the same color. Pick the tile color, the letter color, the tile border, the frame of the newest row and the clock. Every change applies right away on every connected screen and is remembered. <strong>The legend always shows the same colors</strong> - change a color here or on a legend chip and the other follows.</p>
+        <div id="exColorsBody"></div>
       </div>
 
       <div class="drawerSection">
@@ -376,7 +375,7 @@
         <li>Row 2 has 4 letters, row 3 has 5 letters, row 4 has 6 letters… up to as many as you can reach. <strong>Only the first valid word</strong> for each row is accepted, then the next row builds on it. The <strong>newest row is always on top</strong>.</li>
         <li>You have <strong>60 seconds</strong> per round (the host can change it). <strong>Everyone can play</strong>, any number of words.</li>
         <li><strong>Scoring (Live):</strong> <strong>1 point</strong> for every accepted word - 1 point per row you win.</li>
-        <li>Colors: <strong>purple</strong> = the start word, <strong>blue</strong> = letters carried over from the row below, <strong>gold</strong> = the NEW letter of that row. The <strong>legend</strong> above the board explains everything.</li>
+        <li>All letter tiles share one color (the host can change it in Settings). Each row shows who made it, on the left. The <strong>legend</strong> above the board explains everything.</li>
         <li>When time is up (or the word cannot grow any more) the round ends with the top scorer, the round leaderboard and the all-time leaderboard.</li>
         <li>💡 unlimited hints: a word that grows the newest row, a letter you can add, or letters that will NOT work.</li>
         <li><strong>Live</strong> = real TikTok chat. <strong>Test</strong> = simulated chat, nothing saved. <strong>Offline</strong> = type words yourself.</li>

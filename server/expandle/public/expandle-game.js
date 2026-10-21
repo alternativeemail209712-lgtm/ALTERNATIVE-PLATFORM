@@ -552,6 +552,7 @@ function render(state) {
   if (window.ScoreTicker) window.ScoreTicker.update(state); // update 47: scrolling top-scorers ticker
   if (window.WordLanguage) window.WordLanguage.update(state.game, (mode) => send("set_word_language", { mode })); // update 48: word language
   if (el.languageOverlay && el.languageOverlay.hidden) syncLanguageBoxes(state.game); // update 64: languages popup mirrors the server (not while it is open, so ticks are not overwritten)
+  if (window.ExpandleColors) { ExpandleColors.update(state.game.colors, (type, payload) => send(type, payload)); ExpandleColors.build(); } // update 96: one tile color shared with the legend
   detectWinTransition(state.game);
   renderHeader(state);
   renderModeUI(state.game);
@@ -687,33 +688,35 @@ function tileSizeFor(len) {
   return Math.max(16, Math.min(40, Math.floor(room / Math.max(1, len)) - 3));
 }
 function buildBoardRow(kind, entry, g, index) {
+  // update 96: [avatar of who made it - on the LEFT, like the other games] [letter tiles, centered] [empty spacer so the tiles stay centered].
+  // No length number, and every tile has the SAME color (Settings -> Colors, shared with the legend).
   const row = document.createElement("div");
   row.className = "exRow " + (kind === "latest" ? "latest" : "") + (entry.isStarter ? " start" : "");
-  const chip = document.createElement("span");
-  chip.className = "exLen";
-  chip.textContent = String(entry.word.length);
-  chip.title = entry.word.length + " letters";
-  row.appendChild(chip);
-
-  const tiles = document.createElement("div");
-  tiles.className = "exTiles";
-  const size = tileSizeFor(entry.word.length);
-  const addedAt = entry.extra ? entry.word.indexOf(entry.extra) : -1;
-  entry.word.split("").forEach((ch, i) => {
-    const t = document.createElement("span");
-    t.className = "exTile " + (entry.isStarter ? "tStart" : i === addedAt ? "tAdded" : "tCarried");
-    t.textContent = ch.toUpperCase();
-    t.style.width = size + "px";
-    t.style.height = size + "px";
-    t.style.fontSize = Math.max(11, Math.round(size * 0.58)) + "px";
-    tiles.appendChild(t);
-  });
-  row.appendChild(tiles);
 
   const who = document.createElement("span");
   who.className = "exWho";
   if (!entry.isStarter) who.appendChild(buildAvatarNode(entry.caller, entry.avatarUrl, 26, 13, "guessAvatar fxAvatar"));
   row.appendChild(who);
+
+  const tiles = document.createElement("div");
+  tiles.className = "exTiles";
+  const size = tileSizeFor(entry.word.length);
+  entry.word.split("").forEach((ch) => {
+    const t = document.createElement("span");
+    t.className = "exTile";
+    t.textContent = ch.toUpperCase();
+    t.style.width = "calc(" + size + "px * var(--ex-tile-scale, 1))";
+    t.style.height = "calc(" + size + "px * var(--ex-tile-scale, 1))";
+    t.style.fontSize = "calc(" + Math.max(11, Math.round(size * 0.58)) + "px * var(--ex-tile-scale, 1))";
+    tiles.appendChild(t);
+  });
+  row.appendChild(tiles);
+
+  const spacer = document.createElement("span");
+  spacer.className = "exSpacer";
+  spacer.setAttribute("aria-hidden", "true");
+  row.appendChild(spacer);
+
   row.title = entry.isStarter ? "Start word (free)" : entry.word.toUpperCase() + " — +" + String(entry.extra || "").toUpperCase() + " by " + entry.caller + " (+1 point)";
   return row;
 }
@@ -744,8 +747,8 @@ function renderTiles(g) {
 function renderBoardStatus(g) {
   const list = g.guesses || [];
   const top = list.length ? list[list.length - 1] : null;
-  if (g.status === "live" && top) {
-    el.exPrompt.innerHTML = "Next: a <b>" + (top.word.length + 1) + "-letter</b> word from <b>" + escapeHtml(top.word.toUpperCase()) + "</b> + 1 new letter";
+  if (g.status === "live") {
+    el.exPrompt.textContent = ""; // update 96: the "Next: a n-letter word ..." line is gone
   } else if (g.status === "won" || g.status === "lost") {
     const w = g.lastWinInfo;
     el.exPrompt.textContent = g.endReason === "dead_end" ? "No longer word is possible!" : g.endReason === "max" ? "Longest word reached!" : g.endReason === "host" ? "Round ended" : "⏱ Time's up!";

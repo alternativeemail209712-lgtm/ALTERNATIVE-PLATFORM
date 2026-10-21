@@ -397,12 +397,11 @@ button { cursor: pointer; }
   --fx-row:    #8A8A92; --fx-row-dark:    #6A6A72; --fx-row-ink:    #121214;   /* the sorted guess rows (light grey) */
   --fx-latest: #3C3C40; --fx-latest-dark: #28282B; --fx-latest-ink: #F3F1E6;   /* the newest-guess row + the score badges (dark grey) */
   --fx-found:  #4CAF50; --fx-found-dark:  #357A38; --fx-found-ink:  #FFFFFF;   /* the found secret word (green) */
-  /* EXPANDLE tile / frame / timer colors (retuned by "Color shades" -> expandle; the legend reads the same variables) */
-  --ex-start:   #7B5EA7; --ex-start-dark:   #5A4380; --ex-start-ink:   #FFFFFF;   /* the free start word */
-  --ex-carried: #3A7BD5; --ex-carried-dark: #2757A3; --ex-carried-ink: #FFFFFF;   /* letters carried over from the row below */
-  --ex-added:   #F2B01E; --ex-added-dark:   #B9820A; --ex-added-ink:   #1B1B1F;   /* the one NEW letter of a row */
+  /* EXPANDLE colors (update 96): ONE tile color; set by expandle-colors.js from Settings -> Colors, the legend reads the same variables */
+  --ex-tile:    #3A7BD5; --ex-tile-dark:    #2757A3; --ex-tile-ink:    #FFFFFF; --ex-tile-bd: #2757A3;   /* every letter tile */
   --ex-frame:   #3C3C40; --ex-frame-dark:   #28282B; --ex-frame-ink:   #F3F1E6;   /* the frame of the newest row */
   --ex-timer:   #2E7D32; --ex-timer-dark:   #1F5E24; --ex-timer-ink:   #FFFFFF;   /* the round clock */
+  --ex-bw: 0px; --ex-radius: 7px; --ex-tile-scale: 1;
 }
 
 /* ============================================================
@@ -905,10 +904,23 @@ body[data-game="fixle"] .toolbarRow .lengthBadge {
 @keyframes exIn { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
 .exLen { justify-self: center; min-width: 28px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(0,0,0,.16); font: 800 12px var(--font-display); display: flex; align-items: center; justify-content: center; }
 .exTiles { display: flex; justify-content: center; align-items: center; gap: 3px; min-width: 0; }
-.exTile { display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; font-family: var(--font-display); font-weight: 800; box-shadow: 0 2px 0 rgba(0,0,0,.22); flex: 0 0 auto; }
-.exTile.tStart { background: var(--ex-start); color: var(--ex-start-ink); }
-.exTile.tCarried { background: var(--ex-carried); color: var(--ex-carried-ink); }
-.exTile.tAdded { background: var(--ex-added); color: var(--ex-added-ink); box-shadow: 0 0 0 2px var(--ex-added-dark), 0 2px 0 rgba(0,0,0,.22); }
+.exTile { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; border-radius: var(--ex-radius); border: var(--ex-bw) solid var(--ex-tile-bd); background: var(--ex-tile); color: var(--ex-tile-ink); font-family: var(--font-display); font-weight: 800; box-shadow: 0 2px 0 rgba(0,0,0,.22); flex: 0 0 auto; }
+.exSpacer { display: block; }
 .exWho { justify-self: center; display: flex; align-items: center; }
 @media (prefers-reduced-motion: reduce) { .exRow.latest, .exTimer.low .exTimerClock { animation: none; } }
 .exWho .fxAvatar, .exWho .guessAvatar { position: static !important; transform: none !important; margin: 0 !important; left: auto !important; top: auto !important; flex: 0 0 auto; }
+
+/* update 96: Settings -> Colors controls (same look as CITYDLE's) */
+.cdcPresets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; }
+.cdcBtn { font-size: 12px; padding: 5px 10px; }
+.cdcGroup { border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; margin: 0 0 10px; }
+.cdcRow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; }
+.cdcSample { flex: 0 0 38px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font: 800 13px var(--font-display); border: 1px solid rgba(0,0,0,.25); }
+.cdcLabel { flex: 1 1 140px; min-width: 0; }
+.cdcPick { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.cdcPick small { font-size: 10px; opacity: .7; }
+.cdcPick input[type="color"] { width: 38px; height: 24px; padding: 0; border: 1px solid var(--border); border-radius: 6px; background: none; }
+.cdcReset { border: 1px solid var(--border); background: transparent; color: inherit; border-radius: 999px; width: 26px; height: 26px; cursor: pointer; }
+.cdcRange { flex: 1 1 150px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cdcRange input[type="range"] { flex: 1 1 auto; min-width: 0; }
+.cdcVal { min-width: 46px; text-align: right; font-size: 12px; opacity: .8; }
