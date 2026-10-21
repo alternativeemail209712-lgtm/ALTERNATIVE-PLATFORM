@@ -27,6 +27,7 @@ import { resolveHostAvatar, adoptHostAvatar, isHostUser } from "../shared/host-a
 import * as HC from "../shared/hint-config-store.js"; // update 58: three hint types + host hint settings
 import * as WH from "../shared/word-hints.js";
 import { getStarterWord, setStarterWord } from "../shared/starter-word-store.js";
+import { getOption, setOption } from "../shared/game-options-store.js"; // update 98: start length / max length / difficulty
 import { getColors, patchColors, resetColors } from "../shared/expandle-colors-store.js"; // update 96: one tile color, shared with the legend
 import { isValidShortWord, listShortWords } from "./short-words.js";
 import { dictionaryState, loadDictionary, getWordsOfLength } from "../blindle/blindle-dictionary.js";
@@ -196,7 +197,10 @@ function chainDepth(base, cap) {
   return best;
 }
 const GUESS_MIN_LENGTH = 3;
-const START_LENGTH = 3;
+const START_LENGTH = 3; // the standard start-word length (the host can change it in Settings -> Start word length)
+const MIN_START_LENGTH = 3;
+const MAX_START_LENGTH = 5;
+const MIN_MAX_LENGTH = 6; // the lowest "Maximum word length" the host can pick (0 = automatic)
 
 // ---- WORD LANGUAGE (update 48) -------------------------------------------------------------
 // The host picks the word language in Settings (English / Indonesian / Bahasa Melayu / 4 mixes).
@@ -242,6 +246,11 @@ const game = {
   mode: "test",
   status: "idle",
   roundSeconds: DEFAULT_ROUND_SECONDS,
+  // update 98: host options (remembered in data/game-options.json)
+  startLength: cleanStartLength(getOption("expandle", "startLength", 3)),   // 3, 4 or 5 letters; 0 = a random 3-5 every round
+  maxLength: cleanMaxLength(getOption("expandle", "maxLength", 0)),         // 0 = automatic (as long as the dictionary allows)
+  difficulty: cleanDifficulty(getOption("expandle", "difficulty", "normal")), // how the start word is picked
+  activeStartLength: START_LENGTH,                                           // the start length of the round that is running
   roundEndsAt: null, // epoch ms - when the running round's clock reaches zero
   roundStartedAt: null,
   guesses: [],
@@ -275,24 +284,50 @@ const game = {
   rejectionToastSeconds: DEFAULT_REJECTION_TOAST_SECONDS
 };
 
+function cleanStartLength(v) {
+  const n = Math.round(Number(v));
+  if (n === 0) return 0;
+  return Number.isFinite(n) ? Math.min(MAX_START_LENGTH, Math.max(MIN_START_LENGTH, n)) : START_LENGTH;
+}
+function cleanMaxLength(v) {
+  const n = Math.round(Number(v));
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  return Math.max(MIN_MAX_LENGTH, n);
+}
+function cleanDifficulty(v) { return ["normal", "medium", "hard", "random"].includes(v) ? v : "normal"; }
+// the longest word of a round: the host's cap (never below start length + 1) or what the dictionary allows
+function effectiveMax() {
+  const cap = game.maxLength > 0 ? Math.min(game.maxLength, MAX_WORD_LENGTH) : MAX_WORD_LENGTH;
+  return Math.max(cap, Math.min(MAX_WORD_LENGTH, game.activeStartLength + 1));
+}
+
 function clampRoundSeconds(n) {
   const v = Math.round(Number(n));
   if (!Number.isFinite(v)) return DEFAULT_ROUND_SECONDS;
   return Math.min(MAX_ROUND_SECONDS, Math.max(MIN_ROUND_SECONDS, v));
 }
 
-// The start word of a round: a random real 3-letter word that can grow for several rows (so a round is never a dead end).
+// The start word of a round: a random real word of the chosen start length (3 by default) that can grow, picked by the difficulty:
+//   normal = a common word that can grow for many rows      medium = any word that grows for 3-5 rows
+//   hard   = a word that dead-ends after only 1-2 rows       random = any word that can grow at least once
 function pickStartWord() {
-  const pool = wordsOfLength(START_LENGTH);
+  const len = game.startLength === 0 ? MIN_START_LENGTH + Math.floor(Math.random() * (MAX_START_LENGTH - MIN_START_LENGTH + 1)) : game.startLength;
+  game.activeStartLength = len;
+  const full = wordsOfLength(len);
+  const common = wordList.filter((w) => w.length === len);
+  const pool = game.difficulty === "normal" && common.length >= 30 ? common : full;
   if (pool.length === 0) return null;
+  const ok = (d) => game.difficulty === "medium" ? d >= 3 && d <= 5 : game.difficulty === "hard" ? d >= 1 && d <= 2 : game.difficulty === "random" ? d >= 1 : d >= 6;
   let best = null;
   let bestDepth = -1;
-  for (let attempt = 0; attempt < 60; attempt++) {
+  for (let attempt = 0; attempt < 90; attempt++) {
     const w = pool[Math.floor(Math.random() * pool.length)];
-    if (game.usedWords.has(w) && attempt < 40) continue;
+    if (game.usedWords.has(w) && attempt < 60) continue;
     const d = chainDepth(w, 7);
-    if (d > bestDepth) { best = w; bestDepth = d; }
-    if (d >= 6) break;
+    if (ok(d)) { best = w; bestDepth = d; break; }
+    // fallback: the closest to what the difficulty wants (hard wants the SHORTEST chain that still grows, the others the longest)
+    const score = game.difficulty === "hard" ? (d >= 1 ? 100 - d : -1) : d;
+    if (score > bestDepth) { best = w; bestDepth = score; }
   }
   const pick = best || pool[0];
   game.usedWords.add(pick);
@@ -333,7 +368,7 @@ function processGuess(word, extra, caller) {
   game.hintSuggestions = [];
   game.hintNote = null;
   // the word can not grow any further: end the round right away
-  if (word.length >= MAX_WORD_LENGTH) endRound("max");
+  if (word.length >= effectiveMax()) endRound("max");
   else if (nextWordsFor(word).length === 0) endRound("dead_end");
 }
 
@@ -429,6 +464,9 @@ function applySettings(settings) {
     }
   }
   if (settings.roundSeconds !== undefined) game.roundSeconds = clampRoundSeconds(settings.roundSeconds);
+  if (settings.startLength !== undefined) game.startLength = setOption("expandle", "startLength", cleanStartLength(settings.startLength));
+  if (settings.maxLength !== undefined) game.maxLength = setOption("expandle", "maxLength", cleanMaxLength(settings.maxLength));
+  if (settings.difficulty !== undefined) game.difficulty = setOption("expandle", "difficulty", cleanDifficulty(settings.difficulty));
   if (typeof autoContinue === "boolean") game.autoContinue = autoContinue;
   if (autoContinueDelaySeconds !== undefined) {
     const v = Number(autoContinueDelaySeconds);
@@ -445,8 +483,9 @@ function playAgain() {
 // The host types the start word of the round (a real 3-letter word).
 function setSecretWord(rawWord) {
   const word = normalizeGuess(rawWord);
-  if (word.length !== START_LENGTH) return { ok: false, error: `The start word must have exactly ${START_LENGTH} letters.` };
+  if (word.length < MIN_START_LENGTH || word.length > MAX_START_LENGTH) return { ok: false, error: `The start word must have ${MIN_START_LENGTH} to ${MAX_START_LENGTH} letters.` };
   if (!isValidGuessWord(word)) return { ok: false, error: "That's not in the word list." };
+  game.activeStartLength = word.length;
   startRound(word);
   return { ok: true };
 }
@@ -792,7 +831,11 @@ function buildStatePayload() {
         word: g.word, extra: g.extra, caller: g.caller, isStarter: Boolean(g.isStarter),
         avatarUrl: g.isStarter ? hostAvatarUrl : g.avatarUrl
       })),
-      nextLength: top ? top.word.length + 1 : START_LENGTH,
+      nextLength: top ? top.word.length + 1 : game.activeStartLength,
+      startLength: game.startLength,
+      maxLengthSetting: game.maxLength,
+      difficulty: game.difficulty,
+      minStartLength: MIN_START_LENGTH, maxStartLength: MAX_START_LENGTH, minMaxLength: MIN_MAX_LENGTH,
       lastGuess: game.lastGuess,
       lastEvent: game.lastEvent,
       guessesMade: game.guesses.filter((g) => !g.isStarter).length,
@@ -813,7 +856,8 @@ function buildStatePayload() {
       leaderboardShowSeconds: game.leaderboardShowSeconds,
       rejectionToastSeconds: game.rejectionToastSeconds,
       autoContinueSecondsLeft: game.autoContinueAt ? Math.max(0, Math.ceil((game.autoContinueAt - Date.now()) / 1000)) : 0,
-      maxLength: MAX_WORD_LENGTH,
+      maxLength: effectiveMax(),
+      dictionaryMaxLength: MAX_WORD_LENGTH,
       wordLanguage
     },
     roundLeaderboard: getLeaderboard(game.roundScores),

@@ -214,6 +214,19 @@
         </select>
         <p class="sectionNote">Decides how famous the secret city is. The city list covers more than 500 cities on every continent; chat can guess any city on that list (in English, with or without spaces and accents).</p>
       </div>
+      <div class="drawerSection">
+        <h4>Secret city region</h4>
+        <p class="sectionNote">Tick the continents the SECRET city may come from (at least one). Chat can still guess any city in the world. Takes effect when you tap Apply; your choice is remembered.</p>
+        <div id="regionBox"></div>
+      </div>
+      <div class="drawerSection">
+        <h4>Distance unit</h4>
+        <select id="distanceUnitSelect" class="selectInput">
+          <option value="km" selected>Kilometers (km)</option>
+          <option value="mi">Miles (mi)</option>
+        </select>
+        <p class="sectionNote">Only changes how distances are shown on the board, in the floating message and in messages. It applies right away on every screen and is remembered.</p>
+      </div>
 
       <div class="drawerSection">
         <label class="switchRow">
@@ -253,8 +266,17 @@
       </div>
 
       <div class="drawerSection">
+        <h4>Strict fit</h4>
+        <label class="switchRow">
+          <input type="checkbox" id="strictFitToggle" />
+          <span class="switchTrack"><span class="switchThumb"></span></span>
+          <span class="switchLabel">Only accept cities that fit the earlier clues</span>
+        </label>
+        <p class="sectionNote">Off (default): any city of the list is accepted, so chat can probe freely. On: a city must agree with EVERY guess already on the board - the same color and about the same distance (within 10%) as the secret city would have produced - otherwise it is skipped with a message in the floating window. The secret city itself always passes. Applies right away; your choice is remembered.</p>
+      </div>
+      <div class="drawerSection">
         <h4>Floating message window</h4>
-        <p class="sectionNote">The small window above the legend and the board. It announces each new guess with its score and shows a short message whenever a guess is skipped.</p>
+        <p class="sectionNote">The small window above the legend and the board. It announces each new guess with its score and shows a short message whenever a guess is skipped (for example by Strict fit).</p>
         <div class="row">
           <label class="fieldLabel delayLabel">Show floating message for (seconds)</label>
           <input type="number" id="rejectionToastShowInput" class="textInput selectNarrow" min="1" max="30" value="4" />
@@ -353,7 +375,7 @@
       <ul class="howToList">
         <li>Guess the <strong>secret city</strong>. <strong>Unlimited guesses</strong>, anyone can play, anytime. Type any real city (any size, anywhere in the world).</li>
         <li>Every guess is colored: <strong>green</strong> = the right city, <strong>yellow</strong> = the right country but the wrong city, <strong>orange</strong> = the right continent but the wrong country, <strong>grey</strong> = the wrong continent (and so the wrong country).</li>
-        <li>Each guess also shows an <strong>arrow</strong> (the direction to guess next, toward the secret city) and the <strong>distance in km</strong> from the secret city.</li>
+        <li>Each guess also shows an <strong>arrow</strong> (the direction to guess next, toward the secret city) and the <strong>distance</strong> (km or miles - the host's choice) from the secret city.</li>
         <li>Guesses are listed from the <strong>nearest to the farthest</strong> city. The <strong>newest guess</strong> is repeated in a highlighted row at the very top (it turns green when the city is found).</li>
         <li>A city already on the board is skipped. The small <strong>floating window</strong> above the legend announces every new guess.</li>
         <li>The <strong>legend</strong> above the board explains every color and column (the host can customize or hide it).</li>

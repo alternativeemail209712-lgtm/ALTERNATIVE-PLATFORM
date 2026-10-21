@@ -23,6 +23,9 @@ const el = {
   modeBadge: document.getElementById("modeBadge"),
   lengthBadge: document.getElementById("lengthBadge"),
   roundSecondsInput: document.getElementById("roundSecondsInput"),
+  startLengthSelect: document.getElementById("startLengthSelect"),
+  maxLengthSelect: document.getElementById("maxLengthSelect"),
+  difficultySelect: document.getElementById("difficultySelect"),
   exTimer: document.getElementById("exTimer"),
   exTimerFill: document.getElementById("exTimerFill"),
   exTimerClock: document.getElementById("exTimerClock"),
@@ -163,6 +166,22 @@ let stagedMode = "test";
 function syncStagedSettingsFromState(g) {
   stagedMode = g.mode;
   if (el.roundSecondsInput && document.activeElement !== el.roundSecondsInput) el.roundSecondsInput.value = String(g.roundSeconds || 60);
+  // update 98: start-word length, maximum word length and difficulty (staged until the host taps Apply)
+  if (el.startLengthSelect && document.activeElement !== el.startLengthSelect) el.startLengthSelect.value = String(g.startLength === undefined ? 3 : g.startLength);
+  if (el.maxLengthSelect) {
+    const dictMax = g.dictionaryMaxLength || 12;
+    const lo = g.minMaxLength || 6;
+    const sig = lo + "-" + dictMax;
+    if (el.maxLengthSelect.dataset.sig !== sig) {
+      el.maxLengthSelect.dataset.sig = sig;
+      el.maxLengthSelect.innerHTML = "";
+      const auto = document.createElement("option"); auto.value = "0"; auto.textContent = "Automatic — as long as the dictionary allows (up to " + dictMax + ")";
+      el.maxLengthSelect.appendChild(auto);
+      for (let n = lo; n <= dictMax; n++) { const o = document.createElement("option"); o.value = String(n); o.textContent = n + " letters"; el.maxLengthSelect.appendChild(o); }
+    }
+    if (document.activeElement !== el.maxLengthSelect) el.maxLengthSelect.value = String(g.maxLengthSetting || 0);
+  }
+  if (el.difficultySelect && document.activeElement !== el.difficultySelect) el.difficultySelect.value = g.difficulty || "normal";
   el.autoContinueToggle.checked = g.autoContinue;
   el.delayInput.value = g.autoContinueDelaySeconds;
   el.leaderboardShowInput.value = g.leaderboardShowSeconds;
@@ -325,6 +344,9 @@ el.applyBtn.addEventListener("click", () => {
   send("apply_settings", {
     mode: stagedMode,
     roundSeconds: Number(el.roundSecondsInput.value) || 60,
+    startLength: el.startLengthSelect ? Number(el.startLengthSelect.value) : undefined,
+    maxLength: el.maxLengthSelect ? Number(el.maxLengthSelect.value) : undefined,
+    difficulty: el.difficultySelect ? el.difficultySelect.value : undefined,
     autoContinue: el.autoContinueToggle.checked,
     autoContinueDelaySeconds: Number(el.delayInput.value) || 3
   });

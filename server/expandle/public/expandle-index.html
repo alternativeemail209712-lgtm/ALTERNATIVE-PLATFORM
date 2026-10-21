@@ -37,7 +37,7 @@
 
     <div class="heroBand" id="heroBand">
       <h1 class="heroTitle">EXPANDLE</h1>
-      <p class="heroTagline">Start from a 3-letter word. Shuffle its letters, add ONE new letter and make a longer real word - again and again, before the clock runs out. Your chat plays live!</p>
+      <p class="heroTagline">Start from a short word. Shuffle its letters, add ONE new letter and make a longer real word - again and again, before the clock runs out. Your chat plays live!</p>
     </div>
 
     <header class="topbar">
@@ -116,7 +116,7 @@
             <button id="connectBtnBottom" class="btn btnPrimary" type="button">Connect</button>
           </div>
           <div class="row">
-            <input id="setAnswerInputLive" class="textInput" placeholder="Set the 3-letter start word…" autocapitalize="off" autocorrect="off" spellcheck="false" />
+            <input id="setAnswerInputLive" class="textInput" placeholder="Set the start word (3-5 letters)…" autocapitalize="off" autocorrect="off" spellcheck="false" />
             <button id="setAnswerBtnLive" class="btn btnGhost" type="button">Set</button>
           </div>
           <p class="miniStatus" id="setAnswerErrorLive"></p>
@@ -125,7 +125,7 @@
         <div class="modeControls" id="testControls" hidden>
           <p class="sectionNote">Test Mode is simulating chat automatically — nothing to connect.</p>
           <div class="row">
-            <input id="setAnswerInputTest" class="textInput" placeholder="Set the 3-letter start word…" autocapitalize="off" autocorrect="off" spellcheck="false" />
+            <input id="setAnswerInputTest" class="textInput" placeholder="Set the start word (3-5 letters)…" autocapitalize="off" autocorrect="off" spellcheck="false" />
             <button id="setAnswerBtnTest" class="btn btnGhost" type="button">Set</button>
           </div>
           <p class="miniStatus" id="setAnswerErrorTest"></p>
@@ -214,6 +214,31 @@
         <p class="sectionNote">How long chat has to grow the word in every round (default 60 seconds, 10 to 600). The clock starts when the round starts and the round ends when it reaches zero, when the word can not grow any further, or when you tap Give up. Takes effect when you tap Apply.</p>
       </div>
 
+      <div class="drawerSection">
+        <h4>Start word length</h4>
+        <select id="startLengthSelect" class="selectInput">
+          <option value="3" selected>3 letters (standard)</option>
+          <option value="4">4 letters</option>
+          <option value="5">5 letters</option>
+          <option value="0">Random — 3, 4 or 5 letters every round</option>
+        </select>
+        <p class="sectionNote">How long the free first word of every round is. A longer start means fewer rows before the word can not grow any more. Takes effect when you tap Apply; your choice is remembered.</p>
+      </div>
+      <div class="drawerSection">
+        <h4>Maximum word length</h4>
+        <select id="maxLengthSelect" class="selectInput"></select>
+        <p class="sectionNote">The round ends as soon as a word reaches this length (a short cap makes rounds quicker). Automatic = the longest word the dictionary has. Takes effect when you tap Apply; your choice is remembered.</p>
+      </div>
+      <div class="drawerSection">
+        <h4>Difficulty</h4>
+        <select id="difficultySelect" class="selectInput">
+          <option value="normal" selected>Normal — a common start word that can grow for many rows</option>
+          <option value="medium">Medium — a start word that grows for only 3 to 5 rows</option>
+          <option value="hard">Hard — a tricky start word that dead-ends after 1 or 2 rows</option>
+          <option value="random">Random — any start word that can grow</option>
+        </select>
+        <p class="sectionNote">Decides how the start word of every round is picked, by how far it can grow. Takes effect when you tap Apply; your choice is remembered.</p>
+      </div>
       <div class="drawerSection">
         <label class="switchRow">
           <input type="checkbox" id="autoContinueToggle" checked />
@@ -370,7 +395,7 @@
         <button class="iconBtn" id="closeHowTo" type="button" aria-label="Close">✕</button>
       </div>
       <ul class="howToList">
-        <li>Every round starts with a <strong>3-letter word</strong> (the first row, free). The goal: make the word <strong>grow</strong>, one letter per row.</li>
+        <li>Every round starts with a short <strong>start word</strong> (3 letters by default; the host can change it - the first row, free). The goal: make the word <strong>grow</strong>, one letter per row.</li>
         <li>To make the next row, <strong>shuffle all the letters</strong> of the newest word and <strong>add exactly ONE new letter</strong> (any letter) to make a longer <strong>real word</strong>. Example: <strong>ARE</strong> → <strong>TEAR</strong> (+T) → <strong>STARE</strong> (+S) → <strong>TRADES</strong> (+D)…</li>
         <li>Row 2 has 4 letters, row 3 has 5 letters, row 4 has 6 letters… up to as many as you can reach. <strong>Only the first valid word</strong> for each row is accepted, then the next row builds on it. The <strong>newest row is always on top</strong>.</li>
         <li>You have <strong>60 seconds</strong> per round (the host can change it). <strong>Everyone can play</strong>, any number of words.</li>
