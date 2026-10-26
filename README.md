@@ -1,3 +1,5 @@
+> **Update 107:** new game TOWNDLE (Malaysia only: guess the secret city / municipal / district / town; green = the place, yellow = right state with the 3 Federal Territories counted as the 14th, orange = direct neighbour (same or touching district), grey = wrong; arrow + distance; Normal / Medium / Hard / Random tiers) at `/towndle/`. See `CHANGES_UPDATE_107.md` and `data/README-towns.txt`.
+
 > **Update 95:** CITYDLE: City colors card (legend always matches) + 6,300+ cities (and a way to load every city of the world); NEW game EXPANDLE (grow a word one letter per row in 60 s, 1 point per word) at `/expandle/`. See `CHANGES_UPDATE_95.md`.
 
 > **Update 94:** new game CITYDLE (guess the secret city: green city / yellow country / orange continent / grey, plus direction arrow and distance in km; nearest guesses first; 5 points) at `/citydle/`. See `CHANGES_UPDATE_94.md`.
@@ -8,6 +10,7 @@
 
 > **Update 91:** new game LINEDLE (pillars + a light-blue secret wave-line and a white guess wave-line, height = letter from A (low) to Z (high); green/yellow/grey clues; 1 point for solving) at `/linedle/`. See `CHANGES_UPDATE_91.md`.
 
+> **Update 102:** new game NUMBERBLINDLE (BLINDLE with a secret number / PIN; green, yellow and red count columns; one-row 0-9 keyboard with show/hide; colour legend; 1 point per fitting guess, 5 for solving; Number length panel) at `/numberblindle/`. See `CHANGES_UPDATE_102.md`.
 > **Update 89:** new game MINEDLE (Sweep-O style letter + number grid, blue/red marks, Letter bank, green/yellow/grey clues; 1 point for solving) at `/minedle/`. See `CHANGES_UPDATE_89.md`.
 
 > **Update 88:** BETWEENDLE: the word-length panel is fully customizable (Settings -> Look & sound -> Word length panel): its title, the texts for fixed and random length (several parts separated by "|"), number of rows, text size, alignment, colors, corners, border, and show/hide of the panel box. Random length never reveals the round's exact length. See `CHANGES_UPDATE_88.md`.
@@ -507,3 +510,6 @@ SHAPEDLE Settings -> Symbols: tick several symbol sets (new: Flags, Professions,
 
 ## Update 30
 HOME page: the top-left banner now reads **"<HOST NAME> LIVE GAMES"** with the host's round TikTok picture while a TikTok host is connected (any game), and every game card can be restyled from the 🎛️ button (colors, border, corners, 3D edge, font, words, hide, reorder). See `CHANGES_UPDATE_30.md`.
+
+## CONTEXTO (update 101)
+Word-similarity game at `/contexto/`: chat types words, each gets a rank by meaning (#1 = the secret word). See `CHANGES_UPDATE_101.md`. Code: `server/contexto/`.

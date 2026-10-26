@@ -28,8 +28,11 @@
 //   /minedle/ - MINEDLE (Socket.IO namespace /minedle)
 //   /linedle/ - LINEDLE (Socket.IO namespace /linedle)
 //   /citydle/ - CITYDLE (Socket.IO namespace /citydle)
+//   /towndle/ - TOWNDLE (Socket.IO namespace /towndle)
 //   /expandle/ - EXPANDLE (Socket.IO namespace /expandle)
 //   /fixle/ - FIXLE (Socket.IO namespace /fixle)
+//   /contexto/ - CONTEXTO (Socket.IO namespace /contexto)
+//   /numberblindle/ - NUMBERBLINDLE (its own WebSocket path /numberblindle-ws)
 //
 // IMPORTANT: "./server/env-bridge.js" is imported FIRST, before any
 // game module. ES module imports are hoisted and evaluated in the
@@ -65,8 +68,11 @@ import { mountComparable } from "./server/comparable/comparable-server.js";
 import { mountMinedle } from "./server/minedle/minedle-server.js";
 import { mountLinedle } from "./server/linedle/linedle-server.js";
 import { mountCitydle } from "./server/citydle/citydle-server.js";
+import { mountTowndle } from "./server/towndle/towndle-server.js";
 import { mountExpandle } from "./server/expandle/expandle-server.js";
 import { mountFixle } from "./server/fixle/fixle-server.js";
+import { mountContexto } from "./server/contexto/contexto-server.js";
+import { mountNumberblindle } from "./server/numberblindle/numberblindle-server.js";
 import { mountOracle } from "./server/oracle/oracle-server.js";
 import { mountColorblindle } from "./server/colorblindle/colorblindle-server.js";
 import { mountColordle } from "./server/colordle/colordle-server.js";
@@ -92,6 +98,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
+// update 106: longer than Render's proxy idle timeout, so the proxy never reuses a connection the server already closed (random 502 / dropped sockets)
+server.keepAliveTimeout = 65000;
+server.headersTimeout = 66000;
 const io = new Server(server);
 
 // Safety net shared by every game on this server: one bad event handler
@@ -290,6 +299,12 @@ await mountLinedle(app, io, { mountPath: "/linedle" });
 // Scoring: 5 points for the guess that finds the secret city. Own Socket.IO namespace /citydle; the city list is built in.
 await mountCitydle(app, io, { mountPath: "/citydle" });
 
+// TOWNDLE is CITYDLE's Malaysian sibling: chat guesses a secret PLACE (city / municipal / district / town) of Malaysia. green = the place,
+// yellow = right state (13 states + the 3 Federal Territories counted as the 14th), orange = a direct neighbour of the secret place (same or
+// touching district), grey = wrong. Plus a direction arrow and the distance in km; nearest guesses are listed first. Scoring: 5 points for the
+// guess that finds the secret place. Own Socket.IO namespace /towndle; the place list is built in (see server/towndle/).
+await mountTowndle(app, io, { mountPath: "/towndle" });
+
 // EXPANDLE is a BLINDLE sibling (on the FIXLE board): every round starts from a 3-letter word and chat grows it one letter per row (shuffle the
 // letters + ONE new letter = a longer real word) within a 60-second round. 1 point per accepted word. Own Socket.IO namespace /expandle;
 // reuses BLINDLE's dictionary (loaded once).
@@ -302,6 +317,20 @@ await mountExpandle(app, io, { mountPath: "/expandle" });
 // Scoring: the guess that finds the secret word wins exactly that word's score (2 x its length). Own Socket.IO namespace /fixle;
 // reuses BLINDLE's word bank + dictionary (loaded once).
 await mountFixle(app, io, { mountPath: "/fixle" });
+
+// CONTEXTO is the word-similarity game: chat types any word and it gets a RANK = how close its meaning is to the secret word (#1 = the
+// secret word itself). Ranks come from a real word-vector model (downloaded once, in the background - the game starts at once with the
+// built-in puzzles), with an online and an offline fallback. Points are for discovering one of the 10 closest words; the viewer who types
+// the secret word wins the round. Own Socket.IO namespace /contexto; reuses the platform's shared dictionary (loaded once).
+await mountContexto(app, io, { mountPath: "/contexto" });
+
+// NUMBERBLINDLE is a BLINDLE copy that plays with a SECRET NUMBER (a PIN of 5-8 digits by default) instead of a secret word, inspired
+// by "Tebak Pin". Every guess shows number columns: green = digits correct and in the right position, yellow = digits in the number
+// but in the wrong position, grey = digits not in the number. The host colors digits on the tiles and the one-row 0-9 keyboard (show /
+// hide button) follows the same colors. A legend above the board explains the colors. Scoring: 1 point for every guess that fits the
+// board, 5 points for solving the round. Like BLINDLE it uses its own WebSocket path (/numberblindle-ws) on the shared http server and
+// needs no dictionary.
+await mountNumberblindle(app, server, { mountPath: "/numberblindle", wsPath: "/numberblindle-ws" });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
