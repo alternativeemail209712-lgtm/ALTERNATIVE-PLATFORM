@@ -181,7 +181,7 @@ function syncStagedSettingsFromState(g) {
     }
     if (document.activeElement !== el.maxLengthSelect) el.maxLengthSelect.value = String(g.maxLengthSetting || 0);
   }
-  if (el.difficultySelect && document.activeElement !== el.difficultySelect) el.difficultySelect.value = g.difficulty || "normal";
+  if (el.difficultySelect && document.activeElement !== el.difficultySelect) el.difficultySelect.value = g.difficulty || "random";
   el.autoContinueToggle.checked = g.autoContinue;
   el.delayInput.value = g.autoContinueDelaySeconds;
   el.leaderboardShowInput.value = g.leaderboardShowSeconds;
@@ -574,6 +574,7 @@ function render(state) {
   if (window.ScoreTicker) window.ScoreTicker.update(state); // update 47: scrolling top-scorers ticker
   if (window.WordLanguage) window.WordLanguage.update(state.game, (mode) => send("set_word_language", { mode })); // update 48: word language
   if (el.languageOverlay && el.languageOverlay.hidden) syncLanguageBoxes(state.game); // update 64: languages popup mirrors the server (not while it is open, so ticks are not overwritten)
+  if (window.LengthPanel) LengthPanel.update(state.game); // update 99: the shared word length panel
   if (window.ExpandleColors) { ExpandleColors.update(state.game.colors, (type, payload) => send(type, payload)); ExpandleColors.build(); } // update 96: one tile color shared with the legend
   detectWinTransition(state.game);
   renderHeader(state);
@@ -705,9 +706,10 @@ function avatarChipHtml(username, avatarUrl, sizePx) {
 // One row per length (3, 4, 5 ...), the NEWEST ROW ON TOP. A row is: [length chip] [letter tiles, centered] [avatar of who made it].
 // Tile colors: purple = the free start word, blue = letters carried over from the row below, gold = the one NEW letter of the row.
 function tileSizeFor(len) {
+  len = window.TileFit ? window.TileFit.fitLength(len) : len; // update 99: "Tile size & scrolling" (auto-resize on / off)
   const boardWidth = (el.tilesWrap && el.tilesWrap.clientWidth) || 340;
   const room = Math.max(120, boardWidth - 2 * 46 - 12); // two side columns + gaps
-  return Math.max(16, Math.min(40, Math.floor(room / Math.max(1, len)) - 3));
+  return Math.max(window.TileFit && window.TileFit.autoFit() ? 9 : 16, Math.min(40, Math.floor(room / Math.max(1, len)) - 3));
 }
 function buildBoardRow(kind, entry, g, index) {
   // update 96: [avatar of who made it - on the LEFT, like the other games] [letter tiles, centered] [empty spacer so the tiles stay centered].
@@ -752,7 +754,7 @@ function renderTiles(g) {
 
   const list = g.guesses || [];
   const signature = [
-    g.roundNumber, g.status, list.length, (el.tilesWrap && el.tilesWrap.clientWidth) || 0,
+    g.roundNumber, g.status, list.length, (el.tilesWrap && el.tilesWrap.clientWidth) || 0, window.TileFit && window.TileFit.autoFit() ? "fit" : "fixed",
     list.map((e) => e.word + ":" + (e.avatarUrl || "")).join(",")
   ].join("|");
   renderBoardStatus(g);
