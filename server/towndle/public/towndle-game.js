@@ -74,9 +74,6 @@ const el = {
   regionBox: document.getElementById("regionBox"),
   distanceUnitSelect: document.getElementById("distanceUnitSelect"),
   strictFitToggle: document.getElementById("strictFitToggle"),
-  rareSecretToggle: document.getElementById("rareSecretToggle"),
-  unknownList: document.getElementById("unknownList"),
-  unknownMsg: document.getElementById("unknownMsg"),
   autoContinueToggle: document.getElementById("autoContinueToggle"),
   delayInput: document.getElementById("delayInput"),
   leaderboardShowInput: document.getElementById("leaderboardShowInput"),
@@ -193,9 +190,7 @@ function syncStagedSettingsFromState(g) {
   if (el.starterWordToggle) el.starterWordToggle.checked = g.starterWord !== false; // ON unless the host switched it off
   if (el.strictFitToggle) el.strictFitToggle.checked = g.strictFit === true; // update 98: OFF unless the host switched it on
   if (el.distanceUnitSelect) el.distanceUnitSelect.value = g.distanceUnit === "mi" ? "mi" : "km";
-  if (el.rareSecretToggle) el.rareSecretToggle.checked = g.rareSecret !== false;
   buildRegionBox(g);
-  renderUnknownPlaces(g);
   updateModePickerLabel();
 }
 
@@ -282,7 +277,6 @@ function connectSocket() {
   });
   socket.on("offline_guess_result", (payload) => handleOfflineGuessResult(payload));
   socket.on("set_secret_word_result", (payload) => handleSetAnswerResult(payload));
-  socket.on("add_place_result", (r) => { if (el.unknownMsg) el.unknownMsg.textContent = r && r.ok ? "Added " + r.name + " ✔" : (r && r.error) || "Could not add that place."; });
 }
 connectSocket();
 
@@ -337,7 +331,6 @@ el.rejectionToastShowInput.addEventListener("change", () => {
 });
 
 // update 98: Strict fit and Distance unit apply right away (no new round needed) and are remembered by the server
-if (el.rareSecretToggle) el.rareSecretToggle.addEventListener("change", () => send("apply_settings", { rareSecret: el.rareSecretToggle.checked }));
 if (el.strictFitToggle) el.strictFitToggle.addEventListener("change", () => send("set_strict_fit", { on: el.strictFitToggle.checked }));
 if (el.distanceUnitSelect) el.distanceUnitSelect.addEventListener("change", () => send("set_distance_unit", { unit: el.distanceUnitSelect.value }));
 
@@ -667,9 +660,9 @@ const LEVEL_EMOJI = ["🟩", "🟨", "🟧", "⬜"];
 const LEVEL_TEXT = ["the right place", "right state", "direct neighbour", "wrong state, not a neighbour"];
 const ARROWS = ["↑", "↗", "→", "↘", "↓", "↙", "←", "↖"]; // N NE E SE S SW W NW
 // update 98: the host can show distances in kilometers (default) or miles (Settings -> Distance unit)
-function fmtKm(km, approx) {
+function fmtKm(km) {
   const mi = lastState && lastState.game && lastState.game.distanceUnit === "mi";
-  return (approx ? "≈ " : "") + Number(mi ? Math.round(Number(km || 0) * 0.621371) : km || 0).toLocaleString("en-US") + (mi ? " mi" : " km");
+  return Number(mi ? Math.round(Number(km || 0) * 0.621371) : km || 0).toLocaleString("en-US") + (mi ? " mi" : " km");
 }
 function arrowIndex(bearing) { return Math.round((Number(bearing) || 0) / 45) % 8; }
 const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
@@ -709,13 +702,12 @@ function buildBoardRow(kind, entry, g) {
 
   const km = document.createElement("span");
   km.className = "fxScore cdKm";
-  km.textContent = fmtKm(entry.km, entry.approx);
-  if (entry.approx) km.title = "Rough distance - the position of a small or rare place is only approximate";
+  km.textContent = fmtKm(entry.km);
   km.title = "Distance from " + entry.name + " to the secret place";
   row.appendChild(km);
 
   row.title = (kind === "latest" ? "Latest guess: " : "Guess: ") + entry.name + " (" + (entry.typeName || "place") + "), " + entry.district + " district, " + entry.state + " — " + LEVEL_TEXT[entry.level] +
-    " — " + fmtKm(entry.km, entry.approx) + (entry.isStarter ? " (starter place)" : entry.caller ? " — by " + entry.caller : "");
+    " — " + fmtKm(entry.km) + (entry.isStarter ? " (starter place)" : entry.caller ? " — by " + entry.caller : "");
   return row;
 }
 
@@ -886,61 +878,4 @@ function renderLeaderboardTab() {
 
 function escapeHtml(str) {
   return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-
-// ---- update 107: "Places chat tried" (valid-looking guesses that are not in the list yet) ---------------------------------------
-const unknownPick = new Map(); // key -> { state, district } the host has chosen so far
-let unknownSignature = "";
-function renderUnknownPlaces(g) {
-  if (!el.unknownList) return;
-  const list = g.unknownPlaces || [];
-  const sig = list.map((u) => u.key + ":" + u.viewers).join(",");
-  if (sig === unknownSignature) return;
-  unknownSignature = sig;
-  if (!list.length) { el.unknownList.innerHTML = '<div class="sectionNote">Nothing yet.</div>'; return; }
-  el.unknownList.innerHTML = "";
-  const byState = g.districtsByState || {};
-  list.forEach((u) => {
-    const pick = unknownPick.get(u.key) || { state: "", district: "" };
-    unknownPick.set(u.key, pick);
-    const row = document.createElement("div");
-    row.style.cssText = "border:1px solid var(--border,#ddd);border-radius:10px;padding:8px;margin:6px 0;";
-    const title = document.createElement("div");
-    title.innerHTML = "<b></b> <small></small>";
-    title.querySelector("b").textContent = u.text;
-    title.querySelector("small").textContent = " — " + u.viewers + " viewer" + (u.viewers === 1 ? "" : "s") + ", " + u.count + "×";
-    row.appendChild(title);
-    const stateSel = document.createElement("select");
-    stateSel.className = "textInput";
-    stateSel.innerHTML = '<option value="">State…</option>' + (g.allRegions || []).map((r) => '<option value="' + r.code + '">' + escapeHtml(r.name) + "</option>").join("");
-    stateSel.value = pick.state;
-    const distSel = document.createElement("select");
-    distSel.className = "textInput";
-    const fillDistricts = () => {
-      const ds = byState[stateSel.value] || [];
-      distSel.innerHTML = '<option value="">District…</option>' + ds.map((d) => '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + "</option>").join("");
-      distSel.value = ds.includes(pick.district) ? pick.district : "";
-    };
-    fillDistricts();
-    stateSel.addEventListener("change", () => { pick.state = stateSel.value; pick.district = ""; fillDistricts(); });
-    distSel.addEventListener("change", () => { pick.district = distSel.value; });
-    const nameInp = document.createElement("input");
-    nameInp.type = "text"; nameInp.className = "textInput"; nameInp.value = u.text.replace(/\b\w/g, (c) => c.toUpperCase()); nameInp.maxLength = 60;
-    nameInp.title = "How the place name should be written";
-    const add = document.createElement("button");
-    add.type = "button"; add.className = "btn btnPrimary"; add.textContent = "Add";
-    add.addEventListener("click", () => {
-      if (!pick.state || !pick.district) { if (el.unknownMsg) el.unknownMsg.textContent = "Choose the state and the district first."; return; }
-      send("add_place", { key: u.key, name: nameInp.value.trim() || u.text, state: pick.state, district: pick.district });
-    });
-    const dismiss = document.createElement("button");
-    dismiss.type = "button"; dismiss.className = "btn"; dismiss.textContent = "✕ Not a place";
-    dismiss.addEventListener("click", () => send("dismiss_unknown", { key: u.key }));
-    const line = document.createElement("div");
-    line.style.cssText = "display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;";
-    [nameInp, stateSel, distSel, add, dismiss].forEach((n) => line.appendChild(n));
-    row.appendChild(line);
-    el.unknownList.appendChild(row);
-  });
 }

@@ -75,7 +75,7 @@
           <p class="fxStatus" id="boardStatus" aria-live="polite"></p>
         </section>
         <div class="hintChips" id="hintChips"></div>
-        <p class="hintExplainer" id="hintExplainer" hidden>💡 hints for Malaysia: region, state, type of place, a neighbouring district, “near a known place”, starts-with, district, reveal a letter, rule out letters, or a place idea that fits every clue. Unlimited uses.</p>
+        <p class="hintExplainer" id="hintExplainer" hidden>💡 suggests a place that fits every color and distance on the board (never the answer itself), reveals a letter of the place, or rules out letters. Unlimited uses.</p>
 
         <div class="offlineNote" id="offlineNote" hidden>
           <p>Solo practice — type your guess in the box below.</p>
@@ -266,23 +266,6 @@
       </div>
 
       <div class="drawerSection">
-        <h4>Rare places as the secret place</h4>
-        <label class="switchRow">
-          <input type="checkbox" id="rareSecretToggle" />
-          <span class="switchTrack"><span class="switchThumb"></span></span>
-          <span class="switchLabel">Rare places (approximate position) can be the secret place</span>
-        </label>
-        <p class="sectionNote">On (default): Medium / Hard / Random rounds may pick the many small and rare places of the list. Their state and district colors are exact, but their distance and arrow are only a rough guide (shown with ≈). Off: the secret place is always one with a hand-checked position - chat can still guess every place of the list.</p>
-      </div>
-
-      <div class="drawerSection" id="unknownSection">
-        <h4>Places chat tried</h4>
-        <p class="sectionNote">Places that viewers typed but the list does not have yet (in Live mode at least 2 different viewers must type the same thing). If it is a real place, choose its state and district and press Add: it works at once and is saved for the next start in data/towns-extra.txt.</p>
-        <div id="unknownList"><div class="sectionNote">Nothing yet.</div></div>
-        <p class="sectionNote" id="unknownMsg"></p>
-      </div>
-
-      <div class="drawerSection">
         <h4>Strict fit</h4>
         <label class="switchRow">
           <input type="checkbox" id="strictFitToggle" />
@@ -397,7 +380,7 @@
         <li>A place already on the board is skipped. The small <strong>floating window</strong> above the legend announces every new guess.</li>
         <li>The <strong>legend</strong> above the board explains every color and column (the host can customize or hide it).</li>
         <li><strong>Scoring (Live):</strong> the guess that finds the secret place wins <strong>5 points</strong>. Nothing else scores.</li>
-        <li>💡 unlimited hints with ten kinds: region, state, type of place, neighbouring district, near a known place, starts-with, district, reveal a letter, rule out letters, place idea. Difficulty (Normal/Medium/Hard/Random) sets how famous the secret place is.</li>
+        <li>💡 unlimited hints: suggest a place that fits every clue on the board, reveal a letter, or rule out letters. Difficulty (Normal/Medium/Hard/Random) sets how famous the secret place is.</li>
         <li><strong>Live</strong> = real TikTok chat. <strong>Test</strong> = simulated chat, nothing saved. <strong>Offline</strong> = type guesses yourself.</li>
       </ul>
       <button class="btn btnGold" id="closeHowTo2" type="button">Got it</button>
