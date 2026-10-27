@@ -117,7 +117,7 @@
     var send = function (patch) { var f = (opts && opts.sendConfig) || (S.opts && S.opts.sendConfig); if (f) f(patch); };
     host.innerHTML =
       "<h4>Hints</h4>" +
-      '<p class="sectionNote">These hint types are available in this game. Choose which ones the host can give, how many a round may use and how fast.</p>' +
+      '<p class="sectionNote">Three kinds of hint are available in this game. Choose which ones the host can give, how many a round may use and how fast.</p>' +
       '<label class="switchRow"><input type="checkbox" data-h="enabled" /><span class="switchTrack"><span class="switchThumb"></span></span><span class="switchLabel">Hints are available</span></label>' +
       '<div class="hintTypes" data-h="types"></div>' +
       '<div class="hintNums">' +
