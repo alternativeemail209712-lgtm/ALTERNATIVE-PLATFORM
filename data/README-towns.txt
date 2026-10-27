@@ -1,9 +1,5 @@
 TOWNDLE - making the Malaysian place book bigger
 ================================================
-START HERE: on the first start with internet the server downloads the free GeoNames list of Malaysia into data/MY.txt by itself (thousands of villages).
-No internet on the server? Run  npm run import:towns  on any computer with internet and copy the data/MY.txt file over.
-When a viewer types a real place that is still missing, open Settings -> "Places chat tried" and add it with one click.
-
 TOWNDLE ships with a built-in list (server/towndle/towns-data-1..4.js) of cities, municipals, districts and towns of every state and
 Federal Territory, grouped by district, with a famous / well-known / lesser-known tier for each place.
 Coordinates were written by hand and are approximate (about 3 km). Run   npm run check:towns   to see the counts and any suspicious coordinate.
@@ -29,3 +25,9 @@ Notes
 - Places whose plain name is also an everyday word (Gurun, Song, Bau, Jeli ...) must be typed with the state ("gurun kedah"); the page and the hints show that spelling.
 - Two places with the same name: the first keeps the plain name, the other is typed "name + state" (for example "pulai kelantan").
 - Neighbours (orange) are decided by the district border list in server/towndle/towns-adjacency.js: edit it if you disagree with a border.
+
+---- Update 108 ----
+* GeoNames import = the way to get EVERY Malaysian place. Download https://download.geonames.org/export/dump/MY.zip, unzip, put MY.txt in this data/ folder, restart.
+  GeoNames places can be guessed by chat but never become the secret place.
+* Missed places: while TOWNDLE runs live, unrecognised place-like chat is saved to data/towndle-unknown.json. Run:  npm run review:unknown
+  and add real ones to towns-extra.txt.

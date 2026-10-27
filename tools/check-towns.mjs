@@ -3,10 +3,7 @@
 // border list, places far away from their district seat (usually a typo in a coordinate) and the places that must be typed with their state.
 import { TOWNS, DISTRICTS, DISTRICT_NEIGHBOURS, ADJACENCY_PROBLEMS, STATE_LIST, LOAD_REPORT, distanceKm } from "../server/towndle/towns.js";
 
-const approx = TOWNS.filter((t) => t.approx).length;
-console.log(`TOWNDLE place list: ${TOWNS.length} places in ${DISTRICTS.size} districts`);
-console.log(`  ${TOWNS.length - approx} with a hand-checked position, ${approx} with an approximate position (bulk lists / places you added)`);
-console.log(`  ${LOAD_REPORT.extra} came from data/towns-extra.txt, ${LOAD_REPORT.geonames} from the GeoNames file data/MY.txt`);
+console.log(`TOWNDLE place list: ${TOWNS.length} places, ${DISTRICTS.size} districts (${LOAD_REPORT.builtIn} built in, ${LOAD_REPORT.extra} from data/towns-extra.txt, ${LOAD_REPORT.geonames} from GeoNames)`);
 for (const f of LOAD_REPORT.files) console.log("  file:", f);
 console.log("\nPer state (places / districts):");
 for (const s of STATE_LIST) {
