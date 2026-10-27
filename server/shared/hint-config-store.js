@@ -28,6 +28,19 @@ const NUMBER_TYPES = [
   { id: "rule", icon: "🚫", label: "Rule out digits", desc: "Shows up to three digits that are NOT in the secret number." }
 ];
 export const HINT_CATALOG = {
+  town: [
+    { id: "region", icon: "🧭", label: "Region", desc: "Says which part of Malaysia the secret place is in (north, central, south, east coast or Borneo)." },
+    { id: "state", icon: "🗺️", label: "State", desc: "Names the state of the secret place (Federal Territories count as one)." },
+    { id: "kind", icon: "🏷️", label: "Type of place", desc: "Says whether it is a city, a municipal seat, a district or a town." },
+    { id: "neighbour", icon: "🤝", label: "Neighbouring district", desc: "Names a district that borders the secret place's district (a different one each time)." },
+    { id: "near", icon: "📍", label: "Near a known place", desc: "Says the secret place is within about N km of a well-known place (the nearest, then the next nearest)." },
+    { id: "initial", icon: "🔤", label: "Starts with", desc: "Shows the first letter, the number of words and the number of letters of the name." },
+    { id: "district", icon: "🏛️", label: "District", desc: "Names the district the secret place belongs to (a strong hint)." },
+    { id: "letter", icon: "🔤", label: "Reveal a letter", desc: "Shows the name with one more letter uncovered each time (never the last one)." },
+    { id: "rule", icon: "🚫", label: "Rule out letters", desc: "Shows three letters that are NOT in the name." },
+    { id: "suggest", icon: "💡", label: "Place idea", desc: "Suggests a real place that fits every color and distance on the board (never the answer)." }
+  ],
+
   word: WORD_TYPES,
   number: NUMBER_TYPES,
   flagle: [
@@ -45,21 +58,13 @@ export const HINT_CATALOG = {
     { id: "first", icon: "🅰️", label: "First letters", desc: "Shows the first letter of every word still hidden." },
     { id: "pulse", icon: "✨", label: "Highlight a word", desc: "Makes one hidden word glow on the grid for a moment." }
   ],
-  towndle: [
-    { id: "suggest", icon: "💡", label: "Place idea", desc: "Suggests a real place that fits every clue so far (never the answer)." },
-    { id: "region", icon: "🗺️", label: "Region / state", desc: "First the part of Malaysia, then the state of the secret place." },
-    { id: "near", icon: "📍", label: "Near a known town", desc: "Says how far and in which direction the place is from a well-known town. Ask again for another town." },
-    { id: "name", icon: "🔤", label: "Name clue", desc: "Name length, then first letter, last letter, and the vowels." },
-    { id: "kind", icon: "🏷️", label: "Place type & district", desc: "City / municipal / district / town, then the first letter of its district, then the district." },
-    { id: "rule", icon: "🚫", label: "Rule out states", desc: "Shows three states the place is NOT in." }
-  ],
   crossdle: [
     { id: "letter", icon: "🔤", label: "Reveal a letter", desc: "Shows one letter of the secret word in its place." },
     { id: "rule", icon: "🚫", label: "Rule out letters", desc: "Shows three letters that are NOT in the secret word." },
     { id: "start", icon: "🅰️", label: "Starts with", desc: "Shows the first and last letter of the secret word." }
   ]
 };
-const FAMILY = { flagle: "flagle", travle: "travle", findle: "findle", crossdle: "crossdle", numberblindle: "number", towndle: "towndle" };
+const FAMILY = { towndle: "town", flagle: "flagle", travle: "travle", findle: "findle", crossdle: "crossdle", numberblindle: "number" };
 export function catalogFor(gameId) { return HINT_CATALOG[FAMILY[gameId] || "word"]; }
 const AUTO_GAMES = new Set(["blindle", "numberblindle", "oracle", "colorblindle", "colordle", "structle", "textle", "rangedle", "codedle", "shapedle", "forbackle", "shiftle", "wordle", "betweendle", "comparable", "minedle", "linedle", "citydle", "towndle", "expandle", "fixle", "twistle", "crossdle"]);
 export function supportsAuto(gameId) { return AUTO_GAMES.has(gameId); }
