@@ -22,6 +22,7 @@
 
 import "dotenv/config";
 import express from "express";
+import { registerGameSettings } from "../shared/game-settings-registry.js"; // update 113: lets the AFK Autopilot show this game's settings
 import http from "http";
 import fs from "fs";
 import path from "path";
@@ -258,8 +259,8 @@ function processGuess(city, caller) {
   const avatarUrl = knownAvatars.get(caller) || null;
   const entry = makeGuessEntry(city, caller, { avatarUrl });
   game.guesses.push(entry);
-  game.lastGuess = { word: entry.word, name: city.name, level: entry.level, km: entry.km, caller };
-  game.lastEvent = { id: ++game.eventSeq, kind: "guess", word: entry.word, name: city.name, state: stateLabel(city), district: city.district, typeName: city.typeName, level: entry.level, km: entry.km, caller, at: Date.now() };
+  game.lastGuess = { word: entry.word, name: city.name, level: entry.level, km: entry.km, approx: Boolean(city.approx), caller };
+  game.lastEvent = { id: ++game.eventSeq, kind: "guess", word: entry.word, name: city.name, state: stateLabel(city), district: city.district, typeName: city.typeName, level: entry.level, km: entry.km, approx: Boolean(city.approx), caller, at: Date.now() };
 
   // Only the exact secret place is GREEN (level 0).
   if (entry.level === 0) {
@@ -283,7 +284,7 @@ function attemptGuess(city, caller) {
   // A city already on the board is never accepted twice. Silent for chat; offline shows the message.
   const already = game.guesses.find((g) => g.word === city.key);
   if (already) {
-    game.lastEvent = { id: ++game.eventSeq, kind: "duplicate", word: city.key, name: city.name, state: stateLabel(city), district: city.district, typeName: city.typeName, level: already.level, km: already.km, caller, at: Date.now() };
+    game.lastEvent = { id: ++game.eventSeq, kind: "duplicate", word: city.key, name: city.name, state: stateLabel(city), district: city.district, typeName: city.typeName, level: already.level, km: already.km, approx: Boolean(city.approx), caller, at: Date.now() };
     return { ok: false, error: `Already guessed: ${city.name} — ${fmtDist(already.km)} away`, duplicate: true };
   }
 
@@ -769,7 +770,7 @@ function guessPayload(g) {
   const c = g.rec;
   return {
     word: g.word, name: c.name, state: stateLabel(c), district: c.district, typeName: c.typeName,
-    level: g.level, km: g.km, bearing: g.bearing,
+    level: g.level, km: g.km, bearing: g.bearing, approx: Boolean(c.approx), // update 111: bulk places have only an approximate position -> the page shows "~"
     caller: g.caller, isStarter: Boolean(g.isStarter), avatarUrl: g.isStarter ? hostAvatarUrl : g.avatarUrl
   };
 }
@@ -942,7 +943,7 @@ export async function mountTowndle(app, io, options = {}) {
   );
 
   // (The place list is built in - nothing to download or load. data/towns-extra.txt and GeoNames MY.txt add more, see towns.js.)
-  console.log(`[TOWNDLE] ${TOWNS.length} Malaysian places loaded (${LOAD_REPORT.builtIn} built in, ${LOAD_REPORT.extra} from towns-extra.txt, ${LOAD_REPORT.geonames} from GeoNames).`);
+  console.log(`[TOWNDLE] ${TOWNS.length} Malaysian places loaded (${LOAD_REPORT.builtIn} with a checked position, ${LOAD_REPORT.bulk} bulk places with an approximate position, ${LOAD_REPORT.extra} from towns-extra.txt, ${LOAD_REPORT.geonames} from GeoNames).`);
   console.log(
     `[TOWNDLE] Mounted at ${mountPath} (Socket.IO namespace /towndle). ` +
       (diagnostics.signKeyConfigured
@@ -989,3 +990,6 @@ PlatformHub.registerGame(
     return game.mode === "live" && ["live", "connecting", "retrying"].includes(diagnostics.connectionStatus) && (!cur || cur === u);
   }
 );
+
+// update 113: the AFK Autopilot reads this game's live settings (difficulty, length, pause ...) to show them in its "Game settings"
+registerGameSettings("towndle", () => game);

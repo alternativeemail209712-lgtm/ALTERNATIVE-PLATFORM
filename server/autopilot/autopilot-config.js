@@ -7,6 +7,8 @@
 //                    message the game's own Settings screen sends)
 //   DEFAULT_CONFIG   every setting with its default
 //   sanitizeConfig() turns anything the browser sends into a valid, clamped config (unknown keys are dropped)
+//   update 112: every game also has NOTES for the viewers - other names (aka), the game it is inspired by, a note shown during the vote and an
+//   optional custom "how to play" line (see games[id] below and the display.show* switches).
 // ===================================================================
 
 // family: true  -> one of the 21 games that share the "apply_settings" host message, so their gameplay settings can be preset.
@@ -104,7 +106,8 @@ export const DEFAULT_CONFIG = {
     rounds: 6,                    // used by "rounds" / "either"
     finishRound: true,            // when the time is up, let the running round finish first
     graceSeconds: 90,             // ... but never wait longer than this
-    showLeaderboardSeconds: 10    // session leaderboard before voting (0 = skip)
+    showLeaderboardSeconds: 10,   // session leaderboard before voting (0 = skip)
+    resultSeconds: 8              // update 115: after the LAST round of a session, keep the result on screen this long before the game changes
   },
   rotation: {
     mode: "vote",                 // vote | sequence | random | weighted
@@ -129,7 +132,9 @@ export const DEFAULT_CONFIG = {
     resultSeconds: 8,
     extendSecondsIfClose: 0,      // add time once if the top two are within 1 vote with < 5 s left (0 = off)
     includeReplayOption: false,   // add "Play <current game> again" as an option
-    maxVotesPerMinutePerUser: 20  // anti-spam
+    maxVotesPerMinutePerUser: 20, // anti-spam
+    simulateWhenNotLive: true,    // update 115: in Offline / Test mode nobody can type in chat, so a few practice voters vote (otherwise every vote would end with "nobody voted")
+    allowStageClicks: true        // update 115: a click / tap on an option of the stage page also counts as a vote (host, or a phone)
   },
   eligibility: {
     everyone: true,
@@ -157,42 +162,121 @@ export const DEFAULT_CONFIG = {
     theme: "dark",                // dark | light
     accent: "#ff5c8a",
     showHowTo: true,              // one-line "how to play" on the next-game splash
+    showAka: true,                // "Also known as ..." / "Inspired by ..." under each game on the vote, result and splash screens (update 112)
+    showVoteNotes: true,          // the host's short note for each game, shown under it during the vote
+    showNotesOnSplash: true,      // the same notes on the winner screen and the next-game splash
     transitionSeconds: 4          // black "loading" moment while the stage switches game
   },
-  games: {}                       // id -> { enabled, minutes, rounds, weight, settings }
+  sync: { mode: "stick" },         // update 114: "stick" = keep the host's saved settings, never auto-refresh from the games | "follow" = auto-refresh what the games use
+  games: {}                       // id -> { enabled, minutes, rounds, weight, settings, aka, inspiredBy, voteNote, howTo }
 };
-for (const g of GAMES) DEFAULT_CONFIG.games[g.id] = { enabled: g.id !== "contexto" && g.id !== "crossdle", minutes: 0, rounds: 0, weight: 1, settings: {} };
+for (const g of GAMES) DEFAULT_CONFIG.games[g.id] = { enabled: g.id !== "contexto" && g.id !== "crossdle", minutes: 0, rounds: 0, weight: 1, settings: {}, syncMode: "global", aka: [], inspiredBy: "", voteNote: "", howTo: "" };
+// limits of the viewer notes (they must fit on a TikTok LIVE screen)
+export const NOTE_LIMITS = { akaCount: 6, akaChars: 40, inspiredBy: 80, voteNote: 120, howTo: 140 };
 
 // ---- sanitizing ----------------------------------------------------------------------------------------------------
-const num = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, Math.round(n))) : d; };
-const pick = (v, list, d) => (list.includes(v) ? v : d);
-const bool = (v, d) => (typeof v === "boolean" ? v : d);
+// update 114: forgiving readers - a restored file may have been edited by hand or come from an older version (numbers as text, "true"/"false",
+// different capital letters). They are understood instead of silently replaced by the default.
+const num = (v, lo, hi, d) => {
+  if (v === null || v === undefined || v === "" || typeof v === "boolean") return d;
+  const n = typeof v === "string" ? parseFloat(v.replace(",", ".")) : Number(v);
+  return Number.isFinite(n) ? Math.min(hi, Math.max(lo, Math.round(n))) : d;
+};
+const pick = (v, list, d) => {
+  if (list.includes(v)) return v;
+  if (typeof v === "string") { const k = v.trim().toLowerCase(); const hit = list.find((x) => String(x).toLowerCase() === k); if (hit !== undefined) return hit; }
+  return d;
+};
+const bool = (v, d) => {
+  if (typeof v === "boolean") return v;
+  if (typeof v === "number") return v === 1 ? true : v === 0 ? false : d;
+  if (typeof v === "string") { const k = v.trim().toLowerCase(); if (["true", "yes", "on", "1"].includes(k)) return true; if (["false", "no", "off", "0"].includes(k)) return false; }
+  return d;
+};
 const str = (v, max, d) => (typeof v === "string" ? v.trim().slice(0, max) : d);
-const idList = (v, max = 40) => (Array.isArray(v) ? [...new Set(v.filter((x) => GAME_IDS.includes(x)))].slice(0, max) : []);
+const idList = (v, max = 40) => {
+  const raw = Array.isArray(v) ? v : typeof v === "string" ? v.split(/[\s,;]+/) : [];
+  return [...new Set(raw.map((x) => String(x == null ? "" : x).trim().toLowerCase()).filter((x) => GAME_IDS.includes(x)))].slice(0, max);
+};
 const nameList = (v, max = 300) => {
   const raw = Array.isArray(v) ? v : typeof v === "string" ? v.split(/[\s,;]+/) : [];
   return [...new Set(raw.map((x) => String(x || "").replace(/^@/, "").trim().toLowerCase()).filter((x) => /^[a-z0-9._]{2,40}$/.test(x)))].slice(0, max);
 };
+// "Termo, Lingo" / ["Termo","Lingo"] / one per line  ->  a clean list of other names
+const akaList = (v, d) => {
+  const raw = Array.isArray(v) ? v : typeof v === "string" ? v.split(/[,;|\n]+/) : null;
+  if (!raw) return d;
+  const seen = new Set(), out = [];
+  for (const x of raw) { const n = String(x == null ? "" : x).replace(/\s+/g, " ").trim().slice(0, NOTE_LIMITS.akaChars); const k = n.toLowerCase(); if (n && !seen.has(k)) { seen.add(k); out.push(n); } }
+  return out.slice(0, NOTE_LIMITS.akaCount);
+};
 const hex = (v, d) => (typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v) ? v : d);
 
-function sanitizePreset(gameId, raw) {
+export function sanitizePreset(gameId, raw) {
   const keys = PRESET_KEYS[gameId] || [];
   const out = {};
   if (!raw || typeof raw !== "object") return out;
   for (const k of keys) {
     if (raw[k] === undefined || raw[k] === null || raw[k] === "") continue; // empty = "leave the game's own setting"
     const f = PRESET_FIELDS[k];
-    if (f.type === "select") { const allowed = f.options.map((o) => o[0]); const v = String(raw[k]); if (allowed.includes(v)) out[k] = k === "startLength" ? Number(v) : v; }
+    if (f.type === "select") {
+      let v = String(raw[k]).trim().toLowerCase();
+      if (k === "startLength") { const m = v.match(/\d+/); v = m ? m[0] : v.startsWith("rand") ? "0" : v; }
+      const hit = f.options.map((o) => o[0]).find((x) => String(x).toLowerCase() === v);
+      if (hit !== undefined) out[k] = k === "startLength" ? Number(hit) : hit;
+    }
     else if (f.type === "number") out[k] = num(raw[k], f.min, f.max, f.min);
-    else if (f.type === "bool") out[k] = Boolean(raw[k]);
+    else if (f.type === "bool") { const b = bool(raw[k], undefined); if (b !== undefined) out[k] = b; }
     else if (f.type === "regions") {
-      const allowed = (REGION_CHOICES[gameId] || []).map((r) => r[0]);
-      const list = (Array.isArray(raw[k]) ? raw[k] : []).filter((r) => allowed.includes(r));
+      const choices = REGION_CHOICES[gameId] || [];
+      const src = Array.isArray(raw[k]) ? raw[k] : typeof raw[k] === "string" ? raw[k].split(/[,;|]+/) : [];
+      const list = [];
+      for (const x of src) { const t = String(x == null ? "" : x).trim().toLowerCase(); const hit = choices.find((r) => r[0].toLowerCase() === t || r[1].toLowerCase() === t); if (hit && !list.includes(hit[0])) list.push(hit[0]); }
       if (list.length) out[k] = list;
     }
   }
   if (out.lengthMin !== undefined && out.lengthMax !== undefined && out.lengthMin > out.lengthMax) [out.lengthMin, out.lengthMax] = [out.lengthMax, out.lengthMin];
   return out;
+}
+
+// update 114: finds the config inside whatever file was uploaded: a setup file, a bare config, a browser backup ({ t, data }),
+// or a file wrapped one level deeper. Returns null when nothing that looks like an autopilot setup is in it.
+export function extractConfig(d, depth = 0) {
+  if (!d || typeof d !== "object" || depth > 3) return null;
+  if (d.config && typeof d.config === "object") return extractConfig(d.config, depth + 1) || d.config;
+  if (d.run || d.vote || d.games || d.rotation || d.session || d.eligibility || d.display) return d;
+  if (d.data && typeof d.data === "object") return extractConfig(d.data, depth + 1);
+  return null;
+}
+// games may be an object keyed by id OR by name ("Wordle"), or an array of { id, ... }; settings may sit directly on the game
+function normGames(g) {
+  const key = (x) => String(x == null ? "" : x).toLowerCase().replace(/[^a-z0-9]/g, "");
+  const byKey = {};
+  for (const gm of GAMES) { byKey[key(gm.id)] = gm.id; byKey[key(gm.name)] = gm.id; }
+  const out = {};
+  const put = (k, v) => { const id = byKey[key(k)]; if (id && v && typeof v === "object") out[id] = v; };
+  if (Array.isArray(g)) g.forEach((v) => v && put(v.id || v.game || v.name, v));
+  else if (g && typeof g === "object") Object.entries(g).forEach(([k, v]) => put(k, v));
+  return out;
+}
+
+// update 114: what a restore found in the file and what could not be used (shown to the host after "Restore from a file")
+export function describeImport(rawCfg, clean) {
+  const found = normGames(rawCfg && rawCfg.games), rep = { games: Object.keys(found).length, withSettings: 0, settingValues: 0, notes: 0, dropped: [] };
+  for (const [id, r] of Object.entries(found)) {
+    const gm = gameById(id), cg = clean.games[id] || {}, keys = PRESET_KEYS[id] || [];
+    const src = r.settings && typeof r.settings === "object" ? r.settings : r;
+    let any = false;
+    for (const k of keys) {
+      if (src[k] === undefined || src[k] === null || src[k] === "") continue;
+      if (cg.settings && cg.settings[k] !== undefined) { rep.settingValues++; any = true; } else rep.dropped.push(gm.name + ": " + k + " = " + JSON.stringify(src[k]) + " was not understood");
+    }
+    if (any) rep.withSettings++;
+    if (r.settings && typeof r.settings === "object" && !keys.length && Object.keys(r.settings).length) rep.dropped.push(gm.name + ": its settings stay inside the game itself (not part of the autopilot)");
+    if ((cg.aka && cg.aka.length) || cg.inspiredBy || cg.voteNote || cg.howTo) rep.notes++;
+  }
+  rep.dropped = rep.dropped.slice(0, 12);
+  return rep;
 }
 
 export function sanitizeConfig(input, base = DEFAULT_CONFIG) {
@@ -219,7 +303,8 @@ export function sanitizeConfig(input, base = DEFAULT_CONFIG) {
       rounds: num(ses.rounds, 1, 100, b.session.rounds),
       finishRound: bool(ses.finishRound, b.session.finishRound),
       graceSeconds: num(ses.graceSeconds, 5, 900, b.session.graceSeconds),
-      showLeaderboardSeconds: num(ses.showLeaderboardSeconds, 0, 60, b.session.showLeaderboardSeconds)
+      showLeaderboardSeconds: num(ses.showLeaderboardSeconds, 0, 60, b.session.showLeaderboardSeconds),
+      resultSeconds: num(ses.resultSeconds, 0, 60, b.session.resultSeconds !== undefined ? b.session.resultSeconds : 8)
     },
     rotation: {
       mode: pick(rot.mode, ["vote", "sequence", "random", "weighted"], b.rotation.mode),
@@ -244,7 +329,9 @@ export function sanitizeConfig(input, base = DEFAULT_CONFIG) {
       resultSeconds: num(vt.resultSeconds, 2, 60, b.vote.resultSeconds),
       extendSecondsIfClose: num(vt.extendSecondsIfClose, 0, 60, b.vote.extendSecondsIfClose),
       includeReplayOption: bool(vt.includeReplayOption, b.vote.includeReplayOption),
-      maxVotesPerMinutePerUser: num(vt.maxVotesPerMinutePerUser, 1, 120, b.vote.maxVotesPerMinutePerUser)
+      maxVotesPerMinutePerUser: num(vt.maxVotesPerMinutePerUser, 1, 120, b.vote.maxVotesPerMinutePerUser),
+      simulateWhenNotLive: bool(vt.simulateWhenNotLive, b.vote.simulateWhenNotLive !== undefined ? b.vote.simulateWhenNotLive : true),
+      allowStageClicks: bool(vt.allowStageClicks, b.vote.allowStageClicks !== undefined ? b.vote.allowStageClicks : true)
     },
     eligibility: {
       everyone: bool(el.everyone, b.eligibility.everyone),
@@ -272,11 +359,15 @@ export function sanitizeConfig(input, base = DEFAULT_CONFIG) {
       theme: pick(dp.theme, ["dark", "light"], b.display.theme),
       accent: hex(dp.accent, b.display.accent),
       showHowTo: bool(dp.showHowTo, b.display.showHowTo),
+      showAka: bool(dp.showAka, b.display.showAka !== undefined ? b.display.showAka : true),
+      showVoteNotes: bool(dp.showVoteNotes, b.display.showVoteNotes !== undefined ? b.display.showVoteNotes : true),
+      showNotesOnSplash: bool(dp.showNotesOnSplash, b.display.showNotesOnSplash !== undefined ? b.display.showNotesOnSplash : true),
       transitionSeconds: num(dp.transitionSeconds, 1, 30, b.display.transitionSeconds)
     },
+    sync: { mode: pick((c.sync || {}).mode, ["stick", "follow"], (b.sync && b.sync.mode) || "stick") }, // update 114: stick to the saved settings (default) | follow the games' own settings
     games: {}
   };
-  const gin = c.games && typeof c.games === "object" ? c.games : {};
+  const gin = normGames(c.games);
   for (const g of GAMES) {
     const bg = (b.games && b.games[g.id]) || DEFAULT_CONFIG.games[g.id];
     const r = gin[g.id] && typeof gin[g.id] === "object" ? gin[g.id] : {};
@@ -285,7 +376,12 @@ export function sanitizeConfig(input, base = DEFAULT_CONFIG) {
       minutes: num(r.minutes, 0, 240, bg.minutes),   // 0 = use the default session length
       rounds: num(r.rounds, 0, 100, bg.rounds),      // 0 = use the default round count
       weight: num(r.weight, 1, 10, bg.weight),
-      settings: r.settings !== undefined ? sanitizePreset(g.id, r.settings) : bg.settings || {}
+      settings: r.settings !== undefined ? sanitizePreset(g.id, r.settings) : (PRESET_KEYS[g.id] || []).some((k) => r[k] !== undefined) ? sanitizePreset(g.id, r) : bg.settings || {},
+      syncMode: pick(r.syncMode, ["global", "stick", "follow"], bg.syncMode || "global"), // update 114: this game follows the global choice, or its own
+      aka: akaList(r.aka, Array.isArray(bg.aka) ? bg.aka : []),
+      inspiredBy: str(r.inspiredBy, NOTE_LIMITS.inspiredBy, typeof bg.inspiredBy === "string" ? bg.inspiredBy : ""),
+      voteNote: str(r.voteNote, NOTE_LIMITS.voteNote, typeof bg.voteNote === "string" ? bg.voteNote : ""),
+      howTo: str(r.howTo, NOTE_LIMITS.howTo, typeof bg.howTo === "string" ? bg.howTo : "")
     };
   }
   return out;
