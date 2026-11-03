@@ -129,3 +129,47 @@
   background-repeat: no-repeat;
 }
 .theme-picker select:focus{ outline:none; border-style:solid; }
+
+
+/* ==========================================================================
+   BOX COLORS & LOOKS (update 120)
+   The 15 "Box colors & look" designs (see /shared/theme.js) are picked from the same Appearance dropdown as the 6
+   plain colors. theme.js turns the chosen look into the --theme-* tokens above, so every game is recolored with no
+   per-game work. This block adds the scrapbook decoration on top, only while a look is active (html[data-look]):
+   cream graph-paper page, washi-tape corners on the hero banner, stitched (dashed) bars and a hero title that uses the
+   look's accent. BOXDLE paints all of this itself (it has its own boxes), so it is left out here.
+   ========================================================================== */
+html[data-look] body:not([data-game="boxdle"]) .app,
+html[data-look] body:not([data-game="boxdle"]) #app{
+  background-color: var(--theme-bg);
+  background-image:
+    linear-gradient(var(--look-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--look-grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+html[data-look] body[data-game]:not([data-game="boxdle"]){ --hero-accent: var(--look-accent); }
+html[data-look] body:not([data-game="boxdle"]) .heroBand{
+  background:
+    linear-gradient(var(--look-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--look-grid) 1px, transparent 1px),
+    var(--theme-bg-top);
+  background-size: 22px 22px, 22px 22px, auto;
+}
+html[data-look] body:not([data-game="boxdle"]) .heroBand::before,
+html[data-look] body:not([data-game="boxdle"]) .heroBand::after{
+  display: block; z-index: 0; top: 14px; margin: 0; width: 84px; height: 20px; border: 0; border-radius: 3px; opacity: 1;
+  box-shadow: 0 1px 2px var(--theme-shadow);
+}
+html[data-look] body:not([data-game="boxdle"]) .heroBand::before{ left: -18px; right: auto; background: var(--look-tape1); transform: rotate(-35deg); }
+html[data-look] body:not([data-game="boxdle"]) .heroBand::after{ right: -18px; left: auto; background: var(--look-tape2); transform: rotate(35deg); }
+html[data-look] body:not([data-game="boxdle"]) .heroTitle,
+html[data-look] body:not([data-game="boxdle"]) .heroTagline{ z-index: 1; }
+html[data-look] body:not([data-game="boxdle"]) .heroTitle{ filter: drop-shadow(0 2px 0 var(--look-sticker)) drop-shadow(0 4px 8px var(--theme-shadow)); }
+html[data-look] body:not([data-game="boxdle"]) .topbar,
+html[data-look] body:not([data-game="boxdle"]) .app-header{ border-bottom-style: dashed; }
+html[data-look] body:not([data-game="boxdle"]) .controls{ border-top-style: dashed; }
+html[data-look] .theme-picker select{ border-color: var(--look-accent); }
+
+/* the dropdown's group headings */
+.theme-picker select optgroup{ font-weight: 800; font-style: normal; }
+.theme-picker select option{ font-weight: 600; }

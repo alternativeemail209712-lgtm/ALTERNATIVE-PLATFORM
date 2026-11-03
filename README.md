@@ -1,3 +1,5 @@
+> **Update 120:** BOXDLE: newest guess on top of the guessed-words box + 3D tiles; 15 "Box colors & looks" designs now in the Appearance dropdown of EVERY game (next to the 6 plain colors). See CHANGES_UPDATE_120.md.
+
 > **Update 107:** new game TOWNDLE (Malaysia only: guess the secret city / municipal / district / town; green = the place, yellow = right state with the 3 Federal Territories counted as the 14th, orange = direct neighbour (same or touching district), grey = wrong; arrow + distance; Normal / Medium / Hard / Random tiers) at `/towndle/`. See `CHANGES_UPDATE_107.md` and `data/README-towns.txt`.
 
 > **Update 95:** CITYDLE: City colors card (legend always matches) + 6,300+ cities (and a way to load every city of the world); NEW game EXPANDLE (grow a word one letter per row in 60 s, 1 point per word) at `/expandle/`. See `CHANGES_UPDATE_95.md`.
