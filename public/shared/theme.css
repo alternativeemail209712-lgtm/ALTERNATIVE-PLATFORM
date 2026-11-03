@@ -193,42 +193,12 @@ html[data-look] body:not([data-game="boxdle"]) input,
 html[data-look] body:not([data-game="boxdle"]) select{
   font-family: "Quicksand", "Fredoka", system-ui, sans-serif;
 }
-/* glossy raised 3D tiles and keys */
-html[data-look] body:not([data-game="boxdle"]) .tile,
-html[data-look] body:not([data-game="boxdle"]) .key{
-  font-family: "Fredoka", "Quicksand", system-ui, sans-serif; font-weight: 700;
-  border-radius: 10px;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.55),
-    inset 0 -3px 0 rgba(0,0,0,.13),
-    0 3px 0 var(--theme-shadow),
-    0 5px 8px -3px var(--theme-shadow);
-}
-html[data-look] body:not([data-game="boxdle"]) .key:active{
-  transform: translateY(3px);
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.13), 0 0 0 var(--theme-shadow);
-}
-/* raised pill buttons */
-html[data-look] body:not([data-game="boxdle"]) .btn,
-html[data-look] body:not([data-game="boxdle"]) .iconBtn,
-html[data-look] body:not([data-game="boxdle"]) .btn-icon-label,
-html[data-look] body:not([data-game="boxdle"]) .tabBtn{
-  border-radius: 999px; font-weight: 700;
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -3px 0 rgba(0,0,0,.13), 0 3px 0 var(--theme-shadow);
-  transition: transform .08s ease, box-shadow .08s ease;
-}
-html[data-look] body:not([data-game="boxdle"]) .toolbarRow .iconBtn{ border-radius: 50%; }
-html[data-look] body:not([data-game="boxdle"]) .btn:active:not(:disabled),
-html[data-look] body:not([data-game="boxdle"]) .iconBtn:active{
-  transform: translateY(3px);
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.3), 0 0 0 var(--theme-shadow);
-}
+/* (the raised 3D for tiles, keys and buttons now lives in the "3D DEPTH" section at the end of this file) */
 /* stitched cards */
 html[data-look] body:not([data-game="boxdle"]) .wdLegend,
 html[data-look] body:not([data-game="boxdle"]) .celebrationCard,
 html[data-look] body:not([data-game="boxdle"]) .titleFontChip{
   border-style: dashed; border-width: 2px; border-radius: 16px;
-  box-shadow: 0 3px 0 var(--theme-shadow);
 }
 /* sparkles on the hero title (color emoji ignore the transparent text fill) */
 html[data-look] body:not([data-game="boxdle"]) .heroTitle{ font-weight: 700; }
@@ -377,22 +347,78 @@ html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .rou
 }
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .round-card::after{ content: "💗"; position: absolute; top: -15px; right: 20px; font-size: 22px; transform: rotate(12deg); z-index: 3; pointer-events: none; }
 
-/* ---- MORE 3D: every tile-like piece (game clue colors stay as they are; only shape, light and shadow change) ---- */
-html[data-look] body:not([data-game="boxdle"]) .exTile, html[data-look] body:not([data-game="boxdle"]) .mineTile, html[data-look] body:not([data-game="boxdle"]) .codeCell, html[data-look] body:not([data-game="boxdle"]) .patCell, html[data-look] body:not([data-game="boxdle"]) .symbolCell, html[data-look] body:not([data-game="boxdle"]) .letterChartCell, html[data-look] body:not([data-game="boxdle"]) .hint-tile, html[data-look] body:not([data-game="boxdle"]) .legendTile,
-html[data-look] body:not([data-game="boxdle"]) .path-chip, html[data-look] body:not([data-game="boxdle"]) .cdSwatch, html[data-look] body:not([data-game="boxdle"]) .ccSwatch, html[data-look] body:not([data-game="boxdle"]) .tbSwatch, html[data-look] body:not([data-game="boxdle"]) .legendSwatch, html[data-look] body:not([data-game="boxdle"]) .statusChip, html[data-look] body:not([data-game="boxdle"]) .hintChip, html[data-look] body:not([data-game="boxdle"]) .cmChip, html[data-look] body:not([data-game="boxdle"]) .wdChip, html[data-look] body:not([data-game="boxdle"]) .sfChip,
-html[data-look] body:not([data-game="boxdle"]) .chip-green, html[data-look] body:not([data-game="boxdle"]) .chip-yellow, html[data-look] body:not([data-game="boxdle"]) .chip-grey, html[data-look] body:not([data-game="boxdle"]) .chip-decoy, html[data-look] body:not([data-game="boxdle"]) .roundChip{
-  border-radius: 10px;
-  box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.12), 0 2px 0 var(--theme-shadow), 0 4px 6px -3px var(--theme-shadow);
-}
-html[data-look] body:not([data-game="boxdle"]) .tile::after, html[data-look] body:not([data-game="boxdle"]) .exTile::after, html[data-look] body:not([data-game="boxdle"]) .codeCell::after, html[data-look] body:not([data-game="boxdle"]) .patCell::after, html[data-look] body:not([data-game="boxdle"]) .symbolCell::after{ pointer-events: none; }
-html[data-look] body:not([data-game="boxdle"]) .tile, html[data-look] body:not([data-game="boxdle"]) .exTile, html[data-look] body:not([data-game="boxdle"]) .codeCell, html[data-look] body:not([data-game="boxdle"]) .patCell, html[data-look] body:not([data-game="boxdle"]) .symbolCell{
-  background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.28), transparent 70%);
-  text-shadow: 0 1px 0 rgba(255,255,255,.35);
-}
-html[data-look] body:not([data-game="boxdle"]) .tile.current{ transform: translateY(-2px); }
-html[data-look] body:not([data-game="boxdle"]) .legendTile{ border-radius: 8px; }
-html[data-look] body:not([data-game="boxdle"]) .statusChip, html[data-look] body:not([data-game="boxdle"]) .hintChip{ border-width: 2px; }
-html[data-look] body:not([data-game="boxdle"]) .guessRow, html[data-look] body:not([data-game="boxdle"]) .attempt-row, html[data-look] body:not([data-game="boxdle"]) .banner-row{ border-radius: 14px; box-shadow: 0 2px 0 var(--theme-shadow); }
 @media (prefers-reduced-motion: reduce){
   html[data-look] .heroDeco{ animation: none !important; }
 }
+
+
+/* ==========================================================================
+   3D DEPTH (update 124) - one setting for the whole platform: Settings -> Appearance -> "3D depth" (Off / Soft / Strong).
+   It works with every color (plain colors and the cute looks) and is matched to what each game is made of:
+     BIG BOXES   (the main card, panels, globe / route / host cards)  -> a slab with a solid side wall and a soft drop shadow
+     TILES       (letters, code cells, symbols, hint tiles ...)        -> glossy raised blocks
+     KEYS + BUTTONS                                                    -> raised, and they press down when tapped
+     SMALL BOXES (status chips, hints, legends, pills, swatches)       -> small raised stickers
+     ROWS        (answer rows, host rows, ticker items)                -> a thin raised strip
+   Game clue colors (green / yellow / grey ...) are never changed - only light, edge and shadow.
+   BOXDLE and CONTEXTO draw their own 3D (see their own style files).
+   ========================================================================== */
+html[data-depth="soft"]{ --d1: 2px; --d2: 4px; --dblur: 8px; }
+html[data-depth="strong"]{ --d1: 3px; --d2: 6px; --dblur: 12px; }
+
+/* ---- BIG BOXES ---- */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .round-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .panel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .board, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .globe-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .route-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .feed-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .setup-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-card,
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .leaderboard-panel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mode-panel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .comment-panel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .fans-panel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .status-card, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .modal, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .modal-card{
+  box-shadow: 0 var(--d2, 4px) 0 var(--theme-line), 0 calc(var(--d2, 4px) + 6px) calc(var(--dblur, 8px) * 2) -8px var(--theme-shadow);
+}
+html[data-look]:not([data-hstyle="classic"]):not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .round-card{
+  box-shadow: 0 0 0 5px var(--look-sticker), 0 calc(5px + var(--d2, 4px)) 0 var(--theme-line), 0 calc(5px + var(--d2, 4px) + 8px) 26px -6px var(--theme-shadow);
+}
+/* the big box under the stage image of Flagle: the flag sits in a raised frame */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .flag-plate{
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 0 var(--d2, 4px) 0 var(--theme-line), 0 calc(var(--d2, 4px) + 6px) 16px -6px var(--theme-shadow);
+}
+
+/* ---- TILES: glossy raised blocks ---- */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mineTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .codeCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .patCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .symbolCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .letterChartCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .hint-tile{
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.14),
+    0 var(--d1, 2px) 0 rgba(0,0,0,.26), 0 calc(var(--d1, 2px) + 3px) var(--dblur, 8px) -3px var(--theme-shadow);
+  background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.28), transparent 70%);
+  text-shadow: 0 1px 0 rgba(255,255,255,.3);
+}
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tile.current{ transform: translateY(-2px); }
+
+/* ---- KEYS + BUTTONS: raised, pressed down when tapped ---- */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .key, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .primary-btn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .ghost-btn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .danger-btn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .icon-btn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .iconBtn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tabBtn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mode-tab, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tab,
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .toolbarRow .iconBtn, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnGold, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnPrimary, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnGhost{
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -3px 0 rgba(0,0,0,.13),
+    0 var(--d1, 2px) 0 rgba(0,0,0,.24), 0 calc(var(--d1, 2px) + 2px) calc(var(--dblur, 8px) * .7) -3px var(--theme-shadow);
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .key:active:not(:disabled), html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btn:active:not(:disabled), html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .primary-btn:active:not(:disabled), html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .ghost-btn:active:not(:disabled),
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .danger-btn:active:not(:disabled), html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .icon-btn:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .iconBtn:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tabBtn:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mode-tab:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnGold:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnPrimary:active, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .btnGhost:active{
+  transform: translateY(var(--d1, 2px));
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.13), 0 0 0 rgba(0,0,0,.24);
+}
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .key{ background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.25), transparent 70%); }
+
+/* ---- SMALL BOXES: raised stickers ---- */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .statusChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .hintChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .wdLegend, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .lgSection.lgPanel, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .celebrationCard, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .legendTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .legendChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .pickerOption,
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .cdChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .cmChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .wdChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .sfChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .roundChip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .path-chip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .meta-pill, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .badge, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mode-badge, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .modeBadge,
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .lengthBadge, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tiktok-badge, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .setup-badge, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .pip, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .titleFontChip{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 0 rgba(0,0,0,.1),
+    0 var(--d1, 2px) 0 rgba(0,0,0,.18), 0 calc(var(--d1, 2px) + 2px) calc(var(--dblur, 8px) * .6) -3px var(--theme-shadow);
+}
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .cdSwatch, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .ccSwatch, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tbSwatch, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .legendSwatch, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .swatch{
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.4), inset 0 -3px 0 rgba(0,0,0,.14), 0 var(--d1, 2px) 0 rgba(0,0,0,.24);
+}
+
+/* ---- ROWS ---- */
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessRow, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .attempt-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .banner-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .ticker-item, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .route, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .comment-row{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 var(--d1, 2px) 0 rgba(0,0,0,.16);
+}
+
+/* ---- settings window cards (shared Settings workspace) ---- */
+html:not([data-depth="off"]) .csCard{ box-shadow: 0 var(--d1, 2px) 0 var(--theme-line), 0 calc(var(--d1, 2px) + 3px) 10px -6px var(--theme-shadow); }
+html:not([data-depth="off"]) .csApply{ box-shadow: inset 0 2px 0 rgba(255,255,255,.4), 0 var(--d1, 2px) 0 rgba(0,0,0,.25); }
+html:not([data-depth="off"]) .csApply:active{ transform: translateY(var(--d1, 2px)); box-shadow: 0 0 0 rgba(0,0,0,.25); }

@@ -262,11 +262,48 @@
     note.style.margin = "4px 0 0";
     note.textContent = "Title & header design for the cute looks (inspired by BOXDLE). Shared by all games.";
     wrap.appendChild(lab); wrap.appendChild(note);
+    var dl = document.createElement("label");
+    dl.className = "theme-picker"; dl.style.marginTop = "8px"; dl.style.display = "flex";
+    dl.appendChild(document.createTextNode("🧊 "));
+    dl.appendChild(makeDepthSelect());
+    var dn = document.createElement("p");
+    dn.className = "sectionNote"; dn.style.margin = "4px 0 0";
+    dn.textContent = "3D depth: raised tiles, keys, buttons, boxes and chips. Works with every color. Shared by all games.";
+    wrap.appendChild(dl); wrap.appendChild(dn);
     host.parentNode.insertBefore(wrap, host.nextSibling);
   }
 
   hstyle = readHStyle();
   document.documentElement.setAttribute("data-hstyle", hstyle);
+
+  // ---- 3D depth (update 124): off | soft | strong, shared by every game, works with every color ----
+  var DEPTHS = [
+    { id: "soft",   name: "🧊 Soft 3D (default)" },
+    { id: "strong", name: "🧱 Strong 3D" },
+    { id: "off",    name: "▫️ Flat (no 3D)" }
+  ];
+  var DKEY = "platformDepth";
+  function readDepth() {
+    try { var v = localStorage.getItem(DKEY); for (var i = 0; i < DEPTHS.length; i++) if (DEPTHS[i].id === v) return v; } catch (e) {}
+    return "soft";
+  }
+  var depth = readDepth();
+  document.documentElement.setAttribute("data-depth", depth);
+  function setDepth(id) {
+    depth = id;
+    document.documentElement.setAttribute("data-depth", id);
+    try { localStorage.setItem(DKEY, id); } catch (e) {}
+    var sel = document.querySelectorAll("[data-depth-select]");
+    for (var i = 0; i < sel.length; i++) if (sel[i].value !== id) sel[i].value = id;
+  }
+  function makeDepthSelect() {
+    var sel = document.createElement("select");
+    sel.setAttribute("data-depth-select", "1"); sel.setAttribute("aria-label", "3D depth");
+    DEPTHS.forEach(function (h) { var o = document.createElement("option"); o.value = h.id; o.textContent = h.name; sel.appendChild(o); });
+    sel.value = depth;
+    sel.addEventListener("change", function (e) { setDepth(e.target.value); });
+    return sel;
+  }
 
   // Apply immediately (before DOMContentLoaded) so there's no flash of the
   // wrong theme on load.
@@ -294,9 +331,12 @@
 
   function wireSelects() {
     var selects = document.querySelectorAll("[data-theme-select]");
+    var onHome = /^\/(index\.html)?$/.test(location.pathname);
     for (var i = 0; i < selects.length; i++) {
+      if (selects[i].getAttribute("data-wired") === "1") continue;
+      selects[i].setAttribute("data-wired", "1");
       addLookOptions(selects[i]);
-      addHeaderSelect(selects[i]);
+      if (!onHome) addHeaderSelect(selects[i]);
       selects[i].value = current;
       selects[i].addEventListener("change", function (e) {
         apply(e.target.value);
@@ -313,12 +353,17 @@
 
   window.PlatformTheme = {
     apply: apply,
+    wire: wireSelects, // for selects created later (the HOME settings > Appearance tab)
     themes: THEMES,
     plain: PLAIN,
     looks: LOOKS,
     keys: KEYS,
     current: function () { return current; },
     headerStyle: function () { return hstyle; },
+    depth: function () { return depth; },
+    setDepth: setDepth,
+    makeDepthSelect: makeDepthSelect,
+    depths: DEPTHS,
     setHeaderStyle: setHStyle,
     headerStyles: HSTYLES,
     onChange: function (fn) { listeners.push(fn); },
