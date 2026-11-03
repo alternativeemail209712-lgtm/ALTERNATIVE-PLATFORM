@@ -16,6 +16,7 @@
 <script src="/shared/session.js"></script>
 <script src="/shared/platform-sync.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="boxdle-style.css" />
 <link rel="stylesheet" href="/shared/game-chrome.css" />
 <link rel="stylesheet" href="/shared/settings-shell.css" />
@@ -35,8 +36,15 @@
   <div class="app" id="app">
 
     <div class="heroBand" id="heroBand">
-      <h1 class="heroTitle">BOXDLE</h1>
-      <p class="heroTagline">Chain touching tiles into real words before the clock runs out. Every letter is a point. Your chat plays live!</p>
+      <span class="heroDeco d1" aria-hidden="true">✨</span>
+      <span class="heroDeco d2" aria-hidden="true">🎀</span>
+      <span class="heroDeco d3" aria-hidden="true">⭐</span>
+      <span class="heroDeco d4" aria-hidden="true">🧸</span>
+      <span class="heroDeco d5" aria-hidden="true">💗</span>
+      <span class="heroCrown" aria-hidden="true">👑</span>
+      <h1 class="heroTitle"><span class="hT1">BOX</span><span class="hT2">DLE</span></h1>
+      <div class="heroRibbon">WORD HUNT</div>
+      <p class="heroTagline">Chain touching tiles into real words — every letter is a point! Your chat plays live.</p>
     </div>
 
     <header class="topbar">
@@ -66,12 +74,12 @@
     <main class="stage" id="stage">
       <section class="round-card">
 
-        <!-- Order of the page (top to bottom, one normal flow, nothing positioned on top of anything else):
-               1. the floating message window (.toastSlot, above this card)
-               2. the legend - /shared/legend.js puts it right here, as the first block of this card
-               3. the round clock (time left, words found, points)
-               4. the letter grid
-               5. the board of guessed words (valid words found so far, with their points) -->
+        <!-- The largest box (this card) holds, top to bottom, in one normal flow where nothing is positioned over anything else:
+               1. the legend - /shared/legend.js puts it right here, as the first block of this card (the floating message window is
+                  its own reserved slot above the card)
+               2. BOX 1: the round clock (time left, words, points) and a fixed-height status line
+               3. BOX 2: the letter grid
+               4. BOX 3: the guessed words (fixed height, scrolls by itself so it never pushes the other boxes) -->
 
         <div class="bxClock" id="bxClock" hidden>
           <div class="bxClockTop">
@@ -82,6 +90,10 @@
             </span>
           </div>
           <div class="bxBar"><div class="bxBarFill" id="bxBarFill"></div></div>
+          <div class="bxStatus">
+            <span class="bxStatusText" id="bxStatusText"></span>
+            <button class="btn btnGold bxNewBtn" id="playAgainBtn" type="button">New round</button>
+          </div>
         </div>
 
         <section class="bxGridSection" id="bxGridSection" aria-label="Letter grid" hidden>
@@ -89,33 +101,18 @@
             <div class="bxGrid" id="bxGrid"></div>
             <svg class="bxPathSvg" id="bxPathSvg" aria-hidden="true"></svg>
           </div>
-          <div class="bxRuleNote" id="bxRuleNote"></div>
         </section>
 
-        <div class="hintChips" id="hintChips"></div>
-
-        <div class="offlineNote" id="offlineNote" hidden>
-          <p>Solo practice — type your word in the box below.</p>
-        </div>
-
-        <div class="resultBanner" id="resultBanner" hidden>
-          <p id="resultText"></p>
-          <button class="btn btnGold" id="playAgainBtn" type="button">New round</button>
-          <p class="autoContinueNote" id="autoContinueNote" hidden></p>
-        </div>
-
         <div class="idleBanner" id="idleBanner">
-          <p>Open <strong>Settings</strong> (⚙️ top right) to choose a mode, grid size and round time, then tap Apply to begin.</p>
+          <p>🧸 Open <strong>Settings</strong> (⚙️ top right) to choose a mode, grid size and round time, then tap Apply to begin.</p>
         </div>
 
-        <!-- The board of guessed words: every valid word found this round, who found it and what it scored. Own scroll area. -->
         <section class="bxBoard" id="tilesWrap" aria-label="Guessed words" hidden>
           <div class="bxBoardHead">
             <span class="bxBoardTitle">✅ Guessed words</span>
             <span class="bxBoardMeta" id="bxBoardMeta">0 words · 0 points</span>
           </div>
           <ol class="bxWordList" id="bxWordList" aria-live="polite"></ol>
-          <div class="bxMissed" id="bxMissed" hidden></div>
         </section>
 
       </section>
@@ -275,8 +272,14 @@
 
       <div class="drawerSection">
         <h4>Color shades</h4>
-        <p class="sectionNote">Choose how strong each color (the highlighted word path, valid words, the hint tile, skipped words and the round clock) looks, in the grid, the board and the legend. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away - no new round needed - and every screen connected to this game changes together.</p>
+        <p class="sectionNote">Choose how strong each of the special colors (the highlighted word path, valid words, the hint tile, the last-seconds red and the round clock) looks, in the grid, the board and the legend. Ten shades per color, from lightest to darkest (the middle one is the standard look). It applies right away - no new round needed - and every screen connected to this game changes together.</p>
         <div id="shadePicker"></div>
+      </div>
+
+      <div class="drawerSection">
+        <h4>Box colors &amp; look</h4>
+        <p class="sectionNote">Pick a cute preset, or color every part yourself: the page, the largest box, its border and the three boxes inside it (clock, letter grid, guessed words), the tiles and their letters, the text, the pink accent and the navy title. Changes apply right away on every screen connected to this game and are remembered.</p>
+        <div id="colorPanel"></div>
       </div>
 
       <div class="drawerSection">
@@ -417,7 +420,7 @@
       <ul class="howToList">
         <li>The board is a <strong>grid of letter tiles</strong> — 6 × 6, 8 × 8, 10 × 10 or 12 × 12, chosen in Settings. Everyone sees the same grid.</li>
         <li>Make words by chaining tiles that <strong>touch</strong> each other in <strong>every direction</strong>: up, down, left, right <em>and the four corners</em>. Type the word in the chat — anyone can play, anytime.</li>
-        <li>Only <strong>real words</strong> count (no made-up words). A word must be at least 3 letters (the host can change this) and each word scores <strong>once per round</strong> — the first person to type it gets it.</li>
+        <li>Only <strong>real words</strong> count (no made-up words). A word must be at least <strong>4 letters</strong> (the host can change this) and can be as long as you can find — 15 or even 20 letters on the big grids and each word scores <strong>once per round</strong> — the first person to type it gets it.</li>
         <li><strong>Tiles:</strong> by default each tile can be used only once per word. The host can switch on <em>Tiles may be reused</em>, so a word may come back to a tile it already used.</li>
         <li><strong>Scoring:</strong> points = the number of letters. <span class="legendTile bxOk">5</span> a 5-letter word is 5 points, a 10-letter word is 10 points. Points count for the chat leaderboards in Live mode.</li>
         <li>Each new word lights up its path on the grid (<span class="legendTile bxPath">A</span> gold tiles). Every valid word is listed in the <strong>Guessed words</strong> board with its points and who found it.</li>

@@ -44,18 +44,13 @@ const el = {
   gridWrap: document.getElementById("bxGridWrap"),
   grid: document.getElementById("bxGrid"),
   pathSvg: document.getElementById("bxPathSvg"),
-  ruleNote: document.getElementById("bxRuleNote"),
-  hintChips: document.getElementById("hintChips"),
-  offlineNote: document.getElementById("offlineNote"),
-  resultBanner: document.getElementById("resultBanner"),
-  resultText: document.getElementById("resultText"),
   playAgainBtn: document.getElementById("playAgainBtn"),
-  autoContinueNote: document.getElementById("autoContinueNote"),
+  statusText: document.getElementById("bxStatusText"),
+  colorPanel: document.getElementById("colorPanel"),
   idleBanner: document.getElementById("idleBanner"),
   board: document.getElementById("tilesWrap"),
   boardMeta: document.getElementById("bxBoardMeta"),
   wordList: document.getElementById("bxWordList"),
-  missed: document.getElementById("bxMissed"),
 
   controlsHandle: document.getElementById("controlsHandle"),
   controlsBody: document.getElementById("controlsBody"),
@@ -168,8 +163,8 @@ el.fullscreenBtn.addEventListener("click", () => {
 for (let n = 2; n <= 8; n++) {
   const opt = document.createElement("option");
   opt.value = String(n);
-  opt.textContent = n + " letters" + (n === 3 ? " (default)" : "");
-  if (n === 3) opt.selected = true;
+  opt.textContent = n + " letters" + (n === 4 ? " (default)" : "");
+  if (n === 4) opt.selected = true;
   el.minLenSelect.appendChild(opt);
 }
 
@@ -567,12 +562,13 @@ let hl = null; // { path, until }
 let hlTimer = null;
 
 function gridMetrics(n) {
-  const secW = el.gridSection.clientWidth || 320;
-  const avail = Math.max(120, secW - 22);
-  const gap = n <= 6 ? 6 : n <= 8 ? 5 : n <= 10 ? 4 : 3;
-  const maxTile = n <= 6 ? 58 : n <= 8 ? 46 : n <= 10 ? 38 : 32;
-  const size = Math.max(16, Math.min(maxTile, Math.floor((avail - gap * (n - 1)) / n)));
-  return { n, size, gap, font: Math.max(10, Math.round(size * 0.52)) };
+  // The grid box is as wide as the card allows; tiles fill that width, so the letters are as big as the screen permits.
+  const secW = el.gridSection.clientWidth || 340;
+  const avail = Math.max(120, secW - 16);
+  const gap = n <= 6 ? 6 : n <= 8 ? 5 : n <= 10 ? 3 : 2;
+  const maxTile = n <= 6 ? 66 : n <= 8 ? 54 : n <= 10 ? 46 : 40;
+  const size = Math.max(18, Math.min(maxTile, Math.floor((avail - gap * (n - 1)) / n)));
+  return { n, size, gap, font: Math.max(12, Math.round(size * 0.6)) };
 }
 
 function renderGrid(g) {
@@ -609,9 +605,6 @@ function renderGrid(g) {
     el.pathSvg.setAttribute("viewBox", "0 0 " + w + " " + w);
   }
   el.grid.classList.toggle("over", g.status !== "live");
-  el.ruleNote.textContent = g.allowReuse
-    ? "Touching tiles only — up, down, sideways & corners · a tile may be reused in a word · " + g.minWordLength + "+ letters"
-    : "Touching tiles only — up, down, sideways & corners · each tile once per word · " + g.minWordLength + "+ letters";
   applyHighlights(g);
 }
 
@@ -671,6 +664,25 @@ let pendingHighlight = null;
 // ------------------------------------------------------------
 let lastBoardSig = "";
 let boardRows = [];
+let boardRound = -1;
+let stickToBottom = true;
+let stickTimer = null;
+let progScrollUntil = 0;
+function scrollListBottom(smooth) {
+  progScrollUntil = Date.now() + 700;
+  if (el.wordList.scrollTo) el.wordList.scrollTo({ top: el.wordList.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+  else el.wordList.scrollTop = el.wordList.scrollHeight;
+}
+// The box has a fixed height and scrolls by itself: the newest word is always brought into view. If somebody scrolls up to read
+// older words the list stays where it is, and returns to the newest word by itself after a few seconds.
+el.wordList.addEventListener("scroll", () => {
+  if (Date.now() < progScrollUntil) return;
+  const near = el.wordList.scrollHeight - el.wordList.scrollTop - el.wordList.clientHeight < 36;
+  stickToBottom = near;
+  clearTimeout(stickTimer);
+  if (!near) stickTimer = setTimeout(() => { stickToBottom = true; scrollListBottom(true); }, 6000);
+});
+
 function renderBoard(g) {
   const show = g.status !== "idle";
   el.board.hidden = !show;
@@ -678,7 +690,7 @@ function renderBoard(g) {
 
   el.boardMeta.textContent =
     g.foundCount + (g.foundCount === 1 ? " word" : " words") + " · " + g.totalPoints + (g.totalPoints === 1 ? " point" : " points") +
-    (g.playerCount ? " · 👥 " + g.playerCount : "");
+    (g.status === "live" && g.possibleCount ? " · 🔎 " + g.possibleCount + "+ possible" : "");
 
   const newest = g.found[g.found.length - 1];
   const sig = [g.roundNumber, g.foundCount, g.status, newest ? newest.avatarUrl || "" : "", g.missed.join(",")].join("|");
@@ -686,30 +698,30 @@ function renderBoard(g) {
   lastBoardSig = sig;
 
   const keepScroll = el.wordList.scrollTop;
-  boardRows = g.found.slice().reverse();
+  const newRound = g.roundNumber !== boardRound;
+  if (newRound) { boardRound = g.roundNumber; stickToBottom = true; }
+  boardRows = g.found.slice(); // oldest first, newest at the bottom
+  let html = "";
   if (boardRows.length === 0) {
-    el.wordList.innerHTML = '<li class="bxEmpty">' + (g.status === "live" ? "No words yet — type a word you can trace on the grid in the chat!" : "No words were found this round.") + "</li>";
+    html = '<li class="bxEmpty">' + (g.status === "live" ? "🧸 No words yet — type a word you can trace on the grid in the chat!" : "No words were found this round.") + "</li>";
   } else {
     const freshAt = newest && g.status === "live" && (g.serverNow || Date.now()) - newest.at < 2500 ? newest.at : -1;
-    el.wordList.innerHTML = boardRows
+    html = boardRows
       .map((f, i) =>
         '<li class="bxWordRow' + (f.at === freshAt ? " fresh" : "") + '" data-i="' + i + '" title="Tap to show the path on the grid">' +
-        avatarChipHtml(f.caller, f.avatarUrl, 24) +
-        '<span class="bxWordText">' + escapeHtml(f.word) + "</span>" +
-        '<span class="bxWho">' + escapeHtml(f.caller) + "</span>" +
+        avatarChipHtml(f.caller, f.avatarUrl, 26) +
+        '<span class="bxWordMain"><span class="bxWordText">' + escapeHtml(f.word) + '</span><span class="bxWho">' + escapeHtml(f.caller) + "</span></span>" +
         '<span class="bxPts">+' + f.points + "</span></li>"
       )
       .join("");
-    el.wordList.scrollTop = keepScroll;
   }
-
   if (g.status !== "live" && g.missed.length > 0) {
-    el.missed.hidden = false;
-    el.missed.innerHTML = "💡 Words that were hiding on this grid: " + g.missed.map((w) => "<b>" + escapeHtml(w) + "</b>").join(" ");
-  } else {
-    el.missed.hidden = true;
-    el.missed.innerHTML = "";
+    html += '<li class="bxMissedRow">💡 Words that were hiding on this grid: ' + g.missed.map((w) => "<b>" + escapeHtml(w) + "</b>").join(" ") + "</li>";
   }
+  el.wordList.innerHTML = html;
+  if (newRound) el.wordList.scrollTop = 0;
+  else if (stickToBottom) scrollListBottom(true);
+  else el.wordList.scrollTop = keepScroll;
 }
 el.wordList.addEventListener("click", (e) => {
   const row = e.target.closest && e.target.closest(".bxWordRow");
@@ -718,45 +730,126 @@ el.wordList.addEventListener("click", (e) => {
   if (f && f.path) setHighlight(f.path, 4000);
 });
 
-function renderHint(g) {
-  let html = "";
-  if (g.status === "live" && g.hint) {
-    html = '<div class="bxHintLine">💡 A <b>' + g.hint.length + "-letter</b> word starts at the purple tile (letter <b>" + escapeHtml(g.hint.letter.toUpperCase()) + "</b>).</div>";
-  } else if (g.status === "live" && g.hintNote) {
-    html = '<div class="bxHintLine note">' + escapeHtml(g.hintNote.text) + "</div>";
-  }
-  el.hintChips.innerHTML = html;
-}
-
-function renderModeNotes(g) {
-  el.offlineNote.hidden = !(g.status === "live" && g.mode === "offline");
-}
-
-function renderBanners(g) {
+// One status line (fixed height) inside the clock box: hint, solo-practice note or the result of the round - it never moves a box.
+function renderStatus(g) {
   el.idleBanner.hidden = g.status !== "idle";
-  el.resultBanner.hidden = g.status !== "won" && g.status !== "lost";
-
+  const ended = g.status === "won" || g.status === "lost";
+  el.playAgainBtn.classList.toggle("show", ended);
+  let html = "";
   if (g.status === "won") {
     const info = g.lastWinInfo;
-    el.resultBanner.className = "resultBanner win";
-    if (info && info.username) {
-      el.resultText.textContent =
-        "🎉 " + info.username + " wins the round with " + info.roundPoints + " points (" + info.words + (info.words === 1 ? " word" : " words") + ")! " +
-        g.foundCount + (g.foundCount === 1 ? " word" : " words") + " and " + g.totalPoints + " points were found in total.";
-    } else {
-      el.resultText.textContent = "🎉 Time's up! " + g.foundCount + " words found for " + g.totalPoints + " points.";
-    }
+    html = info && info.username
+      ? "🎉 <b>" + escapeHtml(info.username) + "</b> wins the round with <b>" + info.roundPoints + " points</b> (" + info.words + (info.words === 1 ? " word" : " words") + ")! " +
+        g.foundCount + " words · " + g.totalPoints + " points in total."
+      : "🎉 Time's up! " + g.foundCount + " words found for " + g.totalPoints + " points.";
   } else if (g.status === "lost") {
-    el.resultBanner.className = "resultBanner lost";
-    el.resultText.textContent = "⏱ Time's up! No words were found this round.";
+    html = "⏱ Time's up! No words were found this round.";
+  } else if (g.status === "live") {
+    if (g.hint) html = "💡 A <b>" + g.hint.length + "-letter</b> word starts at the purple tile (letter <b>" + escapeHtml(g.hint.letter.toUpperCase()) + "</b>).";
+    else if (g.hintNote) html = escapeHtml(g.hintNote.text);
+    else if (g.mode === "offline") html = "✏️ Solo practice — type your word in the box below.";
+    else html = "✨ Type words you can trace on the grid in the chat — " + g.minWordLength + "+ letters, long words score big!";
   }
+  if (ended && g.autoContinue) html += " <b>Next grid in " + g.autoContinueSecondsLeft + "s…</b>";
+  el.statusText.innerHTML = html;
+}
 
-  if ((g.status === "won" || g.status === "lost") && g.autoContinue) {
-    el.autoContinueNote.hidden = false;
-    el.autoContinueNote.textContent = "Next grid in " + g.autoContinueSecondsLeft + "s…";
-  } else {
-    el.autoContinueNote.hidden = true;
-  }
+// ------------------------------------------------------------
+// Box colors & look: presets + a color picker for every part. The server keeps the choice (shared by every screen, remembered).
+// ------------------------------------------------------------
+const BX_DEFAULT = { page: "#fbf3e4", card: "#fff8ec", cardBorder: "#f4a6be", clockBox: "#ede4fa", gridBox: "#ffe9ef", wordsBox: "#fff2cf", tile: "#ffffff", tileInk: "#1f2a5c", ink: "#2b2a4c", accent: "#e8708f", navy: "#1f2a5c" };
+const BX_PRESETS = [
+  { id: "strawberry", name: "🍓 Strawberry", c: BX_DEFAULT },
+  { id: "lavender", name: "💜 Lavender", c: { page: "#f4eefc", card: "#fbf7ff", cardBorder: "#b9a2e8", clockBox: "#e6dcf7", gridBox: "#efe6fb", wordsBox: "#fdf1ff", tile: "#ffffff", tileInk: "#3b2a78", ink: "#33284f", accent: "#8f6fdc", navy: "#3b2a78" } },
+  { id: "mint", name: "🍃 Mint", c: { page: "#eefaf3", card: "#f8fffb", cardBorder: "#7fcfa3", clockBox: "#d9f3e6", gridBox: "#e6f8ef", wordsBox: "#fffbe0", tile: "#ffffff", tileInk: "#1c5a43", ink: "#25443a", accent: "#33b383", navy: "#1c5a43" } },
+  { id: "peach", name: "🍑 Peach", c: { page: "#fff1e6", card: "#fffaf5", cardBorder: "#f6b08a", clockBox: "#ffe3d1", gridBox: "#fff0e0", wordsBox: "#fff7d6", tile: "#ffffff", tileInk: "#7a3320", ink: "#4a2e26", accent: "#f0824f", navy: "#7a3320" } },
+  { id: "sky", name: "☁️ Sky", c: { page: "#eaf4ff", card: "#f8fbff", cardBorder: "#8ec3f0", clockBox: "#dcecfc", gridBox: "#e5f1ff", wordsBox: "#fff6d9", tile: "#ffffff", tileInk: "#1d3f78", ink: "#25365a", accent: "#4a9be0", navy: "#1d3f78" } },
+  { id: "night", name: "🌙 Night", c: { page: "#1b1b3a", card: "#262650", cardBorder: "#8a7be0", clockBox: "#303066", gridBox: "#2b2b5c", wordsBox: "#34305f", tile: "#3b3b78", tileInk: "#ffffff", ink: "#f1efff", accent: "#ff8fb4", navy: "#ffd6e6" } }
+];
+const BX_ROWS = [
+  ["page", "Page background", "the graph-paper page"],
+  ["card", "Largest box", "the big card that holds everything"],
+  ["cardBorder", "Largest box border", "its stitched border"],
+  ["clockBox", "Box 1 — clock", "time, words and points (also the legend)"],
+  ["gridBox", "Box 2 — letter grid", "the box around the tiles"],
+  ["wordsBox", "Box 3 — guessed words", "the list of found words"],
+  ["tile", "Letter tiles", "the color of every tile"],
+  ["tileInk", "Letters on the tiles", ""],
+  ["ink", "Text", "normal writing"],
+  ["accent", "Accent", "ribbons, buttons, chips and hearts"],
+  ["navy", "Title & headings", ""]
+];
+let bxColors = {};
+let colorSig = "";
+function hexRgb(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+function rgbHex(r) { return "#" + r.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join(""); }
+function mixHex(a, b, t) { const x = hexRgb(a), y = hexRgb(b); return rgbHex([0, 1, 2].map((i) => x[i] * (1 - t) + y[i] * t)); }
+function lumOf(h) { return hexRgb(h).reduce((s, v, i) => { v /= 255; v = v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); return s + v * [0.2126, 0.7152, 0.0722][i]; }, 0); }
+function rgbaOf(h, a) { const c = hexRgb(h); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+function applyColors(overrides) {
+  const c = Object.assign({}, BX_DEFAULT, overrides || {});
+  const root = document.documentElement.style;
+  Object.keys(c).forEach((k) => root.setProperty("--bxc-" + k, c[k]));
+  const dark = lumOf(c.page) < 0.2;
+  root.setProperty("--bxc-line", mixHex(c.cardBorder, c.card, 0.12));
+  root.setProperty("--bxc-muted", mixHex(c.ink, c.card, 0.42));
+  root.setProperty("--bxc-gridline", dark ? "rgba(255,255,255,0.06)" : rgbaOf(c.accent, 0.12));
+  root.setProperty("--bxc-shadow", dark ? "rgba(0,0,0,0.45)" : rgbaOf(c.navy, 0.2));
+  root.setProperty("--bxc-sticker", dark ? c.page : "#ffffff");
+  root.setProperty("--bxc-accent-ink", lumOf(c.accent) > 0.45 ? "#241a05" : "#ffffff");
+  root.setProperty("--bxc-tape1", rgbaOf(c.accent, 0.45));
+  root.setProperty("--bxc-tape2", rgbaOf(mixHex(c.accent, "#a78be0", 0.55), 0.45));
+}
+let colorSendTimer = null;
+function sendColors() {
+  clearTimeout(colorSendTimer);
+  colorSendTimer = setTimeout(() => { colorSendTimer = null; send("set_colors", { colors: bxColors }); }, 300);
+}
+function syncColorInputs() {
+  const c = Object.assign({}, BX_DEFAULT, bxColors);
+  el.colorPanel.querySelectorAll("input[type=color]").forEach((inp) => { inp.value = c[inp.dataset.key]; });
+}
+function buildColorPanel() {
+  let html = '<div class="bxColorPresets">';
+  BX_PRESETS.forEach((p) => {
+    html += '<button type="button" class="bxPreset" data-p="' + p.id + '"><span class="dots">' +
+      [p.c.page, p.c.card, p.c.accent, p.c.navy].map((x) => '<i style="background:' + x + '"></i>').join("") + "</span>" + p.name + "</button>";
+  });
+  html += "</div>";
+  BX_ROWS.forEach((r) => {
+    html += '<div class="bxColorRow"><label for="bxc_' + r[0] + '">' + r[1] + (r[2] ? "<small>" + r[2] + "</small>" : "") + '</label><input type="color" id="bxc_' + r[0] + '" data-key="' + r[0] + '" /></div>';
+  });
+  html += '<button type="button" class="btn btnGhost btnFull" id="bxColorReset" style="margin-top:10px">Reset to the standard 🍓 Strawberry look</button>';
+  el.colorPanel.innerHTML = html;
+  syncColorInputs();
+  el.colorPanel.addEventListener("input", (e) => {
+    const inp = e.target;
+    if (!inp.dataset || !inp.dataset.key) return;
+    bxColors[inp.dataset.key] = inp.value;
+    applyColors(bxColors);
+    sendColors();
+  });
+  el.colorPanel.addEventListener("click", (e) => {
+    const pb = e.target.closest && e.target.closest(".bxPreset");
+    if (pb) {
+      const preset = BX_PRESETS.find((p) => p.id === pb.dataset.p);
+      if (preset) { bxColors = Object.assign({}, preset.c); applyColors(bxColors); syncColorInputs(); sendColors(); }
+      return;
+    }
+    if (e.target.id === "bxColorReset") { bxColors = {}; applyColors(bxColors); syncColorInputs(); clearTimeout(colorSendTimer); send("reset_colors", {}); }
+  });
+}
+buildColorPanel();
+applyColors({});
+// the server's colors (set on another screen, or remembered after a restart) are applied here too
+function syncColorsFromState(g) {
+  const sig = JSON.stringify(g.colors || {});
+  if (sig === colorSig) return;
+  colorSig = sig;
+  if (colorSendTimer) return; // this screen is in the middle of changing a color: its own choice wins until it is sent
+  bxColors = Object.assign({}, g.colors || {});
+  applyColors(bxColors);
+  syncColorInputs();
 }
 
 // ------------------------------------------------------------
@@ -781,9 +874,8 @@ function render(state) {
   renderGrid(g);
   if (pendingHighlight) { const p = pendingHighlight; pendingHighlight = null; setHighlight(p, 3500); }
   renderBoard(g);
-  renderHint(g);
-  renderModeNotes(g);
-  renderBanners(g);
+  renderStatus(g);
+  syncColorsFromState(g);
   maybeShowToast(g);
   renderSettingsChips(state);
   renderDiagnostics(state.diagnostics);

@@ -8,7 +8,7 @@
 //   (2) it can be traced on the grid through touching tiles - and, when "Tiles may be reused" is OFF (default), every tile is used
 //       at most once per word. With the switch ON a tile may appear again later in the same word (never twice in a row, because a
 //       tile does not touch itself),
-//   (3) it is at least "Shortest word" letters long (3 by default) and
+//   (3) it is at least "Shortest word" letters long (4 by default) and
 //   (4) nobody found it yet in this round (every word can be scored only once per round).
 //
 // Scoring: points = the number of letters of the word (3 letters = 3 points, 5 letters = 5 points, 10 letters = 10 points ...).
@@ -119,7 +119,7 @@ const DEFAULT_GRID_SIZE = 6;
 const DEFAULT_ROUND_SECONDS = 60;   // one minute unless the host chooses another time
 const MIN_ROUND_SECONDS = 10;
 const MAX_ROUND_SECONDS = 3600;
-const DEFAULT_MIN_WORD_LENGTH = 3;
+const DEFAULT_MIN_WORD_LENGTH = 4;      // shortest word that counts (host can change it: 2-8)
 const MIN_WORD_LENGTH_LIMIT = 2;
 const MAX_WORD_LENGTH_LIMIT = 8;
 const MAX_GUESS_LENGTH = 30;        // longest word the game even looks at (a longer chat message is ignored)
@@ -268,65 +268,84 @@ function findPath(word, letters, size, allowReuse) {
   return null;
 }
 
-// Builds the grid of a round. Real words are PLANTED first along random touching paths (they may cross and share tiles), so
-// the board is guaranteed to hold words - in both tile-reuse modes - then the leftover tiles are filled with letters that fit.
+// How long the planted words get on each grid size (the audience can build words of 15 or even 20 letters on the big grids).
+function plantPlan(size) {
+  return {
+    maxLen: size <= 6 ? 10 : size <= 8 ? 13 : size <= 10 ? 16 : 20,
+    longCount: size <= 6 ? 1 : size <= 8 ? 2 : size <= 10 ? 3 : 4
+  };
+}
+
+// Builds the grid of a round. Real words are PLANTED first along random touching paths (they may cross and share tiles): first a few LONG
+// words (up to 20 letters on a 12x12 grid), then shorter ones, so the board is guaranteed to hold words of every length - in both
+// tile-reuse modes. Then the leftover tiles are filled with letters that fit, which makes many more words possible.
 function buildBoard(size) {
   const total = size * size;
   const nb = neighboursOf(size);
   const cells = new Array(total).fill("");
-  const maxLen = size <= 6 ? 6 : size <= 8 ? 7 : size <= 10 ? 8 : 9;
+  const { maxLen, longCount } = plantPlan(size);
   const lens = [];
   for (let L = 4; L <= maxLen; L++) if ((ANSWER_WORDS[L] || []).length > 0) lens.push(L);
 
   const planted = [];
   const seen = new Set();
+  let filled = 0;
+  const tryPath = (word) => {
+    for (let tries = 0; tries < 30; tries++) {
+      const start = Math.floor(Math.random() * total);
+      if (cells[start] && cells[start] !== word[0]) continue;
+      const used = new Set([start]);
+      const path = [start];
+      let budget = 500;
+      const walk = (idx) => {
+        if (idx === word.length) return true;
+        if (--budget < 0) return false;
+        const here = path[idx - 1];
+        for (const nx of shuffled(nb[here])) {
+          if (used.has(nx)) continue;
+          if (cells[nx] && cells[nx] !== word[idx]) continue;
+          used.add(nx);
+          path.push(nx);
+          if (walk(idx + 1)) return true;
+          path.pop();
+          used.delete(nx);
+        }
+        return false;
+      };
+      if (walk(1)) return path;
+    }
+    return null;
+  };
+  const plant = (L) => {
+    const list = ANSWER_WORDS[L];
+    if (!list || list.length === 0) return false;
+    const word = list[Math.floor(Math.random() * list.length)];
+    if (!word || seen.has(word) || !/^[a-z]+$/.test(word)) return false;
+    const path = tryPath(word);
+    if (!path) return false;
+    for (let i = 0; i < path.length; i++) {
+      if (!cells[path[i]]) {
+        cells[path[i]] = word[i];
+        filled++;
+      }
+    }
+    seen.add(word);
+    planted.push({ word, path });
+    return true;
+  };
+
   if (lens.length > 0) {
+    // 1. the long words first (the grid is still empty, so they fit easily)
+    const longLens = lens.filter((L) => L >= 9);
+    for (let n = 0, att = 0; n < longCount && longLens.length > 0 && att < 60; att++) {
+      if (plant(longLens[Math.floor(Math.random() * longLens.length)])) n++;
+    }
+    // 2. then short and medium words until the grid is mostly filled
+    const shortLens = lens.filter((L) => L <= 8);
     const targetFilled = Math.round(total * 0.85);
     const maxPlanted = Math.round(total / 3);
-    let filled = 0;
-    let attempts = 0;
-    const tryPath = (word) => {
-      for (let tries = 0; tries < 14; tries++) {
-        const start = Math.floor(Math.random() * total);
-        if (cells[start] && cells[start] !== word[0]) continue;
-        const used = new Set([start]);
-        const path = [start];
-        let budget = 120;
-        const walk = (idx) => {
-          if (idx === word.length) return true;
-          if (--budget < 0) return false;
-          const here = path[idx - 1];
-          for (const nx of shuffled(nb[here])) {
-            if (used.has(nx)) continue;
-            if (cells[nx] && cells[nx] !== word[idx]) continue;
-            used.add(nx);
-            path.push(nx);
-            if (walk(idx + 1)) return true;
-            path.pop();
-            used.delete(nx);
-          }
-          return false;
-        };
-        if (walk(1)) return path;
-      }
-      return null;
-    };
-    while (planted.length < maxPlanted && filled < targetFilled && attempts < 700) {
-      attempts++;
-      const L = lens[Math.floor(Math.random() * lens.length)];
-      const list = ANSWER_WORDS[L];
-      const word = list[Math.floor(Math.random() * list.length)];
-      if (!word || seen.has(word) || !/^[a-z]+$/.test(word)) continue;
-      const path = tryPath(word);
-      if (!path) continue;
-      for (let i = 0; i < path.length; i++) {
-        if (!cells[path[i]]) {
-          cells[path[i]] = word[i];
-          filled++;
-        }
-      }
-      seen.add(word);
-      planted.push({ word, path });
+    for (let attempts = 0; planted.length < maxPlanted && filled < targetFilled && attempts < 700 && shortLens.length > 0; attempts++) {
+      plant(shortLens[Math.floor(Math.random() * shortLens.length)]);
     }
   }
 
@@ -341,6 +360,83 @@ function buildBoard(size) {
   return { letters: cells, planted };
 }
 
+// ---- THE BOARD SOLVER --------------------------------------------------------------------------------------------------
+// Finds the real words (3-20 letters, any word of the dictionary - not only the planted ones) that can be traced on a grid.
+// It walks the grid and cuts every path as soon as no word starts with it (binary search in a sorted word list), with a time
+// limit so a huge grid can never freeze the server. Used by Test Mode's chat bot, the hint, the "words possible" counter and the
+// list of words nobody found.
+let solverCache = { key: "", list: [] };
+function solverList() {
+  const hasEn = wordLanguage === "en" || wordLanguage.split("-").includes("en") || wordLanguage === "all";
+  const key = wordLanguage + "|" + dictionaryState.wordCount + "|" + dictionaryState.source + "|" + bankWordSet.size;
+  if (solverCache.key === key) return solverCache.list;
+  const set = new Set();
+  const ok = (w) => w.length >= 3 && w.length <= 20 && /^[a-z]+$/.test(w);
+  for (const w of bankWordSet) if (ok(w)) set.add(w);
+  if (hasEn) for (const w of dictionaryState.words) if (ok(w)) set.add(w);
+  const list = [...set].sort();
+  solverCache = { key, list };
+  return list;
+}
+
+function solveBoard(letters, size, allowReuse, minLen, budgetMs) {
+  const arr = solverList();
+  const nb = neighboursOf(size);
+  const total = size * size;
+  const found = new Map();
+  const used = new Uint8Array(total);
+  const path = [];
+  const t0 = Date.now();
+  let nodes = 0;
+  let stop = false;
+  const lower = (s, lo) => {
+    let a = lo;
+    let b = arr.length;
+    while (a < b) {
+      const mid = (a + b) >> 1;
+      if (arr[mid] < s) a = mid + 1;
+      else b = mid;
+    }
+    return a;
+  };
+  const dfs = (cell, s, lo) => {
+    if (stop) return;
+    if ((++nodes & 511) === 0 && Date.now() - t0 > budgetMs) { stop = true; return; }
+    const idx = lower(s, lo);
+    if (idx >= arr.length || !arr[idx].startsWith(s)) return;
+    if (s.length >= minLen && arr[idx] === s && !found.has(s)) found.set(s, path.slice());
+    if (s.length >= 20) return;
+    for (const nx of nb[cell]) {
+      if (!allowReuse && used[nx]) continue;
+      if (!allowReuse) used[nx] = 1;
+      path.push(nx);
+      dfs(nx, s + letters[nx], idx);
+      path.pop();
+      if (!allowReuse) used[nx] = 0;
+    }
+  };
+  for (let c = 0; c < total && !stop; c++) {
+    if (!allowReuse) used[c] = 1;
+    path.push(c);
+    dfs(c, letters[c], 0);
+    path.pop();
+    if (!allowReuse) used[c] = 0;
+  }
+  return [...found].map(([word, p]) => ({ word, path: p }));
+}
+
+// ---- COLORS (the host's choices, shared by every connected screen) -------------------------------------------------------
+const COLOR_KEYS = ["page", "card", "cardBorder", "clockBox", "gridBox", "wordsBox", "tile", "tileInk", "ink", "accent", "navy"];
+function sanitizeColors(raw) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const k of COLOR_KEYS) {
+    const v = raw[k];
+    if (typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v)) out[k] = v.toLowerCase();
+  }
+  return out;
+}
+
 // ---- THE GAME STATE ----------------------------------------------------------------------------------------------------
 const game = {
   mode: "test",
@@ -349,11 +445,13 @@ const game = {
   gridSize: clampGridSize(getOption(GAME_ID, "gridSize", DEFAULT_GRID_SIZE)),
   allowReuse: asBool(getOption(GAME_ID, "allowReuse", false), false), // false: every tile once per word   true: a tile may be reused
   roundSeconds: clampRoundSeconds(getOption(GAME_ID, "roundSeconds", DEFAULT_ROUND_SECONDS)),
-  minWordLength: clampMinWordLength(getOption(GAME_ID, "minWordLength", DEFAULT_MIN_WORD_LENGTH)),
+  minWordLength: clampMinWordLength(getOption(GAME_ID, "minWordLen4", DEFAULT_MIN_WORD_LENGTH)),
   // the board of the running round
   boardSize: 0,
   letters: [],
-  planted: [],             // [{ word, path }] words known to be hiding on this board (used by hints and Test Mode)
+  planted: [],             // [{ word, path }] words planted when the grid was built
+  solutions: [],           // [{ word, path }] every word the solver found on this grid (hints, Test Mode bot, words nobody found)
+  colors: sanitizeColors(getOption(GAME_ID, "colors", {})), // the host's color choices (shared by every screen)
   found: [],               // [{ word, caller, points, path, avatarUrl, at }] in the order they were found
   foundMap: new Map(),     // word -> the found entry
   lastToast: null,         // { kind: "ok" | "bad", text, at } - the floating window
@@ -477,6 +575,14 @@ function startRound() {
   game.boardSize = game.gridSize;
   game.letters = board.letters;
   game.planted = board.planted;
+  game.solutions = [];
+  try {
+    game.solutions = solveBoard(board.letters, game.gridSize, game.allowReuse, game.minWordLength, 250);
+  } catch (err) {
+    console.error("[BOXDLE] solver error:", err);
+  }
+  // words planted on purpose are always possible, even if the time limit cut the solver short
+  for (const p of board.planted) if (p.word.length >= game.minWordLength && !game.solutions.some((x) => x.word === p.word)) game.solutions.push(p);
   game.found = [];
   game.foundMap = new Map();
   game.lastToast = null;
@@ -507,7 +613,7 @@ function applySettings(settings) {
   if (settings.gridSize !== undefined) game.gridSize = setOption(GAME_ID, "gridSize", clampGridSize(settings.gridSize));
   if (settings.allowReuse !== undefined) game.allowReuse = setOption(GAME_ID, "allowReuse", asBool(settings.allowReuse, game.allowReuse));
   if (settings.roundSeconds !== undefined) game.roundSeconds = setOption(GAME_ID, "roundSeconds", clampRoundSeconds(settings.roundSeconds));
-  if (settings.minWordLength !== undefined) game.minWordLength = setOption(GAME_ID, "minWordLength", clampMinWordLength(settings.minWordLength));
+  if (settings.minWordLength !== undefined) game.minWordLength = setOption(GAME_ID, "minWordLen4", clampMinWordLength(settings.minWordLength));
   if (typeof settings.autoContinue === "boolean") game.autoContinue = settings.autoContinue;
   if (settings.autoContinueDelaySeconds !== undefined) {
     const v = Number(settings.autoContinueDelaySeconds);
@@ -530,6 +636,7 @@ function endGame() {
   game.status = "idle";
   game.letters = [];
   game.planted = [];
+  game.solutions = [];
   game.found = [];
   game.foundMap = new Map();
   game.boardSize = 0;
@@ -544,7 +651,7 @@ function endGame() {
 function useHint() {
   if (game.status !== "live") return;
   const now = Date.now();
-  const open = game.planted.filter((p) => !game.foundMap.has(p.word));
+  const open = (game.solutions.length ? game.solutions : game.planted).filter((p) => !game.foundMap.has(p.word) && p.word.length >= game.minWordLength);
   if (open.length === 0) {
     game.hintNote = { text: "No more hint words - look for your own!", at: now };
     broadcastState();
@@ -780,12 +887,20 @@ function startTestMode() {
       const roll = Math.random();
       let text;
 
-      const unfound = game.planted.filter((p) => !game.foundSet.has(p.word));
-      if (game.status === "live" && unfound.length > 0 && roll < 0.34) {
-        text = unfound[Math.floor(Math.random() * unfound.length)].word; // a word that really is hiding on the grid
-      } else if (game.status === "live" && game.found.length > 0 && roll < 0.42) {
+      // The Test Mode bot really plays: it answers with words that are on the grid (found by the solver, long ones too),
+      // now and then repeats a word or tries a word that is not on the grid, plus some normal chat chatter.
+      const unfound = game.solutions.filter((p) => !game.foundMap.has(p.word) && p.word.length >= game.minWordLength);
+      if (game.status === "live" && unfound.length > 0 && roll < 0.55) {
+        let pick;
+        if (Math.random() < 0.3) {
+          pick = unfound.reduce((a, b) => (b.word.length > a.word.length ? b : a), unfound[0]); // sometimes the longest word left
+        } else {
+          pick = unfound[Math.floor(Math.random() * unfound.length)];
+        }
+        text = pick.word;
+      } else if (game.status === "live" && game.found.length > 0 && roll < 0.62) {
         text = game.found[Math.floor(Math.random() * game.found.length)].word; // somebody repeats a word (skipped)
-      } else if (game.status === "live" && roll < 0.5) {
+      } else if (game.status === "live" && roll < 0.68) {
         text = FAKE_OFF_GRID_WORDS[Math.floor(Math.random() * FAKE_OFF_GRID_WORDS.length)]; // a real word that is not on this grid
       } else {
         text = FAKE_JUNK_WORDS[Math.floor(Math.random() * FAKE_JUNK_WORDS.length)];
@@ -799,7 +914,7 @@ function startTestMode() {
 
       handleIncomingRawEvent(fakeRaw);
     }),
-    900
+    700
   );
 }
 
@@ -808,6 +923,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // `nsp` is the Socket.IO namespace "/boxdle", created inside mountBoxdle() below -
 // broadcastState() and the namespace's "connection" handler both close over it.
 let nsp = null;
+let testAutoStarted = false;
 
 function buildStatePayload() {
   const idle = game.status === "idle";
@@ -840,7 +956,9 @@ function buildStatePayload() {
       totalPoints,
       playerCount: players.size,
       // after the round: words that were hiding on the board and nobody found
-      missed: ended ? game.planted.filter((p) => !game.foundMap.has(p.word)).map((p) => p.word).slice(0, 14) : [],
+      missed: ended ? game.solutions.filter((p) => !game.foundMap.has(p.word)).sort((a, b) => b.word.length - a.word.length).map((p) => p.word).slice(0, 14) : [],
+      possibleCount: idle ? 0 : game.solutions.length,
+      colors: game.colors,
       lastToast: game.lastToast,
       hint: game.status === "live" && game.hint ? { cell: game.hint.cell, length: game.hint.length, letter: game.hint.letter, at: game.hint.at } : null,
       hintNote: game.hintNote,
@@ -956,6 +1074,14 @@ function handleClientAction(ws, msg) {
       broadcastState();
       break;
     }
+    case "set_colors":
+      game.colors = setOption(GAME_ID, "colors", sanitizeColors(payload && payload.colors));
+      broadcastState(true);
+      break;
+    case "reset_colors":
+      game.colors = setOption(GAME_ID, "colors", {});
+      broadcastState(true);
+      break;
     case "reset_round_leaderboard":
       game.roundScores.clear();
       broadcastState();
@@ -1003,6 +1129,12 @@ export async function mountBoxdle(app, io, options = {}) {
   nsp.on(
     "connection",
     safely("boxdle-connection", (socket) => {
+      // Test Mode plays by itself: the first time a screen opens the game while nothing is running, a round starts and the chat bot joins in.
+      if (!testAutoStarted && game.status === "idle" && game.mode === "test") {
+        testAutoStarted = true;
+        startRound();
+        startTestMode();
+      }
       socket.emit("state", buildStatePayload());
       socket.on(
         "action",

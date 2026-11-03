@@ -1034,3 +1034,175 @@ body[data-game="boxdle"] .toolbarRow .lengthBadge {
 .bxHintLine.note { background: rgba(60, 40, 20, 0.08); border-color: var(--border); color: var(--muted); }
 
 @media (prefers-reduced-motion: reduce) { .bxClock.low .bxClockNum, .bxTile.hint, .bxWordRow.fresh { animation: none; } }
+
+
+/* ============================================================================================================================
+   BOXDLE - cute scrapbook look (cream graph paper, pink + navy + lavender, dashed "stitching", washi tape, stickers).
+   Everything here is scoped to body[data-game="boxdle"], so no other game is touched. All colors come from the --bxc-* variables,
+   which the host can change in Settings -> "Box colors & look" (the page sets them; these are the standard "Strawberry" look).
+   ============================================================================================================================ */
+:root {
+  --bxc-page: #fbf3e4;       /* page background (graph paper) */
+  --bxc-card: #fff8ec;       /* the largest box */
+  --bxc-cardBorder: #f4a6be; /* the largest box border */
+  --bxc-clockBox: #ede4fa;   /* box 1: clock */
+  --bxc-gridBox: #ffe9ef;    /* box 2: letter grid */
+  --bxc-wordsBox: #fff2cf;   /* box 3: guessed words */
+  --bxc-tile: #ffffff;       /* letter tiles */
+  --bxc-tileInk: #1f2a5c;    /* letters on the tiles */
+  --bxc-ink: #2b2a4c;        /* text */
+  --bxc-accent: #e8708f;     /* pink accent: ribbons, buttons, chips */
+  --bxc-navy: #1f2a5c;       /* title & headings */
+  /* derived (the page recomputes these whenever a color changes) */
+  --bxc-line: rgba(232, 112, 143, 0.55);
+  --bxc-muted: #7a6f9a;
+  --bxc-gridline: rgba(232, 112, 143, 0.12);
+  --bxc-shadow: rgba(31, 42, 92, 0.18);
+  --bxc-sticker: #ffffff;
+  --bxc-accent-ink: #ffffff;
+  --bxc-tape1: rgba(232, 112, 143, 0.45);
+  --bxc-tape2: rgba(167, 139, 224, 0.45);
+}
+
+body[data-game="boxdle"] {
+  --bg-stage: var(--bxc-page); --panel: var(--bxc-card); --panel-light: var(--bxc-card);
+  --text: var(--bxc-ink); --muted: var(--bxc-muted); --heading: var(--bxc-navy); --border: var(--bxc-line);
+  --gold: var(--bxc-accent); --gold-dim: var(--bxc-accent); --gold-text: var(--bxc-navy);
+  --theme-bg: var(--bxc-page); --theme-bg-top: var(--bxc-page); --theme-bg-deep: var(--bxc-page);
+  --theme-card: var(--bxc-card); --theme-surface-2: var(--bxc-clockBox); --theme-line: var(--bxc-line);
+  --theme-deep: var(--bxc-navy); --theme-ink: var(--bxc-ink); --theme-shadow: var(--bxc-shadow);
+  --lg-panel-bg: var(--bxc-clockBox); --lg-panel-border: var(--bxc-line);
+  --font-display: "Baloo 2", "Fredoka", "Quicksand", system-ui, sans-serif;
+  --font-body: "Quicksand", "Fredoka", system-ui, sans-serif;
+  font-family: var(--font-body);
+  color: var(--bxc-ink);
+}
+body[data-game="boxdle"] #app,
+body[data-game="boxdle"] .app {
+  background-color: var(--bxc-page);
+  background-image:
+    linear-gradient(var(--bxc-gridline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bxc-gridline) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* ---- hero: sticker title, ribbon, sparkles ---- */
+body[data-game="boxdle"] .heroBand {
+  background: transparent; border-bottom: 0; overflow: hidden; gap: 4px; padding: 6px 14px 8px;
+}
+body[data-game="boxdle"] .heroBand::before,
+body[data-game="boxdle"] .heroBand::after { display: none; }
+body[data-game="boxdle"] .heroTitle {
+  background: none; filter: none; margin-top: 10px; font-family: "Baloo 2", "Fredoka", cursive; font-weight: 800;
+  font-size: clamp(44px, 15vw, 72px); line-height: 0.95; letter-spacing: 0.05em; -webkit-text-fill-color: initial;
+  display: inline-flex; position: relative; z-index: 1;
+}
+body[data-game="boxdle"] .heroTitle span {
+  -webkit-text-stroke: 0.14em var(--bxc-sticker); paint-order: stroke fill;
+  text-shadow: 0 0.05em 0 rgba(0, 0, 0, 0.12); filter: drop-shadow(0 3px 5px var(--bxc-shadow));
+}
+body[data-game="boxdle"] .hT1 { color: var(--bxc-navy); -webkit-text-fill-color: var(--bxc-navy); }
+body[data-game="boxdle"] .hT2 { color: var(--bxc-accent); -webkit-text-fill-color: var(--bxc-accent); }
+body[data-game="boxdle"] .heroRibbon {
+  position: relative; z-index: 1; margin: -2px auto 2px; padding: 3px 22px 4px; font: 800 clamp(13px, 4vw, 17px) var(--font-display);
+  letter-spacing: 0.18em; color: #fff; background: #a78be0; border: 2px dashed rgba(255, 255, 255, 0.9); outline: 3px solid #a78be0;
+  border-radius: 6px; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12); transform: rotate(-1.5deg);
+}
+body[data-game="boxdle"] .heroTagline { font-family: "Patrick Hand", "Quicksand", cursive; font-size: clamp(13px, 3.7vw, 16px); color: var(--bxc-ink); z-index: 1; }
+.heroDeco, .heroCrown { position: absolute; pointer-events: none; user-select: none; line-height: 1; }
+.heroDeco.d1 { left: 7%; top: 14%; font-size: 20px; animation: bx-twinkle 2.6s ease-in-out infinite; }
+.heroDeco.d2 { left: 4%; top: 52%; font-size: 24px; transform: rotate(-14deg); }
+.heroDeco.d3 { right: 8%; top: 12%; font-size: 20px; animation: bx-twinkle 3.1s ease-in-out infinite 0.6s; }
+.heroDeco.d4 { right: 3%; top: 46%; font-size: 30px; transform: rotate(10deg); }
+.heroDeco.d5 { left: 14%; bottom: 8%; font-size: 15px; }
+.heroCrown { font-size: 26px; left: calc(50% - 22vw); top: 4px; transform: rotate(-16deg); z-index: 2; }
+@media (min-width: 560px) { .heroCrown { left: calc(50% - 120px); } }
+@keyframes bx-twinkle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.25) rotate(12deg); opacity: 0.7; } }
+
+/* ---- top bar and host controls: paper strips ---- */
+body[data-game="boxdle"] .topbar { background: var(--bxc-card); border-bottom: 2px dashed var(--bxc-line); box-shadow: 0 4px 10px var(--bxc-shadow); }
+body[data-game="boxdle"] .controls { background: var(--bxc-card); border-top: 2px dashed var(--bxc-line); box-shadow: 0 -4px 12px var(--bxc-shadow); }
+body[data-game="boxdle"] .controlsHandle { color: var(--bxc-navy); font-family: var(--font-display); }
+body[data-game="boxdle"] .iconBtn { background: var(--bxc-tile); border: 2px solid var(--bxc-line); color: var(--bxc-ink); border-radius: 12px; box-shadow: 0 2px 0 var(--bxc-line); }
+body[data-game="boxdle"] .modeBadge, body[data-game="boxdle"] .lengthBadge {
+  background: var(--bxc-clockBox); color: var(--bxc-navy); border: 2px solid var(--bxc-line); font-family: var(--font-display); font-weight: 800; border-radius: 999px;
+}
+body[data-game="boxdle"] .btnGold, body[data-game="boxdle"] .btnPrimary { background: var(--bxc-accent); color: var(--bxc-accent-ink); border-radius: 14px; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.14); font-family: var(--font-display); }
+body[data-game="boxdle"] .btnGhost { background: var(--bxc-tile); color: var(--bxc-ink); border: 2px solid var(--bxc-line); border-radius: 14px; }
+body[data-game="boxdle"] .textInput, body[data-game="boxdle"] .selectInput { background: var(--bxc-tile); color: var(--bxc-ink); border: 2px solid var(--bxc-line); border-radius: 12px; }
+
+/* ---- the stage: as much width as possible for the grid ---- */
+body[data-game="boxdle"] .stage { padding: 14px 8px 20px; gap: 10px; max-width: 680px; }
+
+/* ---- the LARGEST BOX (round card): stitched sticker with washi tape ---- */
+body[data-game="boxdle"] .round-card {
+  position: relative; background: var(--bxc-card); border: 3px dashed var(--bxc-cardBorder); border-radius: 26px; padding: 12px 8px 10px;
+  box-shadow: 0 0 0 5px var(--bxc-sticker), 0 12px 26px var(--bxc-shadow); margin: 8px 4px 0;
+}
+body[data-game="boxdle"] .round-card::before {
+  content: ""; position: absolute; top: -17px; left: 22px; width: 92px; height: 24px; z-index: 3; border-radius: 3px; transform: rotate(-5deg);
+  background: repeating-linear-gradient(45deg, var(--bxc-tape1) 0 7px, var(--bxc-tape2) 7px 14px); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); pointer-events: none;
+}
+body[data-game="boxdle"] .round-card::after {
+  content: "💗"; position: absolute; top: -15px; right: 20px; font-size: 22px; transform: rotate(12deg); z-index: 3; pointer-events: none;
+}
+
+/* ---- the legend: a sticky note ---- */
+body[data-game="boxdle"] .lgSection.lgPanel { background: var(--bxc-clockBox); border: 2px dashed var(--bxc-line); border-radius: 16px; }
+
+/* ---- BOX 1: clock ---- */
+body[data-game="boxdle"] .bxClock { background: var(--bxc-clockBox); border: 2px dashed var(--bxc-line); border-radius: 18px; padding: 8px 10px 8px; margin: 0 0 10px; }
+body[data-game="boxdle"] .bxClockNum { font-family: var(--font-display); border-radius: 14px; font-size: 28px; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.14); }
+body[data-game="boxdle"] .bxChip { background: var(--bxc-tile); color: var(--bxc-ink); border: 2px solid var(--bxc-line); font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+body[data-game="boxdle"] .bxChipPts { background: var(--bx-found); color: var(--bx-found-ink); border-color: var(--bx-found-dark); }
+body[data-game="boxdle"] .bxBar { height: 10px; background: var(--bxc-tile); border: 1.5px solid var(--bxc-line); }
+/* the status line has a FIXED height, so a hint / the result / the offline note never moves the boxes below it */
+.bxStatus { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 46px; margin-top: 7px; overflow: hidden; }
+.bxStatusText { flex: 1; min-width: 0; font: 700 13.5px/1.25 "Patrick Hand", "Quicksand", sans-serif; color: var(--bxc-ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.bxStatusText b { color: var(--bxc-navy); }
+.bxNewBtn { flex: 0 0 auto; padding: 7px 12px; font-size: 13px; visibility: hidden; }
+.bxNewBtn.show { visibility: visible; }
+
+/* ---- BOX 2: letter grid - big, easy-to-read tiles ---- */
+body[data-game="boxdle"] .bxGridSection { background: var(--bxc-gridBox); border: 2px dashed var(--bxc-line); border-radius: 18px; padding: 8px 6px; margin: 0 0 10px; }
+body[data-game="boxdle"] .bxTile {
+  background: var(--bxc-tile); color: var(--bxc-tileInk); border: 2px solid var(--bxc-line); box-shadow: 0 2px 0 var(--bxc-line);
+  font-family: "Baloo 2", "Fredoka", sans-serif; font-weight: 800; padding-bottom: 0.08em;
+}
+body[data-game="boxdle"] .bxTile.hl { background: var(--bx-path); color: var(--bx-path-ink); border-color: var(--bx-path-dark); box-shadow: 0 2px 0 var(--bx-path-dark); }
+body[data-game="boxdle"] .bxTile.hint { background: var(--bx-hint); color: var(--bx-hint-ink); border-color: var(--bx-hint-dark); box-shadow: 0 2px 0 var(--bx-hint-dark); }
+body[data-game="boxdle"] .bxGrid.over .bxTile { opacity: 0.85; }
+
+/* ---- BOX 3: guessed words - FIXED height, its own auto-scrolling list (newest at the bottom), so it can never push another box ---- */
+body[data-game="boxdle"] .bxBoard { background: var(--bxc-wordsBox); border: 2px dashed var(--bxc-line); border-radius: 18px; padding: 8px 8px 8px; margin: 0; }
+body[data-game="boxdle"] .bxBoardTitle { font-family: var(--font-display); color: var(--bxc-navy); letter-spacing: 0.04em; font-size: 14px; }
+body[data-game="boxdle"] .bxBoardMeta { font-family: var(--font-display); color: var(--bxc-ink); }
+body[data-game="boxdle"] .bxWordList {
+  height: clamp(190px, 31vh, 320px); max-height: none; overflow-y: auto; overscroll-behavior: contain; padding-right: 3px; gap: 6px;
+}
+body[data-game="boxdle"] .bxWordRow { background: var(--bxc-tile); border: 2px solid var(--bxc-line); border-radius: 14px; padding: 5px 8px; min-height: 44px; box-shadow: 0 2px 0 var(--bxc-line); }
+.bxWordMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+body[data-game="boxdle"] .bxWordText { flex: none; font: 800 18px/1.1 "Baloo 2", "Fredoka", sans-serif; letter-spacing: 0.05em; overflow-wrap: anywhere; white-space: normal; color: var(--bxc-navy); text-overflow: clip; }
+body[data-game="boxdle"] .bxWho { flex: none; text-align: left; font: 700 11.5px "Quicksand", sans-serif; color: var(--bxc-muted); }
+body[data-game="boxdle"] .bxPts { font-family: var(--font-display); font-size: 15px; min-width: 46px; }
+.bxMissedRow { flex: 0 0 auto; padding: 8px 6px 2px; border-top: 2px dotted var(--bxc-line); font: 700 12.5px/1.8 "Patrick Hand", "Quicksand", sans-serif; color: var(--bxc-muted); }
+.bxMissedRow b { color: var(--bxc-navy); text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 8px; margin: 0 2px; border-radius: 999px; border: 1.5px solid var(--bxc-line); background: var(--bxc-tile); display: inline-block; font-family: var(--font-display); }
+body[data-game="boxdle"] .bxEmpty { font-family: "Patrick Hand", "Quicksand", cursive; font-size: 15px; color: var(--bxc-muted); }
+
+/* ---- idle + banners + floating window: soft pastel stickers ---- */
+body[data-game="boxdle"] .idleBanner { background: var(--bxc-clockBox); border: 2px dashed var(--bxc-line); color: var(--bxc-ink); border-radius: 18px; }
+body[data-game="boxdle"] .rejectionToast.ok { background: #e6f8ec; border: 2px dashed #5cbf84; color: #1f6b3a; box-shadow: 0 8px 18px var(--bxc-shadow); }
+body[data-game="boxdle"] .rejectionToast.ok::before { background: #5cbf84; }
+body[data-game="boxdle"] .rejectionToast.bad { background: #ffe3e8; border: 2px dashed #e8708f; color: #a32b35; box-shadow: 0 8px 18px var(--bxc-shadow); }
+body[data-game="boxdle"] .rejectionToast.bad::before { background: #e8708f; }
+body[data-game="boxdle"] .rejectionToast { font-family: var(--font-display); font-weight: 700; }
+
+/* ---- Settings: color panel ---- */
+.bxColorPresets { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+.bxPreset { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 2px solid var(--border); background: var(--bxc-tile, #fff); color: var(--text); font-weight: 700; font-size: 12px; }
+.bxPreset .dots { display: inline-flex; }
+.bxPreset .dots i { width: 12px; height: 12px; border-radius: 50%; margin-left: -3px; border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12); }
+.bxColorRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.bxColorRow label { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); }
+.bxColorRow label small { display: block; font-weight: 500; color: var(--muted); font-size: 11px; }
+.bxColorRow input[type="color"] { flex: 0 0 52px; width: 52px; height: 34px; padding: 0; border: 2px solid var(--border); border-radius: 10px; background: none; cursor: pointer; }
