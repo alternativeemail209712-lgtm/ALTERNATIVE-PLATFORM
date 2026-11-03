@@ -10,6 +10,8 @@
 
 > **Update 91:** new game LINEDLE (pillars + a light-blue secret wave-line and a white guess wave-line, height = letter from A (low) to Z (high); green/yellow/grey clues; 1 point for solving) at `/linedle/`. See `CHANGES_UPDATE_91.md`.
 
+> **Update 118:** new game BOXDLE (word hunt on a 6x6 / 8x8 / 10x10 / 12x12 letter grid; chain touching tiles; points = letters; 60-second rounds by default; tile-reuse switch; legend; board of guessed words). See CHANGES_UPDATE_118.md.
+
 > **Update 102:** new game NUMBERBLINDLE (BLINDLE with a secret number / PIN; green, yellow and red count columns; one-row 0-9 keyboard with show/hide; colour legend; 1 point per fitting guess, 5 for solving; Number length panel) at `/numberblindle/`. See `CHANGES_UPDATE_102.md`.
 > **Update 89:** new game MINEDLE (Sweep-O style letter + number grid, blue/red marks, Letter bank, green/yellow/grey clues; 1 point for solving) at `/minedle/`. See `CHANGES_UPDATE_89.md`.
 
