@@ -1164,13 +1164,39 @@ body[data-game="boxdle"] .bxBar { height: 10px; background: var(--bxc-tile); bor
 .bxNewBtn.show { visibility: visible; }
 
 /* ---- BOX 2: letter grid - big, easy-to-read tiles ---- */
-body[data-game="boxdle"] .bxGridSection { background: var(--bxc-gridBox); border: 2px dashed var(--bxc-line); border-radius: 18px; padding: 8px 6px; margin: 0 0 10px; }
+body[data-game="boxdle"] .bxGridSection { background: var(--bxc-gridBox); border: 2px dashed var(--bxc-line); border-radius: 18px; padding: 8px 6px 16px; margin: 0 0 10px; }
 body[data-game="boxdle"] .bxTile {
-  background: var(--bxc-tile); color: var(--bxc-tileInk); border: 2px solid var(--bxc-line); box-shadow: 0 2px 0 var(--bxc-line);
+  /* 3D: a glossy raised block - light top-left, darker bottom-right, a solid side wall underneath and a soft shadow on the page */
+  position: relative;
+  background:
+    radial-gradient(ellipse 70% 45% at 30% 14%, var(--bxc-gloss), transparent 70%),
+    linear-gradient(150deg, var(--bxc-tile-hi) 0%, var(--bxc-tile) 48%, var(--bxc-tile-lo) 100%);
+  color: var(--bxc-tileInk);
+  border: 2px solid var(--bxc-tile-edge);
+  border-bottom-color: var(--bxc-tile-edge2);
+  box-shadow:
+    inset 0 2px 1px rgba(255, 255, 255, 0.65),
+    inset 0 -4px 3px rgba(0, 0, 0, 0.08),
+    0 3px 0 var(--bxc-tile-edge),
+    0 6px 0 var(--bxc-tile-edge2),
+    0 10px 10px -2px var(--bxc-shadow);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 2px rgba(0, 0, 0, 0.16);
   font-family: "Baloo 2", "Fredoka", sans-serif; font-weight: 800; padding-bottom: 0.08em;
+  transform: translateY(-3px);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease, color 0.15s ease;
 }
-body[data-game="boxdle"] .bxTile.hl { background: var(--bx-path); color: var(--bx-path-ink); border-color: var(--bx-path-dark); box-shadow: 0 2px 0 var(--bx-path-dark); }
-body[data-game="boxdle"] .bxTile.hint { background: var(--bx-hint); color: var(--bx-hint-ink); border-color: var(--bx-hint-dark); box-shadow: 0 2px 0 var(--bx-hint-dark); }
+/* a tile on the chosen word path is "pressed down": it sinks into the board and takes the path color */
+body[data-game="boxdle"] .bxTile.hl {
+  background: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255, 255, 255, 0.35), transparent 70%), linear-gradient(150deg, var(--bx-path), var(--bx-path-dark));
+  color: var(--bx-path-ink); border-color: var(--bx-path-dark); text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  transform: translateY(2px) scale(1.04);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.35), inset 0 -3px 3px rgba(0, 0, 0, 0.18), 0 1px 0 var(--bx-path-dark), 0 3px 5px var(--bxc-shadow);
+}
+body[data-game="boxdle"] .bxTile.hint {
+  background: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255, 255, 255, 0.35), transparent 70%), linear-gradient(150deg, var(--bx-hint), var(--bx-hint-dark));
+  color: var(--bx-hint-ink); border-color: var(--bx-hint-dark); text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.35), inset 0 -4px 3px rgba(0, 0, 0, 0.15), 0 3px 0 var(--bx-hint-dark), 0 6px 0 var(--bx-hint-dark), 0 10px 10px -2px var(--bxc-shadow);
+}
 body[data-game="boxdle"] .bxGrid.over .bxTile { opacity: 0.85; }
 
 /* ---- BOX 3: guessed words - FIXED height, its own auto-scrolling list (newest at the bottom), so it can never push another box ---- */
@@ -1178,9 +1204,9 @@ body[data-game="boxdle"] .bxBoard { background: var(--bxc-wordsBox); border: 2px
 body[data-game="boxdle"] .bxBoardTitle { font-family: var(--font-display); color: var(--bxc-navy); letter-spacing: 0.04em; font-size: 14px; }
 body[data-game="boxdle"] .bxBoardMeta { font-family: var(--font-display); color: var(--bxc-ink); }
 body[data-game="boxdle"] .bxWordList {
-  height: clamp(190px, 31vh, 320px); max-height: none; overflow-y: auto; overscroll-behavior: contain; padding-right: 3px; gap: 6px;
+  height: clamp(190px, 31vh, 320px); max-height: none; overflow-y: auto; overscroll-behavior: contain; padding: 0 3px 8px 0; gap: 7px;
 }
-body[data-game="boxdle"] .bxWordRow { background: var(--bxc-tile); border: 2px solid var(--bxc-line); border-radius: 14px; padding: 5px 8px; min-height: 44px; box-shadow: 0 2px 0 var(--bxc-line); }
+body[data-game="boxdle"] .bxWordRow { background: linear-gradient(160deg, var(--bxc-tile-hi), var(--bxc-tile) 55%, var(--bxc-tile-lo)); border: 2px solid var(--bxc-tile-edge); border-radius: 14px; padding: 5px 8px; min-height: 44px; box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.6), 0 3px 0 var(--bxc-tile-edge), 0 5px 6px -1px var(--bxc-shadow); }
 .bxWordMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 body[data-game="boxdle"] .bxWordText { flex: none; font: 800 18px/1.1 "Baloo 2", "Fredoka", sans-serif; letter-spacing: 0.05em; overflow-wrap: anywhere; white-space: normal; color: var(--bxc-navy); text-overflow: clip; }
 body[data-game="boxdle"] .bxWho { flex: none; text-align: left; font: 700 11.5px "Quicksand", sans-serif; color: var(--bxc-muted); }

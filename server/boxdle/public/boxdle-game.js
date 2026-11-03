@@ -665,22 +665,22 @@ let pendingHighlight = null;
 let lastBoardSig = "";
 let boardRows = [];
 let boardRound = -1;
-let stickToBottom = true;
+let stickToTop = true;
 let stickTimer = null;
 let progScrollUntil = 0;
-function scrollListBottom(smooth) {
+function scrollListTop(smooth) {
   progScrollUntil = Date.now() + 700;
-  if (el.wordList.scrollTo) el.wordList.scrollTo({ top: el.wordList.scrollHeight, behavior: smooth ? "smooth" : "auto" });
-  else el.wordList.scrollTop = el.wordList.scrollHeight;
+  if (el.wordList.scrollTo) el.wordList.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+  else el.wordList.scrollTop = 0;
 }
-// The box has a fixed height and scrolls by itself: the newest word is always brought into view. If somebody scrolls up to read
-// older words the list stays where it is, and returns to the newest word by itself after a few seconds.
+// The box has a fixed height and scrolls by itself: the NEWEST word is always at the top and is brought into view. If somebody scrolls down
+// to read older words the list stays where it is, and returns to the newest word by itself after a few seconds.
 el.wordList.addEventListener("scroll", () => {
   if (Date.now() < progScrollUntil) return;
-  const near = el.wordList.scrollHeight - el.wordList.scrollTop - el.wordList.clientHeight < 36;
-  stickToBottom = near;
+  const near = el.wordList.scrollTop < 36;
+  stickToTop = near;
   clearTimeout(stickTimer);
-  if (!near) stickTimer = setTimeout(() => { stickToBottom = true; scrollListBottom(true); }, 6000);
+  if (!near) stickTimer = setTimeout(() => { stickToTop = true; scrollListTop(true); }, 6000);
 });
 
 function renderBoard(g) {
@@ -699,8 +699,8 @@ function renderBoard(g) {
 
   const keepScroll = el.wordList.scrollTop;
   const newRound = g.roundNumber !== boardRound;
-  if (newRound) { boardRound = g.roundNumber; stickToBottom = true; }
-  boardRows = g.found.slice(); // oldest first, newest at the bottom
+  if (newRound) { boardRound = g.roundNumber; stickToTop = true; }
+  boardRows = g.found.slice().reverse(); // newest first: the latest guess is always the top row
   let html = "";
   if (boardRows.length === 0) {
     html = '<li class="bxEmpty">' + (g.status === "live" ? "🧸 No words yet — type a word you can trace on the grid in the chat!" : "No words were found this round.") + "</li>";
@@ -720,7 +720,7 @@ function renderBoard(g) {
   }
   el.wordList.innerHTML = html;
   if (newRound) el.wordList.scrollTop = 0;
-  else if (stickToBottom) scrollListBottom(true);
+  else if (stickToTop) scrollListTop(true);
   else el.wordList.scrollTop = keepScroll;
 }
 el.wordList.addEventListener("click", (e) => {
@@ -758,14 +758,10 @@ function renderStatus(g) {
 // Box colors & look: presets + a color picker for every part. The server keeps the choice (shared by every screen, remembered).
 // ------------------------------------------------------------
 const BX_DEFAULT = { page: "#fbf3e4", card: "#fff8ec", cardBorder: "#f4a6be", clockBox: "#ede4fa", gridBox: "#ffe9ef", wordsBox: "#fff2cf", tile: "#ffffff", tileInk: "#1f2a5c", ink: "#2b2a4c", accent: "#e8708f", navy: "#1f2a5c" };
-const BX_PRESETS = [
-  { id: "strawberry", name: "🍓 Strawberry", c: BX_DEFAULT },
-  { id: "lavender", name: "💜 Lavender", c: { page: "#f4eefc", card: "#fbf7ff", cardBorder: "#b9a2e8", clockBox: "#e6dcf7", gridBox: "#efe6fb", wordsBox: "#fdf1ff", tile: "#ffffff", tileInk: "#3b2a78", ink: "#33284f", accent: "#8f6fdc", navy: "#3b2a78" } },
-  { id: "mint", name: "🍃 Mint", c: { page: "#eefaf3", card: "#f8fffb", cardBorder: "#7fcfa3", clockBox: "#d9f3e6", gridBox: "#e6f8ef", wordsBox: "#fffbe0", tile: "#ffffff", tileInk: "#1c5a43", ink: "#25443a", accent: "#33b383", navy: "#1c5a43" } },
-  { id: "peach", name: "🍑 Peach", c: { page: "#fff1e6", card: "#fffaf5", cardBorder: "#f6b08a", clockBox: "#ffe3d1", gridBox: "#fff0e0", wordsBox: "#fff7d6", tile: "#ffffff", tileInk: "#7a3320", ink: "#4a2e26", accent: "#f0824f", navy: "#7a3320" } },
-  { id: "sky", name: "☁️ Sky", c: { page: "#eaf4ff", card: "#f8fbff", cardBorder: "#8ec3f0", clockBox: "#dcecfc", gridBox: "#e5f1ff", wordsBox: "#fff6d9", tile: "#ffffff", tileInk: "#1d3f78", ink: "#25365a", accent: "#4a9be0", navy: "#1d3f78" } },
-  { id: "night", name: "🌙 Night", c: { page: "#1b1b3a", card: "#262650", cardBorder: "#8a7be0", clockBox: "#303066", gridBox: "#2b2b5c", wordsBox: "#34305f", tile: "#3b3b78", tileInk: "#ffffff", ink: "#f1efff", accent: "#ff8fb4", navy: "#ffd6e6" } }
-];
+const PT = window.PlatformTheme; // /shared/theme.js: the 15 "Box colors & look" designs + the 6 plain colors
+const BX_PRESETS = PT && PT.looks
+  ? PT.looks.map((l) => ({ id: l.id, theme: l.theme, name: l.name, c: l.c }))
+  : [{ id: "strawberry", theme: "look-strawberry", name: "🍓 Strawberry", c: BX_DEFAULT }];
 const BX_ROWS = [
   ["page", "Page background", "the graph-paper page"],
   ["card", "Largest box", "the big card that holds everything"],
@@ -799,6 +795,13 @@ function applyColors(overrides) {
   root.setProperty("--bxc-accent-ink", lumOf(c.accent) > 0.45 ? "#241a05" : "#ffffff");
   root.setProperty("--bxc-tape1", rgbaOf(c.accent, 0.45));
   root.setProperty("--bxc-tape2", rgbaOf(mixHex(c.accent, "#a78be0", 0.55), 0.45));
+  // 3D tiles: a lighter top-left, a darker bottom-right, and a solid "side wall" that makes every tile look like a raised block
+  const tdark = lumOf(c.tile) < 0.25;
+  root.setProperty("--bxc-tile-hi", mixHex(c.tile, "#ffffff", tdark ? 0.22 : 0.65));
+  root.setProperty("--bxc-tile-lo", mixHex(c.tile, tdark ? "#000000" : c.cardBorder, tdark ? 0.25 : 0.38));
+  root.setProperty("--bxc-tile-edge", mixHex(c.tile, tdark ? "#000000" : c.cardBorder, tdark ? 0.55 : 0.72));
+  root.setProperty("--bxc-tile-edge2", mixHex(c.tile, tdark ? "#000000" : c.navy, tdark ? 0.7 : 0.55));
+  root.setProperty("--bxc-gloss", tdark ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.9)");
 }
 let colorSendTimer = null;
 function sendColors() {
@@ -833,10 +836,15 @@ function buildColorPanel() {
     const pb = e.target.closest && e.target.closest(".bxPreset");
     if (pb) {
       const preset = BX_PRESETS.find((p) => p.id === pb.dataset.p);
-      if (preset) { bxColors = Object.assign({}, preset.c); applyColors(bxColors); syncColorInputs(); sendColors(); }
+      if (preset && PT) PT.apply(preset.theme); // the Appearance dropdown (and every other game) follows; onChange below paints + saves it here
+      else if (preset) { bxColors = Object.assign({}, preset.c); applyColors(bxColors); syncColorInputs(); sendColors(); }
       return;
     }
-    if (e.target.id === "bxColorReset") { bxColors = {}; applyColors(bxColors); syncColorInputs(); clearTimeout(colorSendTimer); send("reset_colors", {}); }
+    if (e.target.id === "bxColorReset") {
+      if (PT) PT.apply("look-strawberry", { silent: true });
+      try { localStorage.setItem("boxdleThemeSeen", "look-strawberry"); } catch (er) {}
+      bxColors = {}; applyColors(bxColors); syncColorInputs(); clearTimeout(colorSendTimer); send("reset_colors", {});
+    }
   });
 }
 buildColorPanel();
@@ -850,6 +858,32 @@ function syncColorsFromState(g) {
   bxColors = Object.assign({}, g.colors || {});
   applyColors(bxColors);
   syncColorInputs();
+  syncThemeOnce();
+}
+
+// The Appearance dropdown (plain colors + the 15 "Box colors & look" designs) is shared by every game. In BOXDLE, choosing any of them
+// paints the boxes, tiles, text, accent and title with that palette and saves it on the server (so every BOXDLE screen matches).
+function paintThemeInBox(theme) {
+  if (!PT) return;
+  bxColors = PT.palette(theme);
+  applyColors(bxColors);
+  syncColorInputs();
+  sendColors();
+  try { localStorage.setItem("boxdleThemeSeen", theme); } catch (e) {}
+}
+if (PT && PT.onChange) PT.onChange(paintThemeInBox);
+// If the look was changed in another game since BOXDLE last ran, BOXDLE follows it once the first state arrives
+// (individual color tweaks made here stay until the dropdown choice changes again).
+let themeSynced = false;
+function syncThemeOnce() {
+  if (themeSynced || !PT) return;
+  themeSynced = true;
+  let seen = null;
+  try { seen = localStorage.getItem("boxdleThemeSeen"); } catch (e) {}
+  const cur = PT.current();
+  if (seen === cur) return;
+  if (seen === null && cur === "cream") { try { localStorage.setItem("boxdleThemeSeen", cur); } catch (e) {} return; } // never picked anywhere: keep the standard Strawberry look
+  paintThemeInBox(cur);
 }
 
 // ------------------------------------------------------------
