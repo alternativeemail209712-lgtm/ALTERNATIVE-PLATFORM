@@ -475,6 +475,7 @@
   CLASSIC.forEach(addThemeOption);
   if (LOOKS.length) { addThemeHeading('🧸 Box colors & looks'); LOOKS.forEach(addThemeOption); }
   fillThemeSelect();
+  (function () { const h = el('ctxDepthHost'); if (h && PT && PT.makeDepthSelect) { const sel = PT.makeDepthSelect(); sel.className = 'select'; sel.id = 'ctxDepthSelect'; h.appendChild(sel); } })();
   applyTheme(currentTheme, true);
 
   function openThemeMenu() {

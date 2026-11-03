@@ -586,6 +586,9 @@ function renderGrid(g) {
     el.gridWrap.style.width = w + "px";
     el.grid.style.gridTemplateColumns = "repeat(" + n + ", " + m.size + "px)";
     el.grid.style.gap = m.gap + "px";
+    const w1 = m.gap >= 5 ? 3 : m.gap >= 3 ? 2 : 1;
+    el.grid.style.setProperty("--bx-w1", w1 + "px"); el.grid.style.setProperty("--bx-w2", w1 * 2 + "px");
+    el.grid.style.setProperty("--bx-lift", w1 + "px");
     el.grid.innerHTML = "";
     tileEls = [];
     const radius = Math.max(5, Math.round(m.size * 0.2)) + "px";
@@ -785,13 +788,15 @@ function rgbaOf(h, a) { const c = hexRgb(h); return "rgba(" + c[0] + "," + c[1] 
 function applyColors(overrides) {
   const c = Object.assign({}, BX_DEFAULT, overrides || {});
   const root = document.documentElement.style;
-  Object.keys(c).forEach((k) => root.setProperty("--bxc-" + k, c[k]));
   const dark = lumOf(c.page) < 0.2;
+  // update 124 (eye comfort): on the light looks the tiles are a touch softer than pure white, so a bright phone screen does not glare
+  if (!dark && lumOf(c.tile) > 0.8) c.tile = mixHex(c.tile, c.page, 0.3);
+  Object.keys(c).forEach((k) => root.setProperty("--bxc-" + k, c[k]));
   root.setProperty("--bxc-line", mixHex(c.cardBorder, c.card, 0.12));
-  root.setProperty("--bxc-muted", mixHex(c.ink, c.card, 0.42));
+  root.setProperty("--bxc-muted", mixHex(c.ink, c.card, 0.3)); // darker than before: small grey text now reads at 4.5:1
   root.setProperty("--bxc-gridline", dark ? "rgba(255,255,255,0.06)" : rgbaOf(c.accent, 0.12));
   root.setProperty("--bxc-shadow", dark ? "rgba(0,0,0,0.45)" : rgbaOf(c.navy, 0.2));
-  root.setProperty("--bxc-sticker", dark ? c.page : "#ffffff");
+  root.setProperty("--bxc-sticker", dark ? c.page : mixHex("#ffffff", c.page, 0.3));
   root.setProperty("--bxc-accent-ink", lumOf(c.accent) > 0.45 ? "#241a05" : "#ffffff");
   root.setProperty("--bxc-tape1", rgbaOf(c.accent, 0.45));
   root.setProperty("--bxc-tape2", rgbaOf(mixHex(c.accent, "#a78be0", 0.55), 0.45));
@@ -801,7 +806,7 @@ function applyColors(overrides) {
   root.setProperty("--bxc-tile-lo", mixHex(c.tile, tdark ? "#000000" : c.cardBorder, tdark ? 0.25 : 0.38));
   root.setProperty("--bxc-tile-edge", mixHex(c.tile, tdark ? "#000000" : c.cardBorder, tdark ? 0.55 : 0.72));
   root.setProperty("--bxc-tile-edge2", mixHex(c.tile, tdark ? "#000000" : c.navy, tdark ? 0.7 : 0.55));
-  root.setProperty("--bxc-gloss", tdark ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.9)");
+  root.setProperty("--bxc-gloss", tdark ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.7)");
 }
 let colorSendTimer = null;
 function sendColors() {
