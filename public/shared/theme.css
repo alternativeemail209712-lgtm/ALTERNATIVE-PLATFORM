@@ -173,3 +173,74 @@ html[data-look] .theme-picker select{ border-color: var(--look-accent); }
 /* the dropdown's group headings */
 .theme-picker select optgroup{ font-weight: 800; font-style: normal; }
 .theme-picker select option{ font-weight: 600; }
+
+
+/* ==========================================================================
+   CUTE LAYER (update 121) - every game except BOXDLE and CONTEXTO (they paint their own)
+   While one of the 15 looks is active the games also get the BOXDLE feel:
+   rounded Fredoka / Quicksand fonts, glossy raised 3D tiles and keys, raised pill buttons,
+   stitched (dashed) cards and sparkles on the title.
+   Clue colors (green / yellow / grey ...) are never changed - only the shape, shadow and font.
+   ========================================================================== */
+html[data-look] body:not([data-game="boxdle"]){
+  --font-display: "Fredoka", "Baloo 2", "Quicksand", system-ui, sans-serif;
+  --font-body: "Quicksand", "Fredoka", system-ui, sans-serif;
+  --hero-font: "Fredoka", "Baloo 2", cursive;
+}
+html[data-look] body:not([data-game="boxdle"]),
+html[data-look] body:not([data-game="boxdle"]) button,
+html[data-look] body:not([data-game="boxdle"]) input,
+html[data-look] body:not([data-game="boxdle"]) select{
+  font-family: "Quicksand", "Fredoka", system-ui, sans-serif;
+}
+/* glossy raised 3D tiles and keys */
+html[data-look] body:not([data-game="boxdle"]) .tile,
+html[data-look] body:not([data-game="boxdle"]) .key{
+  font-family: "Fredoka", "Quicksand", system-ui, sans-serif; font-weight: 700;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.55),
+    inset 0 -3px 0 rgba(0,0,0,.13),
+    0 3px 0 var(--theme-shadow),
+    0 5px 8px -3px var(--theme-shadow);
+}
+html[data-look] body:not([data-game="boxdle"]) .key:active{
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.13), 0 0 0 var(--theme-shadow);
+}
+/* raised pill buttons */
+html[data-look] body:not([data-game="boxdle"]) .btn,
+html[data-look] body:not([data-game="boxdle"]) .iconBtn,
+html[data-look] body:not([data-game="boxdle"]) .btn-icon-label,
+html[data-look] body:not([data-game="boxdle"]) .tabBtn{
+  border-radius: 999px; font-weight: 700;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -3px 0 rgba(0,0,0,.13), 0 3px 0 var(--theme-shadow);
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+html[data-look] body:not([data-game="boxdle"]) .toolbarRow .iconBtn{ border-radius: 50%; }
+html[data-look] body:not([data-game="boxdle"]) .btn:active:not(:disabled),
+html[data-look] body:not([data-game="boxdle"]) .iconBtn:active{
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.3), 0 0 0 var(--theme-shadow);
+}
+/* stitched cards */
+html[data-look] body:not([data-game="boxdle"]) .wdLegend,
+html[data-look] body:not([data-game="boxdle"]) .celebrationCard,
+html[data-look] body:not([data-game="boxdle"]) .titleFontChip{
+  border-style: dashed; border-width: 2px; border-radius: 16px;
+  box-shadow: 0 3px 0 var(--theme-shadow);
+}
+/* sparkles on the hero title (color emoji ignore the transparent text fill) */
+html[data-look] body:not([data-game="boxdle"]) .heroTitle{ font-weight: 700; }
+html[data-look] body:not([data-game="boxdle"]) .heroTitle::before,
+html[data-look] body:not([data-game="boxdle"]) .heroTitle::after{
+  position: absolute; font-size: .5em; line-height: 1; -webkit-text-fill-color: initial; pointer-events: none;
+}
+html[data-look] body:not([data-game="boxdle"]) .heroTitle::before{ content: "✨"; left: -.7em; top: -.1em; }
+html[data-look] body:not([data-game="boxdle"]) .heroTitle::after{ content: "💖"; right: -.7em; top: 0; }
+html[data-look] body:not([data-game="boxdle"]) .heroTagline{ font-family: "Quicksand", system-ui, sans-serif; font-weight: 700; }
+@media (prefers-reduced-motion: no-preference){
+  html[data-look] body:not([data-game="boxdle"]) .heroTitle::before{ animation: lookTwinkle 2.4s ease-in-out infinite; }
+  html[data-look] body:not([data-game="boxdle"]) .heroTitle::after{ animation: lookTwinkle 2.4s ease-in-out .8s infinite; }
+}
+@keyframes lookTwinkle{ 0%,100%{ transform: scale(1) rotate(0); opacity: 1; } 50%{ transform: scale(.78) rotate(12deg); opacity: .7; } }

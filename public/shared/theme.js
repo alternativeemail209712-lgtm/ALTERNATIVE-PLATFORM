@@ -103,6 +103,15 @@
     if (dark) root.setAttribute("data-look-dark", "1"); else root.removeAttribute("data-look-dark");
   }
 
+  // the cute rounded fonts (Fredoka / Quicksand) are only fetched while a look is active
+  function ensureLookFonts() {
+    if (document.getElementById("look-fonts") || !document.head) return;
+    var l = document.createElement("link");
+    l.id = "look-fonts"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap";
+    document.head.appendChild(l);
+  }
+
   function readSaved() {
     try {
       var v = localStorage.getItem(STORAGE_KEY);
@@ -118,7 +127,7 @@
     current = theme;
     root.setAttribute("data-theme", theme);
     var look = findLook(theme);
-    if (look) applyLook(root, look); else clearLook(root);
+    if (look) { applyLook(root, look); if (document.head) ensureLookFonts(); else document.addEventListener("DOMContentLoaded", ensureLookFonts); } else clearLook(root);
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch (e) {}
