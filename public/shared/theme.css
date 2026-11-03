@@ -244,3 +244,155 @@ html[data-look] body:not([data-game="boxdle"]) .heroTagline{ font-family: "Quick
   html[data-look] body:not([data-game="boxdle"]) .heroTitle::after{ animation: lookTwinkle 2.4s ease-in-out .8s infinite; }
 }
 @keyframes lookTwinkle{ 0%,100%{ transform: scale(1) rotate(0); opacity: 1; } 50%{ transform: scale(.78) rotate(12deg); opacity: .7; } }
+
+
+/* ==========================================================================
+   UPDATE 122 - TITLE & HEADER STYLES + MORE 3D
+   Shown only while one of the 15 looks is active, in every game except BOXDLE and CONTEXTO (they have their own).
+   Header style (Settings -> Appearance -> "Title & header style", shared by all games):
+     sticker (default, = BOXDLE header) | candy | note | classic (the update-121 banner)
+   ========================================================================== */
+/* the injected decorations / ribbon exist in the page always, but are invisible unless a look + a non-classic style is on */
+.cuteDeco, .cuteRibbon{ display: none; }
+.heroDeco, .heroCrown{ position: absolute; pointer-events: none; user-select: none; line-height: 1; z-index: 2; }
+@keyframes cuteTwinkle{ 0%,100%{ transform: scale(1); opacity: 1; } 50%{ transform: scale(1.25) rotate(12deg); opacity: .7; } }
+
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .cuteDeco{ display: block; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .cuteRibbon{ display: block; }
+/* no more update-121 sparkles when a new style is on (the real decorations replace them) */
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroTitle::before,
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroTitle::after{ content: none; }
+
+/* ---- shared by sticker / candy / note ---- */
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroBand{ background: transparent; border-bottom: 0; gap: 4px; padding: 8px 14px 10px; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroBand::before, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroBand::after{ display: none; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroTitle{
+  background: none; filter: none; margin-top: 12px; display: inline-flex; z-index: 1;
+  font-family: "Baloo 2", "Fredoka", cursive; font-weight: 800; line-height: .95; letter-spacing: .05em;
+  font-size: clamp(34px, 11.5vw, 60px); -webkit-text-fill-color: initial; color: inherit;
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroTitle span{ -webkit-text-fill-color: currentColor; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .hT1{ color: var(--theme-deep); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .hT2{ color: var(--look-accent); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroTagline{ font-family: "Patrick Hand", "Quicksand", cursive; font-size: clamp(13px, 3.7vw, 16px); font-weight: 600; z-index: 1; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d1{ left: 7%; top: 14%; font-size: 20px; animation: cuteTwinkle 2.6s ease-in-out infinite; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d2{ left: 4%; top: 52%; font-size: 24px; transform: rotate(-14deg); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d3{ right: 8%; top: 12%; font-size: 20px; animation: cuteTwinkle 3.1s ease-in-out infinite .6s; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d4{ right: 3%; top: 46%; font-size: 28px; transform: rotate(10deg); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d5{ left: 14%; bottom: 8%; font-size: 15px; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown{ font-size: 26px; left: calc(50% - 22vw); top: 4px; transform: rotate(-16deg); }
+@media (min-width: 560px){ html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown{ left: calc(50% - 120px); } }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .cuteRibbon{
+  position: relative; z-index: 1; margin: -2px auto 2px; padding: 3px 22px 4px;
+  font: 800 clamp(12px, 3.6vw, 16px) "Baloo 2", "Fredoka", sans-serif; letter-spacing: .18em; color: #fff;
+  background: var(--look-ribbon); border: 2px dashed rgba(255,255,255,.9); outline: 3px solid var(--look-ribbon);
+  border-radius: 6px; box-shadow: 0 3px 0 rgba(0,0,0,.12); transform: rotate(-1.5deg); white-space: nowrap;
+}
+
+/* ---- 1. STICKER (BOXDLE header) ---- */
+html[data-look][data-hstyle="sticker"] body:not([data-game="boxdle"]) .heroTitle span{
+  -webkit-text-stroke: .14em var(--look-sticker); paint-order: stroke fill;
+  text-shadow: 0 .05em 0 rgba(0,0,0,.12); filter: drop-shadow(0 3px 5px var(--theme-shadow));
+}
+
+/* ---- 2. CANDY 3D: puffy extruded letters + notched banner ---- */
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroTitle{ letter-spacing: .07em; font-weight: 800; }
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroTitle span{
+  -webkit-text-stroke: .1em var(--look-sticker); paint-order: stroke fill;
+  text-shadow:
+    0 .03em 0 var(--look-deep-accent), 0 .06em 0 var(--look-deep-accent), 0 .09em 0 var(--look-deep-accent),
+    0 .12em 0 var(--look-deep-accent), 0 .15em 0 var(--look-deep-accent), 0 .18em 0 var(--look-deep-accent),
+    0 .26em .18em var(--theme-shadow);
+  filter: none;
+}
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .hT1{ color: var(--look-accent); }
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .hT2{ color: var(--look-ribbon); }
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .cuteRibbon{
+  outline: 0; border: 0; border-radius: 0; padding: 4px 30px 6px; margin-top: 6px; transform: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--look-ribbon) 82%, #fff), var(--look-ribbon));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%, 12px 50%);
+  box-shadow: none; text-shadow: 0 2px 0 rgba(0,0,0,.18);
+}
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroTagline{
+  background: var(--theme-card); border: 2px dashed var(--look-accent); border-radius: 999px; padding: 3px 14px; box-shadow: 0 2px 0 var(--theme-shadow);
+}
+html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroCrown{ display: none; }
+
+/* ---- 3. NOTEBOOK LABEL: a paper card with punch holes, washi tape and a pink sticker pill ---- */
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand{
+  position: relative; align-self: stretch; width: auto; margin: 14px 12px 4px; padding: 14px 18px 10px 34px; overflow: visible;
+  background:
+    radial-gradient(circle at 14px 22%, var(--theme-bg) 0 4px, transparent 5px),
+    radial-gradient(circle at 14px 50%, var(--theme-bg) 0 4px, transparent 5px),
+    radial-gradient(circle at 14px 78%, var(--theme-bg) 0 4px, transparent 5px),
+    repeating-linear-gradient(180deg, transparent 0 22px, var(--look-grid) 22px 23px),
+    var(--theme-card);
+  border: 3px dashed var(--theme-line); border-radius: 18px; box-shadow: 0 0 0 4px var(--look-sticker), 0 8px 18px var(--theme-shadow);
+}
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand::before,
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand::after{
+  display: block; content: ""; position: absolute; top: -13px; height: 22px; width: 80px; margin: 0; border: 0; border-radius: 3px; opacity: 1;
+  box-shadow: 0 1px 2px var(--theme-shadow);
+}
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand::before{ left: 24px; right: auto; background: var(--look-tape1); transform: rotate(-6deg); }
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand::after{ right: 24px; left: auto; background: var(--look-tape2); transform: rotate(5deg); }
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroTitle{ margin-top: 2px; letter-spacing: .04em; }
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroTitle span{
+  text-decoration: underline wavy var(--look-accent) .07em; text-underline-offset: .12em; text-shadow: 0 .04em 0 rgba(0,0,0,.1);
+}
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .cuteRibbon{
+  background: var(--theme-surface-2); color: var(--theme-deep); outline: 0; border: 2px dashed var(--look-accent);
+  border-radius: 999px; letter-spacing: .12em; transform: rotate(-1deg); box-shadow: 0 2px 0 var(--theme-shadow);
+}
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroCrown,
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d2,
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d5{ display: none; }
+html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d4{ right: 8px; top: auto; bottom: -10px; }
+
+/* ---- header bar + toolbar buttons: BOXDLE paper strip (all three new styles) ---- */
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .topbar, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .app-header{
+  background: var(--theme-card); border-bottom: 2px dashed var(--theme-line); box-shadow: 0 4px 10px var(--theme-shadow);
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .toolbarRow .iconBtn, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .app-header .btn-icon-label, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .topbar .iconBtn, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .topbar-actions button{
+  background: var(--look-tile); color: var(--theme-ink); border: 2px solid var(--theme-line); border-radius: 12px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), 0 2px 0 var(--theme-line);
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .toolbarRow .modeBadge, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .toolbarRow .lengthBadge, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .app-header .pill{
+  background: var(--theme-surface-2); color: var(--theme-deep); border: 2px solid var(--theme-line);
+  font-family: "Baloo 2", "Fredoka", sans-serif; font-weight: 800; border-radius: 999px;
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .btnGold, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .btnPrimary{ background: var(--look-accent); color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,.18); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .btnGhost{ background: var(--look-tile); color: var(--theme-ink); border: 2px solid var(--theme-line); }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .textInput, html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .selectInput{ background: var(--look-tile); color: var(--theme-ink); border: 2px solid var(--theme-line); border-radius: 12px; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .controls{ background: var(--theme-card); border-top: 2px dashed var(--theme-line); }
+
+/* ---- the largest box (round card): stitched sticker with washi tape, like BOXDLE ---- */
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .round-card{
+  position: relative; background: var(--theme-card); border: 3px dashed var(--theme-line); border-radius: 26px;
+  box-shadow: 0 0 0 5px var(--look-sticker), 0 12px 26px var(--theme-shadow); margin-top: 12px;
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .round-card::before{
+  content: ""; position: absolute; top: -17px; left: 22px; width: 92px; height: 24px; z-index: 3; border-radius: 3px; transform: rotate(-5deg);
+  background: repeating-linear-gradient(45deg, var(--look-tape1) 0 7px, var(--look-tape2) 7px 14px); box-shadow: 0 1px 2px rgba(0,0,0,.12); pointer-events: none;
+}
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .round-card::after{ content: "💗"; position: absolute; top: -15px; right: 20px; font-size: 22px; transform: rotate(12deg); z-index: 3; pointer-events: none; }
+
+/* ---- MORE 3D: every tile-like piece (game clue colors stay as they are; only shape, light and shadow change) ---- */
+html[data-look] body:not([data-game="boxdle"]) .exTile, html[data-look] body:not([data-game="boxdle"]) .mineTile, html[data-look] body:not([data-game="boxdle"]) .codeCell, html[data-look] body:not([data-game="boxdle"]) .patCell, html[data-look] body:not([data-game="boxdle"]) .symbolCell, html[data-look] body:not([data-game="boxdle"]) .letterChartCell, html[data-look] body:not([data-game="boxdle"]) .hint-tile, html[data-look] body:not([data-game="boxdle"]) .legendTile,
+html[data-look] body:not([data-game="boxdle"]) .path-chip, html[data-look] body:not([data-game="boxdle"]) .cdSwatch, html[data-look] body:not([data-game="boxdle"]) .ccSwatch, html[data-look] body:not([data-game="boxdle"]) .tbSwatch, html[data-look] body:not([data-game="boxdle"]) .legendSwatch, html[data-look] body:not([data-game="boxdle"]) .statusChip, html[data-look] body:not([data-game="boxdle"]) .hintChip, html[data-look] body:not([data-game="boxdle"]) .cmChip, html[data-look] body:not([data-game="boxdle"]) .wdChip, html[data-look] body:not([data-game="boxdle"]) .sfChip,
+html[data-look] body:not([data-game="boxdle"]) .chip-green, html[data-look] body:not([data-game="boxdle"]) .chip-yellow, html[data-look] body:not([data-game="boxdle"]) .chip-grey, html[data-look] body:not([data-game="boxdle"]) .chip-decoy, html[data-look] body:not([data-game="boxdle"]) .roundChip{
+  border-radius: 10px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.12), 0 2px 0 var(--theme-shadow), 0 4px 6px -3px var(--theme-shadow);
+}
+html[data-look] body:not([data-game="boxdle"]) .tile::after, html[data-look] body:not([data-game="boxdle"]) .exTile::after, html[data-look] body:not([data-game="boxdle"]) .codeCell::after, html[data-look] body:not([data-game="boxdle"]) .patCell::after, html[data-look] body:not([data-game="boxdle"]) .symbolCell::after{ pointer-events: none; }
+html[data-look] body:not([data-game="boxdle"]) .tile, html[data-look] body:not([data-game="boxdle"]) .exTile, html[data-look] body:not([data-game="boxdle"]) .codeCell, html[data-look] body:not([data-game="boxdle"]) .patCell, html[data-look] body:not([data-game="boxdle"]) .symbolCell{
+  background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.28), transparent 70%);
+  text-shadow: 0 1px 0 rgba(255,255,255,.35);
+}
+html[data-look] body:not([data-game="boxdle"]) .tile.current{ transform: translateY(-2px); }
+html[data-look] body:not([data-game="boxdle"]) .legendTile{ border-radius: 8px; }
+html[data-look] body:not([data-game="boxdle"]) .statusChip, html[data-look] body:not([data-game="boxdle"]) .hintChip{ border-width: 2px; }
+html[data-look] body:not([data-game="boxdle"]) .guessRow, html[data-look] body:not([data-game="boxdle"]) .attempt-row, html[data-look] body:not([data-game="boxdle"]) .banner-row{ border-radius: 14px; box-shadow: 0 2px 0 var(--theme-shadow); }
+@media (prefers-reduced-motion: reduce){
+  html[data-look] .heroDeco{ animation: none !important; }
+}

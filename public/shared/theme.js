@@ -66,7 +66,7 @@
   function rgba(h, a) { var c = hexRgb(h); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
 
   var TOKEN_NAMES = ["--theme-bg-top", "--theme-bg", "--theme-bg-deep", "--theme-card", "--theme-surface-2", "--theme-line", "--theme-deep",
-    "--theme-ink", "--theme-ink-soft", "--theme-shadow", "--theme-name", "--look-accent", "--look-grid", "--look-tape1", "--look-tape2", "--look-tile", "--look-tile-ink", "--look-sticker"];
+    "--theme-ink", "--theme-ink-soft", "--theme-shadow", "--theme-name", "--look-accent", "--look-grid", "--look-tape1", "--look-tape2", "--look-tile", "--look-tile-ink", "--look-sticker", "--look-ribbon", "--look-deep-accent"];
 
   function findLook(theme) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i].theme === theme) return LOOKS[i];
@@ -99,6 +99,8 @@
     s.setProperty("--look-tile", c.tile);
     s.setProperty("--look-tile-ink", c.tileInk);
     s.setProperty("--look-sticker", dark ? c.page : "#ffffff");
+    s.setProperty("--look-ribbon", mix(c.accent, "#a78be0", 0.6));
+    s.setProperty("--look-deep-accent", mix(c.accent, "#000000", dark ? 0.35 : 0.42));
     root.setAttribute("data-look", look.id);
     if (dark) root.setAttribute("data-look-dark", "1"); else root.removeAttribute("data-look-dark");
   }
@@ -135,12 +137,136 @@
     for (var i = 0; i < selects.length; i++) {
       if (selects[i].value !== theme) selects[i].value = theme;
     }
+    setTimeout(function () { if (document.getElementById("heroBand")) { var t = document.querySelector(".heroTitle"); if (t && !look) t.style.fontSize = ""; fitTitle(); } }, 0);
     if (!(opts && opts.silent)) {
       for (var j = 0; j < listeners.length; j++) {
         try { listeners[j](theme); } catch (e) {}
       }
     }
   }
+
+
+  // ======================================================================
+  // TITLE & HEADER STYLES (update 122) - the hero banner of every game, inspired by the BOXDLE header
+  //   classic  : the update-121 banner (gradient title)
+  //   sticker  : BOXDLE's header - two-tone sticker title, purple dashed ribbon, sparkles + crown   (default)
+  //   candy    : puffy 3D extruded title, notched banner ribbon, hearts
+  //   note     : notebook-paper label card with washi tape, punch holes, handwritten tagline pill
+  // They only show while one of the 15 looks is active. The structure (ribbon, sparkles, split title) is added once
+  // by the code below; the styling is all in theme.css.
+  // ======================================================================
+  var HSTYLES = [
+    { id: "sticker", name: "🎀 Sticker (BOXDLE style)" },
+    { id: "candy",   name: "🍬 Candy 3D" },
+    { id: "note",    name: "📒 Notebook label" },
+    { id: "classic", name: "🖼️ Classic banner" }
+  ];
+  var HKEY = "platformHeaderStyle";
+  var hstyle = "sticker";
+  var RIBBONS = {
+    wordle: "WORD GUESS", blindle: "BLIND WORDS", colordle: "COLOR GUESS", colorblindle: "COLOR MIX", betweendle: "IN BETWEEN",
+    citydle: "CITY HUNT", codedle: "CRACK THE CODE", comparable: "HIGHER · LOWER", crossdle: "CROSSWORD", expandle: "GROW THE WORD",
+    fixle: "FIX THE WORD", forbackle: "FORWARD · BACK", linedle: "LINE UP", minedle: "MINE THE WORD", numberblindle: "NUMBER HUNT",
+    oracle: "ASK THE ORACLE", rangedle: "FIND THE RANGE", shapedle: "SHAPE UP", shiftle: "SHIFT IT", structle: "WORD BUILDER",
+    textle: "TEXT GUESS", towndle: "TOWN HUNT", twistle: "TWIST & SOLVE", findle: "FIND IT"
+  };
+
+  function readHStyle() {
+    try {
+      var v = localStorage.getItem(HKEY);
+      for (var i = 0; i < HSTYLES.length; i++) if (HSTYLES[i].id === v) return v;
+    } catch (e) {}
+    return "sticker";
+  }
+
+  function splitTitle(t) {
+    if (t.querySelector(".hT1")) return;
+    var txt = (t.textContent || "").trim();
+    if (!txt) return;
+    var cut = txt.length >= 8 ? txt.length - 3 : Math.ceil(txt.length / 2);
+    var a = document.createElement("span"), b = document.createElement("span");
+    a.className = "hT1"; a.textContent = txt.slice(0, cut);
+    b.className = "hT2"; b.textContent = txt.slice(cut);
+    t.setAttribute("aria-label", txt);
+    t.textContent = "";
+    t.appendChild(a); t.appendChild(b);
+  }
+
+  function fitTitle() {
+    var t = document.querySelector(".heroTitle"), band = document.getElementById("heroBand");
+    if (!t || !band || !document.documentElement.hasAttribute("data-look")) return;
+    t.style.fontSize = "";
+    var max = band.clientWidth - (band.classList.contains("hasDiag") ? 120 : 44);
+    if (max <= 0) return;
+    var size = parseFloat(getComputedStyle(t).fontSize), guard = 60;
+    while (t.scrollWidth > max && size > 14 && guard-- > 0) { size -= 1; t.style.fontSize = size + "px"; }
+  }
+
+  function enhanceHeader() {
+    var band = document.getElementById("heroBand");
+    if (!band || band.getAttribute("data-cute") === "1") { fitTitle(); return; }
+    var t = band.querySelector(".heroTitle");
+    if (!t) return;
+    band.setAttribute("data-cute", "1");
+    splitTitle(t);
+    var deco = ["✨", "🎀", "⭐", "🧸", "💗"];
+    for (var i = 0; i < deco.length; i++) {
+      var d = document.createElement("span");
+      d.className = "cuteDeco heroDeco d" + (i + 1); d.setAttribute("aria-hidden", "true"); d.textContent = deco[i];
+      band.appendChild(d);
+    }
+    var crown = document.createElement("span");
+    crown.className = "cuteDeco heroCrown"; crown.setAttribute("aria-hidden", "true"); crown.textContent = "👑";
+    band.appendChild(crown);
+    var game = document.body ? document.body.getAttribute("data-game") : "";
+    var rib = document.createElement("div");
+    rib.className = "cuteRibbon";
+    rib.textContent = RIBBONS[game] || "LIVE GAME";
+    var tag = band.querySelector(".heroTagline");
+    band.insertBefore(rib, tag || null);
+    // the title keeps its place: ribbon goes right under it
+    if (t.nextSibling !== rib) band.insertBefore(rib, t.nextSibling);
+    fitTitle();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+  }
+
+  function setHStyle(id) {
+    hstyle = id;
+    document.documentElement.setAttribute("data-hstyle", id);
+    try { localStorage.setItem(HKEY, id); } catch (e) {}
+    var sel = document.querySelectorAll("[data-hstyle-select]");
+    for (var i = 0; i < sel.length; i++) if (sel[i].value !== id) sel[i].value = id;
+    setTimeout(fitTitle, 0);
+  }
+
+  function addHeaderSelect(themeSel) {
+    var host = themeSel.closest("label") || themeSel.parentNode;
+    if (!host || host.parentNode.querySelector("[data-hstyle-wrap]")) return;
+    var wrap = document.createElement("div");
+    wrap.setAttribute("data-hstyle-wrap", "1");
+    wrap.style.marginTop = "8px";
+    var lab = document.createElement("label");
+    lab.className = "theme-picker";
+    lab.appendChild(document.createTextNode("🎀 "));
+    var sel = document.createElement("select");
+    sel.setAttribute("data-hstyle-select", "1");
+    sel.setAttribute("aria-label", "Title and header style");
+    HSTYLES.forEach(function (h) {
+      var o = document.createElement("option"); o.value = h.id; o.textContent = h.name; sel.appendChild(o);
+    });
+    sel.value = hstyle;
+    sel.addEventListener("change", function (e) { setHStyle(e.target.value); });
+    lab.appendChild(sel);
+    var note = document.createElement("p");
+    note.className = "sectionNote";
+    note.style.margin = "4px 0 0";
+    note.textContent = "Title & header design for the cute looks (inspired by BOXDLE). Shared by all games.";
+    wrap.appendChild(lab); wrap.appendChild(note);
+    host.parentNode.insertBefore(wrap, host.nextSibling);
+  }
+
+  hstyle = readHStyle();
+  document.documentElement.setAttribute("data-hstyle", hstyle);
 
   // Apply immediately (before DOMContentLoaded) so there's no flash of the
   // wrong theme on load.
@@ -170,6 +296,7 @@
     var selects = document.querySelectorAll("[data-theme-select]");
     for (var i = 0; i < selects.length; i++) {
       addLookOptions(selects[i]);
+      addHeaderSelect(selects[i]);
       selects[i].value = current;
       selects[i].addEventListener("change", function (e) {
         apply(e.target.value);
@@ -177,10 +304,11 @@
     }
   }
 
+  function onReady() { wireSelects(); enhanceHeader(); window.addEventListener("resize", fitTitle); }
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", wireSelects);
+    document.addEventListener("DOMContentLoaded", onReady);
   } else {
-    wireSelects();
+    onReady();
   }
 
   window.PlatformTheme = {
@@ -190,6 +318,9 @@
     looks: LOOKS,
     keys: KEYS,
     current: function () { return current; },
+    headerStyle: function () { return hstyle; },
+    setHeaderStyle: setHStyle,
+    headerStyles: HSTYLES,
     onChange: function (fn) { listeners.push(fn); },
     // the 11-color palette of any theme (a look, or one of the 6 plain colors) - BOXDLE paints its boxes with it
     palette: function (theme) {
