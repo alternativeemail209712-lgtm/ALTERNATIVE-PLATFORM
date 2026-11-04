@@ -105,6 +105,24 @@
     if (dark) root.setAttribute("data-look-dark", "1"); else root.removeAttribute("data-look-dark");
   }
 
+  // update 126: the cute decorations (graph paper, washi tape, ribbon, sparkles, stickers) now ALSO work with the 6 plain colors.
+  // A plain color gets the same --look-* decoration tokens, built from its own palette, and the page is marked data-look="plain".
+  function applyPlainDecor(root, theme) {
+    var c = PLAIN_PALETTES[theme], s = root.style;
+    if (!c) return;
+    s.setProperty("--look-accent", c.accent);
+    s.setProperty("--look-grid", rgba(c.accent, 0.13));
+    s.setProperty("--look-tape1", rgba(c.accent, 0.45));
+    s.setProperty("--look-tape2", rgba(mix(c.accent, "#a78be0", 0.55), 0.45));
+    s.setProperty("--look-tile", c.tile);
+    s.setProperty("--look-tile-ink", c.tileInk);
+    s.setProperty("--look-sticker", "#ffffff");
+    s.setProperty("--look-ribbon", mix(c.accent, "#a78be0", 0.6));
+    s.setProperty("--look-deep-accent", mix(c.accent, "#000000", 0.42));
+    root.setAttribute("data-look", "plain");
+    root.removeAttribute("data-look-dark");
+  }
+
   // the cute rounded fonts (Fredoka / Quicksand) are only fetched while a look is active
   function ensureLookFonts() {
     if (document.getElementById("look-fonts") || !document.head) return;
@@ -129,7 +147,8 @@
     current = theme;
     root.setAttribute("data-theme", theme);
     var look = findLook(theme);
-    if (look) { applyLook(root, look); if (document.head) ensureLookFonts(); else document.addEventListener("DOMContentLoaded", ensureLookFonts); } else clearLook(root);
+    if (look) { applyLook(root, look); } else { clearLook(root); applyPlainDecor(root, theme); }
+    if (document.head) ensureLookFonts(); else document.addEventListener("DOMContentLoaded", ensureLookFonts);
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch (e) {}
@@ -137,7 +156,7 @@
     for (var i = 0; i < selects.length; i++) {
       if (selects[i].value !== theme) selects[i].value = theme;
     }
-    setTimeout(function () { if (document.getElementById("heroBand")) { var t = document.querySelector(".heroTitle"); if (t && !look) t.style.fontSize = ""; fitTitle(); } relayout(); }, 0);
+    setTimeout(function () { if (document.getElementById("heroBand")) { var t = document.querySelector(".heroTitle"); fitTitle(); } relayout(); }, 0);
     if (!(opts && opts.silent)) {
       for (var j = 0; j < listeners.length; j++) {
         try { listeners[j](theme); } catch (e) {}
@@ -253,12 +272,13 @@
 
   // ---- Display & layout (update 125): space, banner, info text, decorations. Shared by every game. ----
   var DKEYS = "platformDisplay";
-  var DISPLAY_DEFAULTS = { width: "wide", banner: "compact", itext: "normal", deco: "on" };
+  var DISPLAY_DEFAULTS = { width: "wide", banner: "compact", itext: "normal", deco: "on", nshadow: "off" };
   var DISPLAY_OPTS = {
     width:  { label: "↔️ Game area width", opts: [["standard", "Standard"], ["wide", "Wide (default)"], ["full", "Full screen width"]] },
     banner: { label: "🪧 Title banner",    opts: [["compact", "Compact (default)"], ["full", "Full size"], ["hidden", "Hidden (most room)"]] },
     itext:  { label: "🔠 Info text size",  opts: [["normal", "Normal"], ["large", "Large"], ["xlarge", "Extra large"]] },
-    deco:   { label: "✨ Decorations",     opts: [["on", "On (sparkles, tape, hearts)"], ["off", "Off (cleaner)"]] }
+    deco:   { label: "✨ Decorations",     opts: [["on", "On (sparkles, tape, hearts)"], ["off", "Off (cleaner)"]] },
+    nshadow:{ label: "🔢 Shadow under numbers", opts: [["off", "Off (clean, default)"], ["on", "On (3D numbers)"]] }
   };
   var display = {};
   function readDisplay() {
@@ -319,7 +339,7 @@
       return sel;
     }
     if (!opts.noHeader) dispRow(container, "🎀 Title & header style", mkSel(["data-hstyle-select", "1"], HSTYLES.map(function (x) { return [x.id, x.name]; }), hstyle, setHStyle, "Title and header style"));
-    ["width", "banner", "itext", "deco"].forEach(function (k) {
+    ["width", "banner", "itext", "deco", "nshadow"].forEach(function (k) {
       if (opts.noBanner && k === "banner") return;
       if (opts.only && opts.only.indexOf(k) < 0) return;
       if (k === "width" && document.body && document.body.hasAttribute("data-no-width")) return;
@@ -414,7 +434,28 @@
     }
   }
 
-  function onReady() { wireSelects(); enhanceHeader(); window.addEventListener("resize", fitTitle); }
+  // update 126: every game page has a fullscreen button. If one is ever missing (or hidden), add a working one next to the other toolbar buttons.
+  function ensureFullscreenButton() {
+    var body = document.body;
+    if (!body || !body.getAttribute("data-game")) return;
+    var de = document.documentElement;
+    if (!(de.requestFullscreen || de.webkitRequestFullscreen)) return;   // e.g. iPhone Safari: nothing to offer
+    var found = document.querySelector("#fullscreenBtn, #fullscreen-btn, #fsBtn, [aria-label*='ullscreen'], [aria-label*='ull screen'], .fsAutoBtn");
+    if (found && found.offsetParent !== null) return;
+    var bar = document.querySelector(".toolbarRow, .topbar-actions, .topbar, .app-header");
+    if (!bar) return;
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "iconBtn icon-btn fsAutoBtn"; b.textContent = "⛶";
+    b.setAttribute("aria-label", "Toggle full screen"); b.title = "Full screen";
+    b.addEventListener("click", function () {
+      try {
+        if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        else (de.requestFullscreen || de.webkitRequestFullscreen).call(de);
+      } catch (e) {}
+    });
+    bar.appendChild(b);
+  }
+  function onReady() { wireSelects(); enhanceHeader(); ensureFullscreenButton(); window.addEventListener("resize", fitTitle); }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", onReady);
   } else {

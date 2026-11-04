@@ -384,7 +384,6 @@ html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="cont
   box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.14),
     0 var(--d1, 2px) 0 rgba(0,0,0,.26), 0 calc(var(--d1, 2px) + 3px) var(--dblur, 8px) -3px var(--theme-shadow);
   background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.28), transparent 70%);
-  text-shadow: 0 1px 0 rgba(255,255,255,.3);
 }
 html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tile.current{ transform: translateY(-2px); }
 
@@ -414,7 +413,7 @@ html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="cont
 }
 
 /* ---- ROWS ---- */
-html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessRow, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .attempt-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .banner-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .ticker-item, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .route, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .comment-row{
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessRow, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .attempt-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .banner-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-row{
   box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 var(--d1, 2px) 0 rgba(0,0,0,.16);
 }
 
@@ -497,9 +496,9 @@ html[data-deco="off"] body:not([data-game="boxdle"]):not([data-game="contexto"])
    UPDATE 125 - 3D for the rest: number clues, count badges, avatars, dots, bars, route chips ...
    ========================================================================== */
 /* number clues + badges + score pills: raised stickers */
-html body:not([data-game="boxdle"]):not([data-game="contexto"]) .countBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .fxScore, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .hintNum, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .lpNum, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .iconBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .cdPill, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .fxPill, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .ccNum, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .keyNum,
-html body:not([data-game="boxdle"]):not([data-game="contexto"]) .hintOpt, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .legend-item, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .brandBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .celebPoints, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .csBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .round-timer, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .lbTab, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .route-tag, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-endpoint,
-html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-good, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-optimal, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-reference, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-empty, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .globe-btn, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .dock-toggle, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .feed-toggle, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .hint-icon{
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .countBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .iconBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .cdPill, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .fxPill,
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .hintOpt, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .brandBadge, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .round-timer, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .lbTab, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .route-tag, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-endpoint,
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-good, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-optimal, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-reference, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .chip-empty, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .globe-btn, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .dock-toggle, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .feed-toggle{
   box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.12),
     0 var(--d1, 2px) 0 rgba(0,0,0,.2), 0 calc(var(--d1, 2px) + 2px) calc(var(--dblur, 8px) * .6) -3px var(--theme-shadow);
 }
@@ -514,7 +513,7 @@ html body:not([data-game="boxdle"]):not([data-game="contexto"]) .key-tile:active
 html body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessAvatar, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .rowAvatar, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .lbAvatar, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .avatarImg, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .avatarChip, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .avatarChipImg{
   box-shadow: inset 0 2px 0 rgba(255,255,255,.4), 0 var(--d1, 2px) 0 rgba(0,0,0,.25), 0 calc(var(--d1, 2px) + 2px) 6px -2px var(--theme-shadow);
 }
-html body:not([data-game="boxdle"]):not([data-game="contexto"]) .waveGuessDot, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .waveTargetDot, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .waveDotLetter, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .node, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .status-dot{
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .waveGuessDot, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .waveTargetDot, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .node, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .status-dot{
   box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -2px 0 rgba(0,0,0,.14), 0 var(--d1, 2px) 0 rgba(0,0,0,.22);
   background-image: radial-gradient(circle at 32% 28%, rgba(255,255,255,.55), transparent 55%);
 }
@@ -522,3 +521,46 @@ html body:not([data-game="boxdle"]):not([data-game="contexto"]) .wavePillar{ box
 /* progress / timer bars: a groove with a raised fill */
 html body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTimerBar, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .diag-bar{ box-shadow: inset 0 2px 3px rgba(0,0,0,.25); }
 html body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTimerBar > *, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .diag-bar > *{ box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 1px 2px rgba(0,0,0,.2); }
+
+
+/* ==========================================================================
+   UPDATE 126
+   ========================================================================== */
+/* ---- needless shadows removed: numbers / labels never get a box shadow (it only drew a grey line under them) ----
+   Optional: Settings -> Appearance -> Display & layout -> "Shadow under numbers: On" gives them a soft 3D text shadow. */
+.lpNum, .ccNum, .hintNum, .keyNum, .celebPoints, .legend-item, .hint-icon, .waveDotLetter, .fxScore, .csBadge{ box-shadow: none !important; }
+html[data-nshadow="on"] .lpNum, html[data-nshadow="on"] .ccNum, html[data-nshadow="on"] .celebPoints,
+html[data-nshadow="on"] .fxScore, html[data-nshadow="on"] .bxChip, html[data-nshadow="on"] .lb-score{ text-shadow: 0 2px 0 rgba(0,0,0,.18); }
+
+/* ---- the toast ("message") slot no longer reserves an empty band above the board; the message floats over the top instead ---- */
+html body .toastSlot{ height: 0 !important; min-height: 0 !important; overflow: visible; }
+html body .toastSlot .rejectionToast{ top: 6px; }
+
+/* ---- the top toolbar: nothing overlaps, nothing is cut. Icons keep their size; if a line is full, it wraps ---- */
+html body:not([data-game="contexto"]) .toolbarRow{ flex-wrap: wrap; justify-content: flex-end; align-items: center; row-gap: 4px; column-gap: 4px; min-width: 0; overflow: visible; }
+html body:not([data-game="contexto"]) .toolbarRow > *{ flex: 0 0 auto; min-width: 0; }
+html body:not([data-game="contexto"]) .toolbarRow .modeBadge, html body:not([data-game="contexto"]) .toolbarRow .lengthBadge, html body:not([data-game="contexto"]) .toolbarRow .pill{
+  white-space: nowrap; overflow: visible; text-overflow: clip; max-width: none; line-height: 1.25; padding: 4px 9px; font-size: 11.5px; letter-spacing: .02em;
+}
+html body:not([data-game="contexto"]) .topbar, html body:not([data-game="contexto"]) .app-header{ overflow: visible; flex-wrap: wrap; row-gap: 4px; }
+@media (max-width: 520px){
+  html body:not([data-game="contexto"]) .toolbarRow{ justify-content: center; width: 100%; }
+  html body:not([data-game="contexto"]) .toolbarRow .iconBtn, html body:not([data-game="contexto"]) .toolbarRow .icon-btn, html body:not([data-game="contexto"]) .toolbarRow .btn-icon-label{
+    width: clamp(30px, 9vw, 40px); height: clamp(30px, 9vw, 40px); font-size: clamp(14px, 4.2vw, 18px); padding: 0;
+  }
+  html body:not([data-game="contexto"]) .toolbarRow .modeBadge, html body:not([data-game="contexto"]) .toolbarRow .lengthBadge{ order: 20; }
+  html body:not([data-game="contexto"]) .brandRow .brandText{ display: none; }
+}
+
+/* ---- room for 3D edges: parents must not clip a tile's side wall ---- */
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .tilesWrap, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .tileRow,
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessBlock, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .keyRow,
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .keyboard{ overflow: visible; }
+html body:not([data-game="boxdle"]):not([data-game="contexto"]) .tileRow, html body:not([data-game="boxdle"]):not([data-game="contexto"]) .keyRow{ padding-bottom: var(--d2, 4px); }
+
+/* ---- compact banner on phones: the banner is no longer forced to the 100px TikTok-safe height ---- */
+@media (max-width: 520px){
+  html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroBand{ min-height: 60px; }
+}
+/* the fullscreen button that theme.js adds when a game page has none */
+.fsAutoBtn{ cursor: pointer; }
