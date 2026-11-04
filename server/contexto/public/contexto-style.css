@@ -1130,3 +1130,44 @@ html[data-deco="off"] .hero::before, html[data-deco="off"] .hero::after,
 html[data-deco="off"] .wordmark::before, html[data-deco="off"] .wordmark::after { content: none !important; display: none !important; }
 @media (max-width: 480px) { .hero { padding-left: 8px; padding-right: 8px; } }
 .dispBlock { margin-top: 12px; }
+
+/* ============================================================
+   UPDATE 127 - CONTEXTO: the top bar is ONE row that never scrolls sideways, and the guess rows line up.
+   ============================================================ */
+.top-bar { overflow: visible; flex-wrap: nowrap; gap: 4px; padding: 6px calc(6px + var(--safe-right)) 6px calc(6px + var(--safe-left)); }
+.top-bar > * { flex-shrink: 1; min-width: 0; }
+/* every round button shares what is left of the row equally (never smaller than 24 px, never bigger than 40 px) */
+.top-bar > .icon-btn, .top-bar > .icon-pill, .top-bar > .theme-picker, .top-bar > .more-wrap {
+  flex: 1 1 0; min-width: 24px; max-width: 40px; width: auto; height: auto; aspect-ratio: 1 / 1;
+}
+.top-bar > .theme-picker > .icon-pill, .top-bar > .more-wrap > .icon-btn { width: 100%; height: 100%; aspect-ratio: 1 / 1; }
+.top-bar .icon-btn, .top-bar .icon-pill { padding: 0; }
+.top-bar .icon-pill svg, .top-bar .icon-btn svg { width: 55%; height: 55%; }
+.top-bar #themeToggle span { font-size: clamp(13px, 4.2vw, 18px); }
+.top-bar .status-word { flex: 0 1 auto; font-size: clamp(9px, 2.6vw, 11px); padding: 4px 8px; overflow: hidden; text-overflow: ellipsis; }
+.top-bar .viewer-chip { flex: 0 0 auto; font-size: clamp(9px, 2.6vw, 11px); padding: 3px 6px; }
+.top-bar .btn { flex: 0 1 auto; min-width: 0; margin-left: 0; padding: 6px clamp(6px, 2vw, 12px); font-size: clamp(10.5px, 3vw, 13px); white-space: nowrap; }
+#moreBtn { font-size: clamp(16px, 5vw, 22px); line-height: 1; font-weight: 800; color: var(--text); }
+.more-wrap { position: relative; display: grid; }
+.more-menu {
+  position: fixed; z-index: 70; min-width: 210px; display: flex; flex-direction: column; gap: 4px; padding: 6px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: 0 14px 34px -12px rgba(0,0,0,.5);
+}
+.more-menu.hidden { display: none; }
+.more-menu .mm-item {
+  width: 100%; height: auto; aspect-ratio: auto; display: flex; align-items: center; gap: 10px; justify-content: flex-start;
+  padding: 10px 12px; border-radius: 10px; min-height: 44px; color: var(--text); font: inherit; font-weight: 700;
+}
+.more-menu .mm-item svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.more-menu .mm-label { font-size: calc(14px * var(--fs, 1.2)); }
+
+/* guess rows: the avatar + name block has ONE fixed width and sits in the middle of the row; inside it the avatar always starts at the
+   same left edge and the name always starts right after it, so from one row to the next the pictures and names line up in clean columns. */
+:root { --who-av: calc(26px * var(--fs, 1.2)); --who-name: calc(92px * var(--fs, 1.2)); --who-gap: 7px; --who-w: calc(var(--who-av) + var(--who-gap) + var(--who-name)); }
+@media (max-width: 700px) { :root { --who-av: calc(19px * var(--fs, 1.2)); --who-name: calc(62px * var(--fs, 1.2)); --who-gap: 5px; } }
+@media (max-width: 440px) { :root { --who-name: calc(64px * var(--fs, 1.2)); } }
+.guess-row { grid-template-columns: minmax(0, 1fr) var(--who-w) minmax(0, 1fr); }
+.guess-who { width: var(--who-w); max-width: none; justify-content: flex-start; gap: var(--who-gap); }
+.guess-row .guess-who .pp-avatar, .guess-who .who-spacer { flex: 0 0 var(--who-av); width: var(--who-av); height: var(--who-av); }
+.guess-who .who-spacer { display: block; }
+.guess-row .guess-user { flex: 1 1 auto; min-width: 0; max-width: none; text-align: left; }

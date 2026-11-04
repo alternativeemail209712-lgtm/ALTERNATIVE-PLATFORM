@@ -52,16 +52,21 @@
 
       <button id="roundBtn" class="btn btn-primary" type="button">Start round</button>
 
-      <button id="diagBtn" class="icon-btn" type="button" aria-expanded="false" aria-label="Connection details" title="Connection details">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></svg>
-      </button>
       <button id="fsBtn" class="icon-btn" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
         <svg id="fsIconEnter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
         <svg id="fsIconExit" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
       </button>
-      <button id="toolbarHideBtn" class="icon-btn" type="button" aria-label="Hide toolbar" title="Hide toolbar">
+      <div class="more-wrap">
+        <button id="moreBtn" class="icon-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="moreMenu" aria-label="More" title="More: connection details, hide toolbar">⋯</button>
+        <div id="moreMenu" class="more-menu hidden" role="menu">
+      <button id="diagBtn" class="icon-btn mm-item" type="button" aria-expanded="false" aria-label="Connection details" title="Connection details">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></svg>
+      <span class="mm-label">Connection details</span></button>
+      <button id="toolbarHideBtn" class="icon-btn mm-item" type="button" aria-label="Hide toolbar" title="Hide toolbar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
-      </button>
+      <span class="mm-label">Hide toolbar</span></button>
+        </div>
+      </div>
     </div>
     <div id="diagPanel" class="diag-panel hidden">
       <div class="diag-row"><span>Dictionary</span><strong id="diagDict">—</strong></div>
@@ -269,7 +274,7 @@
         <div class="field wide">
           <label class="label" for="ctxThemeSelect">Color theme</label>
           <select id="ctxThemeSelect" class="select" aria-label="Color theme"></select>
-          <p class="field-note">The 7 Contexto colors, plus the 15 cute "Box colors &amp; looks" shared with BOXDLE and every other game. The same list is behind the round button at the top.</p>
+          <p class="field-note">The 7 Contexto colors, plus the 30 cute "Box colors &amp; looks" shared with BOXDLE and every other game. The same list is behind the round button at the top.</p>
         </div>
         <div id="ctxDisplayHost"></div>
       </div>

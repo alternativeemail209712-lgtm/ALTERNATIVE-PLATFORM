@@ -998,7 +998,7 @@
       <div class="guess-heat" style="width:${heatWidth(entry.rank)};background:${tierColor(entry.rank)}"></div>
       <span class="guess-word">${escapeHtml(entry.word)}</span>
       <span class="guess-who">
-        ${showAvatar ? avatarHtml(entry.user, entry.avatar) : ''}
+        ${showAvatar ? avatarHtml(entry.user, entry.avatar) : '<span class="who-spacer" aria-hidden="true"></span>'}
         <span class="guess-user">${escapeHtml(displayUser)}</span>
       </span>
       <span class="guess-end">
@@ -1509,4 +1509,27 @@
   updateHintButton();
   // Both sheets start closed — a clean, uncluttered first screen. Tap the
   // gear icon to open Settings whenever you need to change something.
+})();
+
+
+// update 127: the "More" menu of the top bar (connection details + hide toolbar live in it so the row can stay one line)
+(function () {
+  const btn = document.getElementById('moreBtn'), menu = document.getElementById('moreMenu');
+  if (!btn || !menu) return;
+  function place() {
+    const r = btn.getBoundingClientRect();
+    menu.style.top = (r.bottom + 6) + 'px';
+    menu.style.right = Math.max(6, window.innerWidth - r.right) + 'px';
+    menu.style.left = 'auto';
+  }
+  function close() { menu.classList.add('hidden'); btn.setAttribute('aria-expanded', 'false'); }
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = menu.classList.contains('hidden');
+    if (open) { place(); menu.classList.remove('hidden'); btn.setAttribute('aria-expanded', 'true'); } else close();
+  });
+  menu.addEventListener('click', () => setTimeout(close, 0));
+  document.addEventListener('click', (e) => { if (!menu.contains(e.target) && e.target !== btn) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  window.addEventListener('resize', close);
 })();
