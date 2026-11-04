@@ -475,7 +475,7 @@
   CLASSIC.forEach(addThemeOption);
   if (LOOKS.length) { addThemeHeading('🧸 Box colors & looks'); LOOKS.forEach(addThemeOption); }
   fillThemeSelect();
-  (function () { const h = el('ctxDepthHost'); if (h && PT && PT.makeDepthSelect) { const sel = PT.makeDepthSelect(); sel.className = 'select'; sel.id = 'ctxDepthSelect'; h.appendChild(sel); } })();
+  (function () { const h = el('ctxDisplayHost'); if (h && PT && PT.buildDisplayBlock) PT.buildDisplayBlock(h, { noHeader: true, noBanner: true, only: ['width', 'deco'] }); })();
   applyTheme(currentTheme, true);
 
   function openThemeMenu() {

@@ -1296,3 +1296,28 @@ body[data-game="boxdle"] .stage { padding-left: max(8px, env(safe-area-inset-lef
   body[data-game="boxdle"] .bxWordText { font-size: 20px; }
   body[data-game="boxdle"] .bxWho { font-size: 13.5px; }
 }
+
+/* ============================================================================================================================
+   UPDATE 125 - BOXDLE follows the shared "Display & layout" settings (width, banner, info text, decorations, 3D depth)
+   ============================================================================================================================ */
+html[data-width="standard"] { --bx-max: 680px; }
+html[data-width="wide"]     { --bx-max: 860px; }
+html[data-width="full"]     { --bx-max: 100%; }
+html { --bx-max: 860px; }
+body[data-game="boxdle"] .stage { max-width: var(--bx-max, 860px); }
+@media (min-width: 900px) { body[data-game="boxdle"] .stage { max-width: var(--bx-max, 860px); } }
+html[data-banner="hidden"] body[data-game="boxdle"] .heroBand { display: none; }
+html[data-banner="compact"] body[data-game="boxdle"] .heroTitle { font-size: clamp(34px, 10.5vw, 50px); margin-top: 4px; }
+html[data-banner="compact"] body[data-game="boxdle"] .heroTagline { font-size: 13px; }
+html[data-banner="compact"] body[data-game="boxdle"] .heroDeco.d2, html[data-banner="compact"] body[data-game="boxdle"] .heroDeco.d5 { display: none; }
+html[data-itext="large"]  { --itz: 1.15; }
+html[data-itext="xlarge"] { --itz: 1.3; }
+body[data-game="boxdle"] .bxHintLine, body[data-game="boxdle"] .heroTagline, body[data-game="boxdle"] .bxRuleNote,
+body[data-game="boxdle"] .bxMissedRow, body[data-game="boxdle"] .idleBanner { zoom: var(--itz, 1); }
+html[data-deco="off"] body[data-game="boxdle"] .heroDeco, html[data-deco="off"] body[data-game="boxdle"] .heroCrown { display: none !important; }
+html[data-deco="off"] body[data-game="boxdle"] .round-card::before, html[data-deco="off"] body[data-game="boxdle"] .round-card::after { display: none; }
+/* Flat: no raised blocks */
+html[data-depth="off"] body[data-game="boxdle"] .bxTile, html[data-depth="off"] body[data-game="boxdle"] .bxWordRow, html[data-depth="off"] body[data-game="boxdle"] .iconBtn {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5) !important; transform: none;
+}
+html[data-depth="strong"] body[data-game="boxdle"] .bxTile { --bx-w1: 4px; --bx-w2: 8px; }

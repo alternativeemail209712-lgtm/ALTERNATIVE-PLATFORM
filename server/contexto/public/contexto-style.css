@@ -346,7 +346,7 @@ button { font-family: inherit; }
   flex-direction: column;
   min-height: 0;
   padding: 16px 16px calc(24px + var(--safe-bottom));
-  max-width: 640px;
+  max-width: var(--ctx-max, 820px);
   margin: 0 auto;
   width: 100%;
 }
@@ -1117,3 +1117,16 @@ html:not([data-depth="off"]) .diff-chip, html:not([data-depth="off"]) .mode-pip,
 html:not([data-depth="off"]) .btn:active:not(:disabled), html:not([data-depth="off"]) .icon-pill:active, html:not([data-depth="off"]) .icon-btn:active {
   transform: translateY(var(--d1, 2px)); box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 0 0 rgba(0,0,0,.28);
 }
+
+/* ============================================================
+   Update 125 - Contexto room + Display & layout (width, decorations)
+   ============================================================ */
+html[data-width="standard"] { --ctx-max: 640px; }
+html[data-width="wide"]     { --ctx-max: 820px; }
+html[data-width="full"]     { --ctx-max: 100%; }
+html { --ctx-max: 820px; }
+main, .main, .wrap, .page { max-width: var(--ctx-max, 820px); }
+html[data-deco="off"] .hero::before, html[data-deco="off"] .hero::after,
+html[data-deco="off"] .wordmark::before, html[data-deco="off"] .wordmark::after { content: none !important; display: none !important; }
+@media (max-width: 480px) { .hero { padding-left: 8px; padding-right: 8px; } }
+.dispBlock { margin-top: 12px; }
