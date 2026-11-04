@@ -190,11 +190,11 @@
     });
     lab.appendChild(sel); m.appendChild(lab);
     if (window.PlatformTheme) { window.PlatformTheme.wire(); try { sel.value = window.PlatformTheme.current(); } catch (e) {} }
-    if (window.PlatformTheme && window.PlatformTheme.makeDepthSelect) {
-      var dl = el("label", "theme-picker hv-themepick"); dl.appendChild(document.createTextNode("🧊 ")); dl.appendChild(window.PlatformTheme.makeDepthSelect()); m.appendChild(dl);
-      m.appendChild(el("p", "hv-help", "3D depth: raised tiles, keys, buttons and boxes inside the games (Soft, Strong or Flat). Works with every color."));
+    if (window.PlatformTheme && window.PlatformTheme.buildDisplayBlock) {
+      var blk = el("div"); m.appendChild(blk);
+      window.PlatformTheme.buildDisplayBlock(blk, { noBanner: true });
     }
-    m.appendChild(el("p", "hv-help", "The title & header style of the cute looks is set inside each game (Settings → Look & sound) and is shared by all games."));
+    m.appendChild(el("p", "hv-help", "These display options are the same ones you find inside each game (Settings → Appearance), shared by all games."));
   }
 
   var settingsTab = "mode"; // update 38: Mode is the first tab (Offline / Test / Live + connection), Cards = Customize Game Cards

@@ -137,7 +137,7 @@
     for (var i = 0; i < selects.length; i++) {
       if (selects[i].value !== theme) selects[i].value = theme;
     }
-    setTimeout(function () { if (document.getElementById("heroBand")) { var t = document.querySelector(".heroTitle"); if (t && !look) t.style.fontSize = ""; fitTitle(); } }, 0);
+    setTimeout(function () { if (document.getElementById("heroBand")) { var t = document.querySelector(".heroTitle"); if (t && !look) t.style.fontSize = ""; fitTitle(); } relayout(); }, 0);
     if (!(opts && opts.silent)) {
       for (var j = 0; j < listeners.length; j++) {
         try { listeners[j](theme); } catch (e) {}
@@ -192,6 +192,17 @@
     t.appendChild(a); t.appendChild(b);
   }
 
+  // update 125: a color / header / depth / size change alters how much room the board has, but the games only measure it on "resize".
+  // So after every appearance change we tell them to measure again (this is what makes every choice take effect fully, at once).
+  var relayoutTimer = null;
+  function relayout() {
+    clearTimeout(relayoutTimer);
+    relayoutTimer = setTimeout(function () {
+      try { window.dispatchEvent(new Event("resize")); } catch (e) {}
+      setTimeout(function () { try { window.dispatchEvent(new Event("resize")); } catch (e) {} }, 350); // once more after the fonts / animations settle
+    }, 60);
+  }
+
   function fitTitle() {
     var t = document.querySelector(".heroTitle"), band = document.getElementById("heroBand");
     if (!t || !band || !document.documentElement.hasAttribute("data-look")) return;
@@ -237,40 +248,98 @@
     var sel = document.querySelectorAll("[data-hstyle-select]");
     for (var i = 0; i < sel.length; i++) if (sel[i].value !== id) sel[i].value = id;
     setTimeout(fitTitle, 0);
+    relayout();
+  }
+
+  // ---- Display & layout (update 125): space, banner, info text, decorations. Shared by every game. ----
+  var DKEYS = "platformDisplay";
+  var DISPLAY_DEFAULTS = { width: "wide", banner: "compact", itext: "normal", deco: "on" };
+  var DISPLAY_OPTS = {
+    width:  { label: "↔️ Game area width", opts: [["standard", "Standard"], ["wide", "Wide (default)"], ["full", "Full screen width"]] },
+    banner: { label: "🪧 Title banner",    opts: [["compact", "Compact (default)"], ["full", "Full size"], ["hidden", "Hidden (most room)"]] },
+    itext:  { label: "🔠 Info text size",  opts: [["normal", "Normal"], ["large", "Large"], ["xlarge", "Extra large"]] },
+    deco:   { label: "✨ Decorations",     opts: [["on", "On (sparkles, tape, hearts)"], ["off", "Off (cleaner)"]] }
+  };
+  var display = {};
+  function readDisplay() {
+    var d = {}, k, saved = {};
+    try { saved = JSON.parse(localStorage.getItem(DKEYS) || "{}") || {}; } catch (e) {}
+    for (k in DISPLAY_DEFAULTS) {
+      var ok = false;
+      if (saved[k]) for (var i = 0; i < DISPLAY_OPTS[k].opts.length; i++) if (DISPLAY_OPTS[k].opts[i][0] === saved[k]) ok = true;
+      d[k] = ok ? saved[k] : DISPLAY_DEFAULTS[k];
+    }
+    return d;
+  }
+  function paintDisplay() {
+    var root = document.documentElement;
+    for (var k in display) root.setAttribute("data-" + k, display[k]);
+  }
+  display = readDisplay();
+  paintDisplay();
+  function setDisplay(k, v) {
+    display[k] = v; paintDisplay();
+    try { localStorage.setItem(DKEYS, JSON.stringify(display)); } catch (e) {}
+    var sel = document.querySelectorAll("[data-display-select='" + k + "']");
+    for (var i = 0; i < sel.length; i++) if (sel[i].value !== v) sel[i].value = v;
+    setTimeout(fitTitle, 0);
+    relayout();
+  }
+  function resetDisplay() {
+    display = JSON.parse(JSON.stringify(DISPLAY_DEFAULTS)); paintDisplay();
+    try { localStorage.setItem(DKEYS, JSON.stringify(display)); } catch (e) {}
+    setHStyle("sticker"); setDepth("soft");
+    var sel = document.querySelectorAll("[data-display-select]");
+    for (var i = 0; i < sel.length; i++) sel[i].value = display[sel[i].getAttribute("data-display-select")];
+    relayout();
+  }
+  function dispRow(container, label, selectEl) {
+    var row = document.createElement("label");
+    row.className = "dispRow";
+    var t = document.createElement("span"); t.className = "dispLabel"; t.textContent = label;
+    row.appendChild(t); row.appendChild(selectEl);
+    container.appendChild(row);
+  }
+  // fills a container with the whole "Display & layout" card (used inside every game's Settings, the homepage and Contexto)
+  function buildDisplayBlock(container, opts) {
+    opts = opts || {};
+    if (!container || container.getAttribute("data-disp-built") === "1") return;
+    container.setAttribute("data-disp-built", "1");
+    container.classList.add("dispBlock");
+    var h = document.createElement("div"); h.className = "dispHead"; h.textContent = "🎛️ Display & layout";
+    container.appendChild(h);
+    var intro = document.createElement("p"); intro.className = "dispNote";
+    intro.textContent = "Shared by all games. Make the board as big as your screen allows, and choose how much decoration you want.";
+    container.appendChild(intro);
+    function mkSel(attr, list, val, onchange, label) {
+      var sel = document.createElement("select");
+      sel.setAttribute(attr[0], attr[1]); sel.setAttribute("aria-label", label);
+      list.forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op); });
+      sel.value = val; sel.addEventListener("change", function (e) { onchange(e.target.value); });
+      return sel;
+    }
+    if (!opts.noHeader) dispRow(container, "🎀 Title & header style", mkSel(["data-hstyle-select", "1"], HSTYLES.map(function (x) { return [x.id, x.name]; }), hstyle, setHStyle, "Title and header style"));
+    ["width", "banner", "itext", "deco"].forEach(function (k) {
+      if (opts.noBanner && k === "banner") return;
+      if (opts.only && opts.only.indexOf(k) < 0) return;
+      if (k === "width" && document.body && document.body.hasAttribute("data-no-width")) return;
+      dispRow(container, DISPLAY_OPTS[k].label, mkSel(["data-display-select", k], DISPLAY_OPTS[k].opts, display[k], function (v) { setDisplay(k, v); }, DISPLAY_OPTS[k].label));
+    });
+    if (!opts.noDepth) dispRow(container, "🧊 3D depth", makeDepthSelect());
+    var rb = document.createElement("button");
+    rb.type = "button"; rb.className = "dispReset"; rb.textContent = "↺ Reset display & layout";
+    rb.addEventListener("click", resetDisplay);
+    container.appendChild(rb);
   }
 
   function addHeaderSelect(themeSel) {
     var host = themeSel.closest("label") || themeSel.parentNode;
-    if (!host || host.parentNode.querySelector("[data-hstyle-wrap]")) return;
+    if (!host || !host.parentNode || host.parentNode.querySelector("[data-hstyle-wrap]")) return;
     var wrap = document.createElement("div");
     wrap.setAttribute("data-hstyle-wrap", "1");
-    wrap.style.marginTop = "8px";
-    var lab = document.createElement("label");
-    lab.className = "theme-picker";
-    lab.appendChild(document.createTextNode("🎀 "));
-    var sel = document.createElement("select");
-    sel.setAttribute("data-hstyle-select", "1");
-    sel.setAttribute("aria-label", "Title and header style");
-    HSTYLES.forEach(function (h) {
-      var o = document.createElement("option"); o.value = h.id; o.textContent = h.name; sel.appendChild(o);
-    });
-    sel.value = hstyle;
-    sel.addEventListener("change", function (e) { setHStyle(e.target.value); });
-    lab.appendChild(sel);
-    var note = document.createElement("p");
-    note.className = "sectionNote";
-    note.style.margin = "4px 0 0";
-    note.textContent = "Title & header design for the cute looks (inspired by BOXDLE). Shared by all games.";
-    wrap.appendChild(lab); wrap.appendChild(note);
-    var dl = document.createElement("label");
-    dl.className = "theme-picker"; dl.style.marginTop = "8px"; dl.style.display = "flex";
-    dl.appendChild(document.createTextNode("🧊 "));
-    dl.appendChild(makeDepthSelect());
-    var dn = document.createElement("p");
-    dn.className = "sectionNote"; dn.style.margin = "4px 0 0";
-    dn.textContent = "3D depth: raised tiles, keys, buttons, boxes and chips. Works with every color. Shared by all games.";
-    wrap.appendChild(dl); wrap.appendChild(dn);
+    wrap.style.marginTop = "10px";
     host.parentNode.insertBefore(wrap, host.nextSibling);
+    buildDisplayBlock(wrap, { noBanner: !document.getElementById("heroBand"), noHeader: !!(document.body && document.body.getAttribute("data-game") === "boxdle") });
   }
 
   hstyle = readHStyle();
@@ -295,6 +364,7 @@
     try { localStorage.setItem(DKEY, id); } catch (e) {}
     var sel = document.querySelectorAll("[data-depth-select]");
     for (var i = 0; i < sel.length; i++) if (sel[i].value !== id) sel[i].value = id;
+    relayout();
   }
   function makeDepthSelect() {
     var sel = document.createElement("select");
@@ -360,6 +430,10 @@
     keys: KEYS,
     current: function () { return current; },
     headerStyle: function () { return hstyle; },
+    display: function () { return display; },
+    setDisplay: setDisplay,
+    buildDisplayBlock: buildDisplayBlock,
+    relayout: relayout,
     depth: function () { return depth; },
     setDepth: setDepth,
     makeDepthSelect: makeDepthSelect,
