@@ -23,6 +23,8 @@
 <script src="/shared/title-font.js" defer></script>
 <script src="/shared/score-ticker.js"></script>
 <script src="/shared/word-language.js"></script>
+<link rel="stylesheet" href="/shared/one-screen.css" />
+<script src="/shared/one-screen.js" defer></script>
 </head>
 <body data-game="crossdle">
 <div id="app">
@@ -72,17 +74,6 @@
       <a href="/" class="btn btn-ghost btn-icon-label" id="homeBtn" title="Choose another game">
         <span>🏠</span><span class="btn-text">Games</span>
       </a>
-      <label class="theme-picker crossdle-theme-picker">
-        🎨
-        <select data-theme-select aria-label="Platform theme color">
-          <option value="cream">Cream</option>
-          <option value="blue">Sky Blue</option>
-          <option value="green">Meadow Green</option>
-          <option value="pink">Blossom Pink</option>
-          <option value="violet">Lavender Violet</option>
-          <option value="honey">Honey Gold</option>
-        </select>
-      </label>
       <div class="pill" id="roundPill">Round —</div>
       <button id="leaderboardBtn" class="btn btn-ghost btn-icon-label" type="button">
         <span>🏆</span><span class="btn-text">Leaderboard</span>
@@ -165,6 +156,21 @@
       </div>
 
       <div class="host-cards">
+
+        <div class="host-card">
+          <div class="host-card-title">🎨 Theme &amp; layout</div>
+          <label class="theme-picker crossdle-theme-picker">
+        🎨
+        <select data-theme-select aria-label="Platform theme color">
+          <option value="cream">Cream</option>
+          <option value="blue">Sky Blue</option>
+          <option value="green">Meadow Green</option>
+          <option value="pink">Blossom Pink</option>
+          <option value="violet">Lavender Violet</option>
+          <option value="honey">Honey Gold</option>
+        </select>
+      </label>
+        </div>
 
         <div class="host-card">
           <div class="host-card-title">🔤 Title font</div>

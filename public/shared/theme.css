@@ -35,7 +35,7 @@
      three never overlap and nothing jumps when the message appears or disappears.
      This is the slot's height - raise it if the message is ever cut off, lower it to
      move the keyboard and board back up. */
-  --toast-slot-height: 84px;
+  --toast-slot-height: 62px;
 
   --theme-bg-top:  #FFF3DC;
   --theme-bg:      #F5E3C0;
@@ -532,9 +532,16 @@ html body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTimerBar > *,
 html[data-nshadow="on"] .lpNum, html[data-nshadow="on"] .ccNum, html[data-nshadow="on"] .celebPoints,
 html[data-nshadow="on"] .fxScore, html[data-nshadow="on"] .bxChip, html[data-nshadow="on"] .lb-score{ text-shadow: 0 2px 0 rgba(0,0,0,.18); }
 
-/* ---- the toast ("message") slot no longer reserves an empty band above the board; the message floats over the top instead ---- */
-html body .toastSlot{ height: 0 !important; min-height: 0 !important; overflow: visible; }
-html body .toastSlot .rejectionToast{ top: 6px; }
+/* ---- update 128: the floating guess / message window NEVER overlaps anything ----
+   It has its own reserved slot in the normal page flow (under the top bar, above the legend, keyboard, clock, grid and
+   guessed-words board). Everything else sits below the slot, so the message can never cover them. The message card
+   is compact (at most 2 lines) and is clipped to the slot, so even a long message cannot spill out of it. */
+html body .toastSlot, html body .toast-slot{ height: var(--toast-slot-height) !important; min-height: var(--toast-slot-height) !important; max-height: var(--toast-slot-height) !important; flex: 0 0 var(--toast-slot-height) !important; overflow: hidden !important; margin-top: 0 !important; margin-bottom: 4px !important; }
+html body .toastSlot .rejectionToast, html body .toast-slot .reject-toast{
+  top: 4px !important; box-sizing: border-box !important; padding: 6px 12px 7px !important; font-size: 12px !important; line-height: 1.25 !important;
+  max-height: calc(var(--toast-slot-height) - 10px) !important; overflow: hidden !important; overflow-wrap: anywhere;
+}
+html body .toastSlot .rejectionToast::before{ margin-bottom: 4px !important; }
 
 /* ---- the top toolbar: nothing overlaps, nothing is cut. Icons keep their size; if a line is full, it wraps ---- */
 html body:not([data-game="contexto"]) .toolbarRow{ flex-wrap: wrap; justify-content: flex-end; align-items: center; row-gap: 4px; column-gap: 4px; min-width: 0; overflow: visible; }
