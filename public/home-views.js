@@ -181,7 +181,7 @@
   /* update 124: the platform colors / cute looks live here (not on the front of the page) */
   function appearancePanel(m) {
     m.appendChild(el("div", "hv-ah", "🎨 Platform appearance"));
-    m.appendChild(el("p", "hv-help", "Pick the colors for the whole platform: the homepage and every game follow it. Besides the 6 plain colors there are 15 cute \"Box colors & looks\" designs (graph paper, washi tape, 3D tiles) inspired by BOXDLE."));
+    m.appendChild(el("p", "hv-help", "Pick the colors for the whole platform: the homepage and every game follow it. Besides the 10 plain colors (no decorations) there are 30 cute \"Box colors & looks\" designs (graph paper, washi tape, 3D tiles) inspired by BOXDLE."));
     var lab = el("label", "theme-picker hv-themepick");
     lab.appendChild(document.createTextNode("🎨 "));
     var sel = el("select"); sel.setAttribute("data-theme-select", ""); sel.setAttribute("aria-label", "Platform theme color");

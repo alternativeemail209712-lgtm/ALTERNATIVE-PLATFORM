@@ -564,3 +564,60 @@ html body:not([data-game="boxdle"]):not([data-game="contexto"]) .tileRow, html b
 }
 /* the fullscreen button that theme.js adds when a game page has none */
 .fsAutoBtn{ cursor: pointer; }
+
+/* ==========================================================================
+   UPDATE 127 - THE TOP TOOLBAR IS ONE SINGLE ROW IN EVERY GAME
+   No sideways scrolling, no second line, nothing cut. Every round button shares the width that is left
+   equally (24 px minimum, 42 px maximum), the mode / length badges keep their own text size, and the long
+   brand name steps aside on phones. (CONTEXTO has its own bar in contexto-style.css.)
+   ========================================================================== */
+html body:not([data-game="contexto"]) .topbar{
+  display: flex !important; flex-wrap: nowrap !important; align-items: center; gap: 4px; overflow: visible;
+  padding-left: max(6px, env(safe-area-inset-left, 0px)); padding-right: max(6px, env(safe-area-inset-right, 0px));
+}
+html body:not([data-game="contexto"]) .topbar .brandRow{ flex: 0 0 auto; gap: 4px; min-width: 0; }
+html body:not([data-game="contexto"]) .topbar .brandDot{ width: 8px; height: 8px; }
+html body:not([data-game="contexto"]) .toolbarRow{
+  flex: 1 1 0 !important; min-width: 0; display: flex; flex-wrap: nowrap !important; justify-content: flex-end; align-items: center;
+  gap: 3px; width: auto !important; overflow: visible !important; row-gap: 0;
+}
+html body:not([data-game="contexto"]) .toolbarRow > .iconBtn{
+  flex: 1 1 0 !important; min-width: 24px !important; max-width: 42px; width: auto !important; height: auto !important; aspect-ratio: 1 / 1;
+  padding: 0 !important; display: inline-flex !important; align-items: center; justify-content: center; line-height: 1;
+  font-size: clamp(12px, 4vw, 18px) !important; text-decoration: none;
+}
+html body:not([data-game="contexto"]) .toolbarRow > .modeBadge, html body:not([data-game="contexto"]) .toolbarRow > .lengthBadge{
+  flex: 0 0 auto !important; order: 0 !important; white-space: nowrap; overflow: visible; max-width: none; line-height: 1.2;
+  padding: 3px clamp(5px, 1.6vw, 9px); font-size: clamp(9px, 2.7vw, 11.5px);
+}
+@media (max-width: 700px){ html body:not([data-game="contexto"]) .topbar .brandText{ display: none; } }
+
+/* FLAGLE */
+#game-screen .topbar{ flex-wrap: nowrap; gap: 4px; padding-left: 6px; padding-right: 6px; }
+#game-screen .topbar-left, #game-screen .topbar-right{ flex: 0 1 auto; min-width: 0; gap: 4px; }
+#game-screen .topbar .icon-btn{ flex: 0 1 auto; width: clamp(26px, 8vw, 36px); height: clamp(26px, 8vw, 36px); min-width: 26px; padding: 0; }
+#game-screen .mode-badge, #game-screen .round-timer{ flex: 0 0 auto; white-space: nowrap; }
+#game-screen .round-timer{ padding: 3px 10px; font-size: 14px; }
+#game-screen #live-username{ max-width: 18vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#game-screen .heartbeat{ white-space: nowrap; }
+@media (max-width: 640px){ #game-screen .topbar-title{ display: none; } }
+@media (max-width: 400px){ #game-screen .heartbeat{ display: none; } }
+
+/* TRAVLE */
+.topbar-actions{ flex: 1 1 0; min-width: 0; flex-wrap: nowrap; justify-content: flex-end; gap: 3px; }
+.topbar-actions > .icon-btn{ flex: 1 1 0; min-width: 24px; max-width: 40px; width: auto; height: auto; aspect-ratio: 1 / 1; padding: 0; justify-content: center; font-size: clamp(12px, 4vw, 16px); }
+.topbar-actions > .badge{ flex: 0 0 auto; white-space: nowrap; font-size: clamp(9px, 2.7vw, 11px); padding: 3px 7px; }
+.topbar .brand{ flex: 0 0 auto; }
+@media (max-width: 600px){ .topbar .brand-text{ display: none; } .topbar{ padding-left: 8px; padding-right: 8px; gap: 4px; } }
+
+/* CROSSDLE */
+.app-header{ flex-wrap: nowrap !important; gap: 4px; padding-left: 8px; padding-right: 8px; }
+.app-header .brand{ flex: 0 1 auto; min-width: 0; }
+.app-header .brand-title{ font-size: clamp(15px, 4.6vw, 19px); white-space: nowrap; }
+.app-header .round-meta{ flex: 1 1 0; min-width: 0; flex-wrap: nowrap; justify-content: flex-end; gap: 3px; }
+.app-header .pill{ flex: 0 0 auto; white-space: nowrap; font-size: clamp(9.5px, 2.8vw, 12px); padding: 3px 8px; }
+@media (max-width: 700px){
+  .app-header .brand-sub, .app-header .btn-text{ display: none; }
+  .app-header .btn-icon-label{ flex: 1 1 0; min-width: 26px; max-width: 40px; aspect-ratio: 1 / 1; padding: 0; justify-content: center; font-size: clamp(13px, 4.2vw, 17px); }
+}
+@media (max-width: 560px){ .app-header .crossdle-theme-picker{ display: none; } }
