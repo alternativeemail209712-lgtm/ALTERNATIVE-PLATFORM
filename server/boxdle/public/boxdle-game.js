@@ -784,7 +784,7 @@ function renderStatus(g) {
 // Box colors & look: presets + a color picker for every part. The server keeps the choice (shared by every screen, remembered).
 // ------------------------------------------------------------
 const BX_DEFAULT = { page: "#fbf3e4", card: "#fff8ec", cardBorder: "#f4a6be", clockBox: "#ede4fa", gridBox: "#ffe9ef", wordsBox: "#fff2cf", tile: "#ffffff", tileInk: "#1f2a5c", ink: "#2b2a4c", accent: "#e8708f", navy: "#1f2a5c" };
-const PT = window.PlatformTheme; // /shared/theme.js: the 15 "Box colors & look" designs + the 6 plain colors
+const PT = window.PlatformTheme; // /shared/theme.js: the 30 "Box colors & look" designs + the 10 plain colors
 const BX_PRESETS = PT && PT.looks
   ? PT.looks.map((l) => ({ id: l.id, theme: l.theme, name: l.name, c: l.c }))
   : [{ id: "strawberry", theme: "look-strawberry", name: "🍓 Strawberry", c: BX_DEFAULT }];
@@ -889,7 +889,7 @@ function syncColorsFromState(g) {
   syncThemeOnce();
 }
 
-// The Appearance dropdown (plain colors + the 15 "Box colors & look" designs) is shared by every game. In BOXDLE, choosing any of them
+// The Appearance dropdown (plain colors + the 30 "Box colors & look" designs) is shared by every game. In BOXDLE, choosing any of them
 // paints the boxes, tiles, text, accent and title with that palette and saves it on the server (so every BOXDLE screen matches).
 function paintThemeInBox(theme) {
   if (!PT) return;
