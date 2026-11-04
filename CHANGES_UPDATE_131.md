@@ -1,25 +1,22 @@
-# UPDATE 131 - every game fits ONE screen (no page scrolling)
+# Update 131
 
-## What changed
-Every game page now sits in a box exactly as tall as the screen. Nothing is cut off and the page itself never scrolls.
+Based on updates 128 - 130 (included).
 
-* NEW `public/shared/one-screen.css` + `public/shared/one-screen.js`, linked into all 28 game pages
-  (the 22 word games, Twistle, Boxdle, Crossdle, Travle, Contexto, Findle display + Findle host).
-* The BOARD (guessed words / grid / globe / guess list) is the flexible part: it takes the height that is left and only
-  its own list scrolls when there are more guesses than rows that fit. Word-game tiles are sized so about 3 guess rows fit.
-* If the fixed parts (title banner, bars, keyboard, legend, host controls) need more than the screen has, the layout
-  tightens in 3 steps (smaller banner / spacing, TikTok safe-top reserve shrinks only when needed), and only if that is
-  still not enough the whole page is scaled evenly (CSS zoom, so text and symbols stay sharp). Floor 50%.
-* It re-checks on every resize, rotation and layout change. On tall screens (e.g. a phone) most games stay at 100%.
-* Crossdle + Findle host: the "Display & layout" card was sitting inside the top bar (made it 500-650 px tall). It now
-  lives in the Host Controls panel (Crossdle) / Settings drawer (Findle host).
-* Findle: the grid square is sized from the room that is left (container units), not from viewport units.
-* Travle: the globe is now a circle as large as the room left; route card + feed + host dock always visible.
-* Contexto: page locked, only the guess list scrolls inside itself.
-* Boxdle: grid / clock / guessed words are measured against the real card height.
+## 1. Every game fits on ONE screen (no scrolling)
+Title, top ribbon, score ribbon, message window, legend, keyboard, hints, the guess board and the host bar are all visible at once.
+- New shared files: `public/shared/fit-screen.css` + `fit-screen.js`, loaded by all games.
+- The guess list is the one flexible area: it takes the height that is left over and scrolls inside its own box (newest guesses first).
+- If a small phone cannot hold everything at full size, the whole game shrinks by a few percent (CSS zoom: text and symbols are re-drawn, never stretched or blurry). It never goes below 70 %, it only shrinks while the guess list would get too small, and it grows back only when there is clear spare room, so the screen never jumps up and down.
+- Games with their own layout were handled separately: CROSSDLE (board), TWISTLE (grid), CITYDLE / TOWNDLE / EXPANDLE / FIXLE (board with header row), TRAVLE (the globe now takes exactly the height that is left: `public/travle/fit-travle.js`), CONTEXTO (list inside its own box), FLAGLE (already one screen). BOXDLE keeps its own fitting.
+- Tested at 360x740, 390x844, 412x915, 768x1024 and 1280x720.
 
-## Not changed on purpose
-Flagle's pre-game SETUP form (a long settings form) still scrolls; its game screen already fits one screen.
+## 2. New settings section: 🧩 Customize (all games)
+Open ⚙️ Settings > 🧩 Customize. Built for an Android phone: big switches, big buttons, one column.
+- **Quick layouts**: Everything / Clean / Big board / Guesses only (one tap).
+- **Whole screen**: switch "Fit everything on one screen" on or off; "Start with the host bar folded".
+- **One card per area, with a switch for every part** and a Small / Normal / Large size button where it makes sense: Title banner (+ description line), Top ribbon buttons (each button separately), Score ribbon & messages (ribbon, floating message window), Legend, Keyboard (+ heading), Game parts (the parts that only this game has, e.g. BOXDLE clock / counters / time bar / letter grid, CITYDLE column titles, EXPANDLE timer, LINEDLE wave panel, MINEDLE mine grid and letter bank, CODEDLE code row, COLORBLINDLE colour counts, COMPARABLE symbol pattern, SHAPEDLE symbol row, TWISTLE round chip / answer tiles / guide, TRAVLE globe bar / trail lines / live activity, FLAGLE flag / hint line / chat / likes / gifters, CROSSDLE hint tiles ..., CONTEXTO latest guess / stats ...), Guess board & banners, Host controls bar.
+- **Reset this game** and **Use this layout for all games**.
+- Choices are kept on the phone (per game) and apply instantly.
+- The ⚙️ Settings button can never be hidden. Rescue link: open the game with `?gcreset=1` to wipe its layout.
 
-## To disable for a page
-Remove the two `one-screen` lines from that page's `<head>`.
+Files: public/shared/fit-screen.css|js, game-customize.css|js, settings-shell.js (new "Customize" category) | public/travle/fit-travle.js, style.css | every game page (2 extra links) | package.json 2.79.0

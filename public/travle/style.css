@@ -925,3 +925,12 @@ button, input, select {
 html[data-width="standard"] #app { max-width: 560px; }
 html[data-width="wide"] #app { max-width: 760px; }
 html[data-width="full"] #app { max-width: 100%; }
+
+/* ---- update 131: one screen. The globe takes exactly the height that is left (set by fit-travle.js), so the route card,
+   live feed and host dock are ALWAYS fully visible. ---- */
+#app { overflow: hidden; }
+.globe-wrap { width: var(--globe-size, min(52dvh, calc(100dvh - 330px), calc(100vw - 56px), 560px)); height: var(--globe-size, min(52dvh, calc(100dvh - 330px), calc(100vw - 56px), 560px)); }
+.board > .route-card, .board > .feed-card { flex-shrink: 0; }
+.board > .feed-card:not(.collapsed) { flex: 1 1 0; min-height: 44px; }
+.board > .feed-card:not(.collapsed) .feed-list { overflow-y: auto; }
+html.fs body #app > main.board { flex: 1 1 0 !important; min-height: 0 !important; }

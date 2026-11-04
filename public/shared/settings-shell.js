@@ -24,6 +24,7 @@
     { id: "hints",   icon: "💡", label: "Hints",           help: "Which hints the host can give, and how often" },
     { id: "connect", icon: "📡", label: "Connection",      help: "TikTok LIVE link, mode and diagnostics" },
     { id: "look",    icon: "🎨", label: "Look & sound",    help: "Colours, fonts and audio" },
+    { id: "custom",  icon: "🧩", label: "Customize",       help: "Show, hide and resize every part of this game" },
     { id: "scores",  icon: "🏆", label: "Scores & feedback", help: "Leaderboards, celebrations and messages" },
     { id: "tools",   icon: "🧰", label: "Live tools",      help: "Polls, alerts and host messages for your stream" }
   ];
@@ -147,7 +148,7 @@
       el.classList.add("csCard");
     }
     var head = mk("div", "csCardHead");
-    head.innerHTML = '<span class="csCardIcon" aria-hidden="true">' + iconFor(title) + '</span><h3 class="csCardTitle">' + esc(title) + "</h3>";
+    head.innerHTML = '<span class="csCardIcon" aria-hidden="true">' + ((el.getAttribute && el.getAttribute("data-cs-icon")) || iconFor(title)) + '</span><h3 class="csCardTitle">' + esc(title) + "</h3>";
     // hide the game's original heading, but keep any button that lives inside it (e.g. Diagnostics hide/show)
     var oldH = el.querySelector(":scope > h4, :scope > h3, :scope > h2, :scope > .host-card-title");
     if (oldH) {
@@ -156,7 +157,7 @@
       oldH.classList.add("csGone");
     }
     var badge = mk("span", "csBadge");
-    var applyOn = !!(S.out && S.out.apply) && NEEDS_APPLY.test(title) && catFor(title) !== "hints";
+    var applyOn = !!(S.out && S.out.apply) && NEEDS_APPLY.test(title) && catFor(title) !== "hints" && !(el.getAttribute && el.getAttribute("data-cs-force-cat"));
     badge.className = "csBadge " + (applyOn ? "needs" : "live");
     badge.textContent = applyOn ? "Needs Apply" : (catFor(title) === "tools" ? "Live" : "Applies instantly");
     badge.title = applyOn ? "This setting takes effect when you press Apply." : "This setting takes effect straight away.";
@@ -175,8 +176,9 @@
       }
     });
     el.setAttribute("data-cs-title", title.toLowerCase());
-    el.setAttribute("data-cs-cat", catFor(title));
-    card.cat = catFor(title);
+    var forced = el.getAttribute && el.getAttribute("data-cs-force-cat");   // update 131: the Customize cards
+    el.setAttribute("data-cs-cat", forced || catFor(title));
+    card.cat = forced || catFor(title);
     return el;
   }
 

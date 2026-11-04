@@ -1,0 +1,81 @@
+/* ==========================================================================
+   FIT-SCREEN (update 131) - every game is ONE screen: no page scrolling.
+   Title, top bar, score ticker, message slot, legend, keyboard, hints, the guess board and the host bar are all
+   visible at once. Only the guess list itself (it can hold hundreds of guesses) scrolls inside its own box; it
+   shows the newest guesses first, and it takes whatever height is left over.
+   fit-screen.js (loaded with this file) shrinks the whole game by a few percent ONLY when a small screen cannot hold
+   everything at full size. It uses CSS "zoom" (text and symbols are re-drawn at the new size, never stretched), so
+   nothing becomes blurry, and it only ever shrinks (never jumps up and down while playing).
+   ========================================================================== */
+html.fs, html.fs body { height: 100%; margin: 0; overflow: hidden !important; overscroll-behavior: none; }
+html.fs body .app {
+  position: relative; display: flex; flex-direction: column; overflow: hidden !important;
+  height: calc(var(--fs-vh, 100vh) / var(--fs-zoom, 1)); max-height: calc(var(--fs-vh, 100vh) / var(--fs-zoom, 1));
+  zoom: var(--fs-zoom, 1);
+}
+/* fixed-size parts keep their natural size ... */
+html.fs body .app > * { flex-shrink: 0; }
+/* ... and the middle takes ALL the remaining height */
+html.fs body .app > .stage {
+  flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  padding-top: 4px; padding-bottom: 4px; gap: 0; margin-left: auto; margin-right: auto;
+}
+html.fs body .app > .stage > .round-card {
+  flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; gap: 6px;
+  padding-top: 8px; padding-bottom: 8px; margin-bottom: 0;
+}
+html.fs body .app > .stage > .round-card > * { flex: 0 0 auto; min-height: 0; margin-top: 0; margin-bottom: 0; }
+/* the guess list: the ONE flexible area; its own scroll (hidden bar, still touch/wheel scrollable) */
+html.fs body .app > .stage > .round-card > .tilesWrap {
+  flex: 1 1 0; min-height: 130px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; align-content: flex-start;
+}
+/* TWISTLE: its guess rows live in #grid */
+html.fs body .app > .stage > .round-card > .grid {
+  flex: 1 1 0; min-height: 130px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; align-content: flex-start; justify-content: flex-start;
+}
+/* CITYDLE / TOWNDLE / EXPANDLE / FIXLE: the guess list sits inside a "board" with a header row (column titles / timer):
+   the whole board is the flexible area, the list inside it scrolls */
+html.fs body .app > .stage > .round-card > .fxBoard:not([hidden]) {
+  flex: 1 1 0; min-height: 130px; display: flex; flex-direction: column; overflow: hidden;
+}
+html.fs body .app > .stage > .round-card > .fxBoard > * { flex: 0 0 auto; }
+html.fs body .app > .stage > .round-card > .fxBoard > .tilesWrap {
+  flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; margin-bottom: 0; scrollbar-width: thin;
+}
+html.fs body .app > .controls { flex: 0 0 auto; }
+html.fs body .app > .controls .controlsBody { max-height: none; }
+@media (prefers-reduced-motion: reduce) { html.fs body .app { transition: none; } }
+
+/* ---------- CROSSDLE (different markup: #app > header + ticker + main.main-content > section.board-section) ---------- */
+html.fs body #app:not(.app) {
+  display: flex; flex-direction: column; position: relative; overflow: hidden !important;
+  height: calc(var(--fs-vh, 100vh) / var(--fs-zoom, 1)); max-height: calc(var(--fs-vh, 100vh) / var(--fs-zoom, 1));
+  zoom: var(--fs-zoom, 1);
+}
+html.fs body #app:not(.app) > * { flex-shrink: 0; }
+html.fs body #app > .main-content {
+  flex: 1 1 0; min-height: 0; overflow: hidden !important; display: flex; flex-direction: column;
+  padding: 6px 10px 62px; /* bottom: clears the floating host button */
+}
+html.fs body #app > .main-content > .board-section {
+  flex: 1 1 0; min-height: 0; width: 100%; display: flex; flex-direction: column; overflow: hidden;
+}
+html.fs body #app > .main-content > .board-section > * { flex: 0 0 auto; margin-top: 0; }
+html.fs body #app > .main-content > .board-section > .keyboard-section,
+html.fs body #app > .main-content > .board-section > .board-legend { margin-bottom: 6px; }
+html.fs body #app > .main-content > .board-section > #board {
+  flex: 1 1 0; min-height: 130px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; align-content: flex-start;
+}
+html.fs body #app > .main-content > .board-section > .board-empty { flex: 1 1 0; min-height: 0; padding: 12px 16px; overflow: hidden; }
+
+/* ---------- CONTEXTO (#app > header#diagnostics + main#game > hero, latest guess, board > #guessList) ---------- */
+html.fs body #app > #game {
+  flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; padding-top: 6px; padding-bottom: 8px;
+}
+html.fs body #app > #game > * { flex: 0 0 auto; }
+html.fs body #app > #game > .hero { padding: 2px 0 6px; }
+html.fs body #app > #game > .latest { margin: 6px 0 8px; }
+html.fs body #app > #game > .board { flex: 1 1 0; min-height: 0; margin-bottom: 0; padding: 10px 12px; overflow: hidden; }
+html.fs body #app > #game > .board > .board-head { margin-bottom: 6px; }
+html.fs body #app > #game > .board > .guess-list { flex: 1 1 0; min-height: 130px; overflow-y: auto; scrollbar-width: thin; }
+html.fs body #app > #game > .board > .empty-hint { padding: 10px 0; }
