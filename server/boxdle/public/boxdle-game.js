@@ -774,10 +774,13 @@ function renderStatus(g) {
     if (g.hint) html = "💡 A <b>" + g.hint.length + "-letter</b> word starts at the purple tile (letter <b>" + escapeHtml(g.hint.letter.toUpperCase()) + "</b>).";
     else if (g.hintNote) html = escapeHtml(g.hintNote.text);
     else if (g.mode === "offline") html = "✏️ Solo practice — type your word in the box below.";
-    else html = "✨ Type words you can trace on the grid in the chat — " + g.minWordLength + "+ letters, long words score big!";
+    // (update 128) the "Type words you can trace on the grid in the chat ..." line was removed on purpose: nothing replaces it.
   }
   if (ended && g.autoContinue) html += " <b>Next grid in " + g.autoContinueSecondsLeft + "s…</b>";
   el.statusText.innerHTML = html;
+  // (update 130) the status box lives in the reserved message slot: when empty it is just invisible, nothing moves
+  const row = el.statusText.parentNode;
+  if (row && row.classList) row.classList.toggle("bxEmpty", !html && !ended);
 }
 
 // ------------------------------------------------------------
