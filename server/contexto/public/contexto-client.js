@@ -166,7 +166,7 @@
     return AVATAR_COLORS[h % AVATAR_COLORS.length];
   }
   function fallbackAvatarHtml(user) {
-    return `<span class="pp-avatar" style="background:${colorFor(user || '?')}">${escapeHtml((user || '?').charAt(0).toUpperCase())}</span>`;
+    return `<span class="pp-avatar" style="background:${colorFor(user || '?')}">${escapeHtml(Array.from(user || '?')[0].toUpperCase())}</span>`;
   }
   function avatarHtml(user, avatarUrl) {
     if (!avatarUrl) return fallbackAvatarHtml(user);
@@ -184,7 +184,7 @@
     span.className = 'pp-avatar';
     const user = img.dataset.fallbackUser || '?';
     span.style.background = colorFor(user);
-    span.textContent = user.charAt(0).toUpperCase();
+    span.textContent = Array.from(user)[0].toUpperCase();
     img.replaceWith(span);
   }, true);
 

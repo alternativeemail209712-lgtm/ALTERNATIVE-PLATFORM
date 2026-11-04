@@ -562,22 +562,45 @@ let hl = null; // { path, until }
 let hlTimer = null;
 
 function gridMetrics(n) {
-  // The grid box is as wide as the card allows; tiles fill that width, so the letters are as big as the screen permits.
+  // The grid is as big as BOTH the width and the height that are left allow (update 126): the whole page - title down to the
+  // guessed words - fits one screen, so the grid never pushes the guessed words out of view.
   const secW = el.gridSection.clientWidth || 340;
   const avail = Math.max(120, secW - 16);
   const gap = n <= 6 ? 6 : n <= 8 ? 5 : n <= 10 ? 3 : 2;
-  const maxTile = n <= 6 ? 66 : n <= 8 ? 54 : n <= 10 ? 46 : 40;
-  const size = Math.max(18, Math.min(maxTile, Math.floor((avail - gap * (n - 1)) / n)));
+  const maxTile = n <= 6 ? 88 : n <= 8 ? 72 : n <= 10 ? 58 : 46;
+  let size = Math.max(18, Math.min(maxTile, Math.floor((avail - gap * (n - 1)) / n)));
+  try {
+    const card = el.gridSection.closest(".round-card");
+    if (card && card.clientHeight > 0) {
+      const px = (v) => parseFloat(v) || 0;
+      const cs = getComputedStyle(card);
+      let others = 0;
+      Array.prototype.forEach.call(card.children, (ch) => {
+        if (ch === el.gridSection || ch === el.board || ch.hidden || ch.offsetParent === null) return;
+        const m = getComputedStyle(ch);
+        others += ch.offsetHeight + px(m.marginTop) + px(m.marginBottom);
+      });
+      const sc = getComputedStyle(el.gridSection);
+      const secExtra = px(sc.paddingTop) + px(sc.paddingBottom) + px(sc.borderTopWidth) + px(sc.borderBottomWidth) + px(sc.marginTop) + px(sc.marginBottom);
+      const boardMin = (window.innerHeight < 780 ? 92 : 140) + 6;
+      const budget = card.clientHeight - px(cs.paddingTop) - px(cs.paddingBottom) - px(cs.borderTopWidth) - px(cs.borderBottomWidth) - others - secExtra - boardMin;
+      const byH = Math.floor((budget - gap * (n - 1)) / n);
+      size = Math.max(18, Math.min(size, byH));
+    }
+  } catch (e) { /* measuring is best effort */ }
   return { n, size, gap, font: Math.max(12, Math.round(size * 0.6)) };
 }
 
+let lastGridState = null;
 function renderGrid(g) {
+  lastGridState = g;
   const n = g.boardSize || 0;
   const show = g.status !== "idle" && n > 0 && g.letters.length === n * n;
   el.gridSection.hidden = !show;
   if (!show) { lastGridSig = ""; tileEls = []; return; }
 
-  const sig = [g.roundNumber, n, el.gridSection.clientWidth].join("|");
+  const _card = el.gridSection.closest(".round-card");
+  const sig = [g.roundNumber, n, el.gridSection.clientWidth, _card ? _card.clientHeight : 0, el.clock ? el.clock.offsetHeight : 0, window.innerHeight].join("|");
   if (sig !== lastGridSig) {
     lastGridSig = sig;
     const m = gridMetrics(n);
@@ -587,7 +610,7 @@ function renderGrid(g) {
     el.grid.style.gridTemplateColumns = "repeat(" + n + ", " + m.size + "px)";
     el.grid.style.gap = m.gap + "px";
     const w1 = m.gap >= 5 ? 3 : m.gap >= 3 ? 2 : 1;
-    el.grid.style.setProperty("--bx-w1", w1 + "px"); el.grid.style.setProperty("--bx-w2", w1 * 2 + "px");
+    el.grid.style.setProperty("--bx-w1", w1 + "px"); el.grid.style.setProperty("--bx-w2", Math.min(w1 * 2, m.gap - 1) + "px");
     el.grid.style.setProperty("--bx-lift", w1 + "px");
     el.grid.innerHTML = "";
     tileEls = [];
@@ -1105,3 +1128,19 @@ function renderLeaderboardTab() {
 function escapeHtml(str) {
   return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+
+
+// update 126: re-fit the grid whenever the room changes (rotation, the browser bar sliding away, the status line wrapping, ...)
+(function () {
+  let raf = 0;
+  function refit() { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { if (lastGridState) renderGrid(lastGridState); }); }
+  window.addEventListener("resize", refit);
+  window.addEventListener("orientationchange", () => setTimeout(refit, 250));
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", refit);
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(refit);
+    const card = document.querySelector(".round-card"); if (card) ro.observe(card);
+    if (el.clock) ro.observe(el.clock);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+})();
