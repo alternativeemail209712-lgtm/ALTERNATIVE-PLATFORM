@@ -224,7 +224,7 @@ html[data-look] body:not([data-game="boxdle"]) .heroTagline{ font-family: "Quick
    ========================================================================== */
 /* the injected decorations / ribbon exist in the page always, but are invisible unless a look + a non-classic style is on */
 .cuteDeco, .cuteRibbon{ display: none; }
-.heroDeco, .heroCrown{ position: absolute; pointer-events: none; user-select: none; line-height: 1; z-index: 2; }
+.heroDeco{ position: absolute; pointer-events: none; user-select: none; line-height: 1; z-index: 2; }
 @keyframes cuteTwinkle{ 0%,100%{ transform: scale(1); opacity: 1; } 50%{ transform: scale(1.25) rotate(12deg); opacity: .7; } }
 
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .cuteDeco{ display: block; }
@@ -250,8 +250,6 @@ html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .her
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d3{ right: 8%; top: 12%; font-size: 20px; animation: cuteTwinkle 3.1s ease-in-out infinite .6s; }
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d4{ right: 3%; top: 46%; font-size: 28px; transform: rotate(10deg); }
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroDeco.d5{ left: 14%; bottom: 8%; font-size: 15px; }
-html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown{ font-size: 26px; left: calc(50% - 22vw); top: 4px; transform: rotate(-16deg); }
-@media (min-width: 560px){ html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown{ left: calc(50% - 120px); } }
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .cuteRibbon{
   position: relative; z-index: 1; margin: -2px auto 2px; padding: 3px 22px 4px;
   font: 800 clamp(12px, 3.6vw, 16px) "Baloo 2", "Fredoka", sans-serif; letter-spacing: .18em; color: #fff;
@@ -286,7 +284,6 @@ html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .cuteRibbon{
 html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroTagline{
   background: var(--theme-card); border: 2px dashed var(--look-accent); border-radius: 999px; padding: 3px 14px; box-shadow: 0 2px 0 var(--theme-shadow);
 }
-html[data-look][data-hstyle="candy"] body:not([data-game="boxdle"]) .heroCrown{ display: none; }
 
 /* ---- 3. NOTEBOOK LABEL: a paper card with punch holes, washi tape and a pink sticker pill ---- */
 html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroBand{
@@ -314,7 +311,6 @@ html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .cuteRibbon{
   background: var(--theme-surface-2); color: var(--theme-deep); outline: 0; border: 2px dashed var(--look-accent);
   border-radius: 999px; letter-spacing: .12em; transform: rotate(-1deg); box-shadow: 0 2px 0 var(--theme-shadow);
 }
-html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroCrown,
 html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d2,
 html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d5{ display: none; }
 html[data-look][data-hstyle="note"] body:not([data-game="boxdle"]) .heroDeco.d4{ right: 8px; top: auto; bottom: -10px; }
@@ -454,7 +450,6 @@ html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="conte
 html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTitle{ font-size: clamp(28px, 8.4vw, 44px); margin-top: 4px; }
 html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTagline{ font-size: clamp(11px, 3vw, 13px); }
 html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .cuteRibbon{ font-size: clamp(10px, 2.9vw, 13px); padding: 1px 16px 2px; margin: 0 auto; }
-html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroCrown{ font-size: 20px; }
 html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroDeco.d2, html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroDeco.d5{ display: none; }
 @media (max-height: 720px){ html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTagline{ display: none; } }
 html[data-banner="compact"][data-hstyle="note"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroBand{ margin: 10px 10px 2px; padding: 8px 14px 6px 30px; }
@@ -639,8 +634,29 @@ html body:not([data-game="contexto"]) .toolbarRow > .modeBadge, html body:not([d
    The crown emoji paints a few pixels above its own box; the banner used to clip it flat at the top of the screen.
    ========================================================================== */
 html[data-look] body:not([data-game="boxdle"]) .heroBand { overflow: visible !important; }
-html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown { top: 10px; }
-html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroCrown { top: 9px; }
 html[data-look] body:not([data-game="boxdle"]) .heroBand { padding-top: max(10px, var(--hero-pad-top, 0px)); }
 /* the tagline keeps clear of the corner decorations (teddy bear / sparkles) instead of running underneath them */
 html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTagline { padding-left: clamp(30px, 10vw, 50px); padding-right: clamp(34px, 11vw, 54px); box-sizing: border-box; }
+
+
+/* ==========================================================================
+   UPDATE 135 - the title crown is attached to the TITLE, not to the screen
+   Before: the crown was placed at a fixed distance from the centre of the banner, so it only looked right for titles of one
+   particular width (it sat on top of the first letter of CROSSDLE / BLINDLE and floated away from short titles like FINDLE).
+   Now: it is a decoration of the first word-part of the title (.hT1::before), sized in em, so it always sits on the top-left
+   corner of the first letter, tilted like a hat, whatever the game name, title font, banner size or screen width.
+   ========================================================================== */
+.heroCrown{ display: none !important; }   /* the old stand-alone crown element is never shown any more */
+html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTitle .hT1{ position: relative; overflow: visible; }
+html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTitle .hT1::before{
+  content: "\1F451"; position: absolute; left: -.2em; top: -.36em; z-index: 3;
+  font: 400 .52em/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; letter-spacing: 0;
+  -webkit-text-stroke: 0; -webkit-text-fill-color: initial; text-shadow: none; paint-order: normal;
+  transform: rotate(-18deg); transform-origin: 50% 100%; pointer-events: none; user-select: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.25));
+}
+html[data-deco="off"] .heroTitle .hT1::before{ content: none !important; display: none !important; }
+/* room above the title for the crown (never touches / is cut by the top of the screen) */
+html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroBand{ padding-top: max(15px, var(--hero-pad-top, 0px)); }
+/* the first sparkle moves to the lower-left corner in the compact banner, so it never collides with the crown on long titles */
+html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroDeco.d1{ top: auto; bottom: 10%; left: 4%; }

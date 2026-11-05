@@ -271,9 +271,7 @@
       d.className = "cuteDeco heroDeco d" + (i + 1); d.setAttribute("aria-hidden", "true"); d.textContent = deco[i];
       band.appendChild(d);
     }
-    var crown = document.createElement("span");
-    crown.className = "cuteDeco heroCrown"; crown.setAttribute("aria-hidden", "true"); crown.textContent = "👑";
-    band.appendChild(crown);
+    // update 135: the crown is now drawn by CSS on the first part of the title (.hT1::before) so it always sticks to the title
     var game = document.body ? document.body.getAttribute("data-game") : "";
     var rib = document.createElement("div");
     rib.className = "cuteRibbon";
