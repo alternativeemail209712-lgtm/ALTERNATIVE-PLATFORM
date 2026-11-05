@@ -114,3 +114,24 @@ html.fs body .app .tilesWrap > * { max-width: 100%; }
 
 /* in scroll-fallback mode the guess list may use most of the screen (tile-fit.js sets a small inline max-height for the one-screen layout) */
 html.fs.fs-scroll body .app .tilesWrap { max-height: max(300px, 72vh) !important; }
+
+/* ==========================================================================
+   UPDATE 133 - decorations and tile edges are never sliced.
+   The one-screen lock clipped three things that legitimately stick out of their box:
+   (a) the washi tape + heart on top of the card (they sit 13-17px ABOVE the card edge)  -> the stage now reserves that room
+       and the card itself no longer clips (the fit logic measures scrollHeight, so it never relied on the clip);
+   (b) the TOP edge of the first tile row (3D lift / border / highlight)                 -> the guess lists get a little padding
+       inside their scroll box, so the first row is whole at scroll position 0;
+   (c) the bottom 3D edge of the last visible row                                        -> same padding at the bottom.
+   ========================================================================== */
+html.fs body .app > .stage { padding-top: 20px; }
+html.fs body .app > .stage > .round-card { overflow: visible; }
+html.fs body .app > .stage > .round-card > .tilesWrap,
+html.fs body .app > .stage > .round-card > .grid,
+html.fs body .app > .stage > .round-card > .fxBoard > .tilesWrap { padding-top: 7px; padding-bottom: 9px; box-sizing: border-box; }
+html.fs body #app > .main-content > .board-section > #board,
+html.fs body #app > #game > .board > .guess-list { padding-top: 6px; padding-bottom: 8px; box-sizing: border-box; }
+/* the fx board (Citydle / Towndle / Expandle / Fixle) has its own clip: give its content the same breathing room */
+html.fs body .app > .stage > .round-card > .fxBoard:not([hidden]) { overflow: visible; }
+/* scroll fallback mode: same room above the card */
+html.fs.fs-scroll body .app > .stage { padding-top: 20px; }

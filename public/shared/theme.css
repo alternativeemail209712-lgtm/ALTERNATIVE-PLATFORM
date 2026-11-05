@@ -633,3 +633,14 @@ html body:not([data-game="contexto"]) .toolbarRow > .modeBadge, html body:not([d
 [data-hstyle-wrap]{ box-sizing: border-box; max-width: 100%; min-width: 0; }
 .topbar [data-hstyle-wrap], header [data-hstyle-wrap], .app-header [data-hstyle-wrap]{ flex: 1 1 100%; width: 100%; }
 .settings-subhead + [data-hstyle-wrap] > .dispHead, .drawer-subhead + [data-hstyle-wrap] > .dispHead{ display: none; }
+
+/* ==========================================================================
+   UPDATE 133 - the title crown / sparkles are never cut by the banner box
+   The crown emoji paints a few pixels above its own box; the banner used to clip it flat at the top of the screen.
+   ========================================================================== */
+html[data-look] body:not([data-game="boxdle"]) .heroBand { overflow: visible !important; }
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]) .heroCrown { top: 10px; }
+html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroCrown { top: 9px; }
+html[data-look] body:not([data-game="boxdle"]) .heroBand { padding-top: max(10px, var(--hero-pad-top, 0px)); }
+/* the tagline keeps clear of the corner decorations (teddy bear / sparkles) instead of running underneath them */
+html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTagline { padding-left: clamp(30px, 10vw, 50px); padding-right: clamp(34px, 11vw, 54px); box-sizing: border-box; }
