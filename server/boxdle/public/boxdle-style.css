@@ -1385,3 +1385,8 @@ body[data-game="boxdle"] .toastSlot .bxStatus {
 body[data-game="boxdle"] .toastSlot .bxStatus.bxEmpty { display: flex; visibility: hidden; }
 body[data-game="boxdle"] .toastSlot .bxStatusText { font-size: 13.5px; line-height: 1.2; -webkit-line-clamp: 2; text-align: center; }
 body[data-game="boxdle"] .toastSlot .bxNewBtn { pointer-events: auto; padding: 5px 12px; }
+
+/* UPDATE 133 - the crown is never cut flat by the banner box */
+body[data-game="boxdle"] .heroBand { overflow: visible; }
+body[data-game="boxdle"] .heroCrown { top: 10px; }
+@media (max-width: 480px) { body[data-game="boxdle"] .heroCrown { top: 9px; } }
