@@ -628,3 +628,8 @@ html body:not([data-game="contexto"]) .toolbarRow > .modeBadge, html body:not([d
   .app-header .btn-icon-label{ flex: 1 1 0; min-width: 26px; max-width: 40px; aspect-ratio: 1 / 1; padding: 0; justify-content: center; font-size: clamp(13px, 4.2vw, 17px); }
 }
 @media (max-width: 560px){ .app-header .crossdle-theme-picker{ display: none; } }
+
+/* update 132: the Display & layout card is a full-width block wherever it lives (never a squeezed flex item in a header row) */
+[data-hstyle-wrap]{ box-sizing: border-box; max-width: 100%; min-width: 0; }
+.topbar [data-hstyle-wrap], header [data-hstyle-wrap], .app-header [data-hstyle-wrap]{ flex: 1 1 100%; width: 100%; }
+.settings-subhead + [data-hstyle-wrap] > .dispHead, .drawer-subhead + [data-hstyle-wrap] > .dispHead{ display: none; }

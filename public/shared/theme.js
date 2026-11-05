@@ -386,6 +386,37 @@
     wrap.style.marginTop = "10px";
     host.parentNode.insertBefore(wrap, host.nextSibling);
     buildDisplayBlock(wrap, { noBanner: !document.getElementById("heroBand"), noHeader: !!(document.body && document.body.getAttribute("data-game") === "boxdle") });
+    keepDisplayOutOfHeader(wrap);
+  }
+
+  // update 132: some games keep their theme picker in the header bar. The big "Display & layout" card must NEVER sit there (it
+  // covered the title and ran off the screen). If the card is not inside a settings panel, move it into the game's own one.
+  var SETTINGS_HOMES = [
+    { box: "#hostPanelOverlay .host-cards", card: true },      // Crossdle host panel
+    { box: ".host-cards", card: true },
+    { box: ".settingsBody", head: "h4", headClass: "settings-subhead" }, { box: ".drawer-body", head: "h3", headClass: "drawer-subhead" }, { box: "#settingsSheet .sheet-body" }
+  ];
+  function inSettings(el) {
+    return !!(el.closest && el.closest("#hostPanelOverlay, #settingsOverlay, #settings-overlay, #settingsDrawer, #settingsSheet, #drawer, .drawer, .settingsBody, .drawer-body, .sheet-body, .host-cards, .csBody"));
+  }
+  function keepDisplayOutOfHeader(wrap) {
+    var tries = 0;
+    (function attempt() {
+      if (!wrap.isConnected || inSettings(wrap)) return;
+      for (var i = 0; i < SETTINGS_HOMES.length; i++) {
+        var home = document.querySelector(SETTINGS_HOMES[i].box);
+        if (!home) continue;
+        if (SETTINGS_HOMES[i].card) wrap.classList.add("host-card");
+        if (SETTINGS_HOMES[i].head) {   // "flow" style settings panels start a new card at every sub-heading
+          var hd = document.createElement(SETTINGS_HOMES[i].head); hd.className = SETTINGS_HOMES[i].headClass; hd.textContent = "Display & layout";
+          home.appendChild(hd);
+        }
+        home.appendChild(wrap);
+        wrap.style.marginTop = "";
+        return;
+      }
+      if (++tries < 40) setTimeout(attempt, 250);
+    })();
   }
 
   hstyle = readHStyle();

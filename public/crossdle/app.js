@@ -508,7 +508,7 @@
 
   function buildAttemptRow(attempt, animateIn) {
     const row = document.createElement('div');
-    row.className = 'attempt-row' + (attempt.correct ? ' attempt-correct' : '');
+    row.className = 'attempt-row' + (attempt.correct ? ' attempt-correct' : '') + (attempt.guess.length > 6 ? ' attempt-long' : '');   // update 132: long words stack guess + decoy on two lines
 
     const userDiv = document.createElement('div');
     userDiv.className = 'attempt-user';
@@ -518,6 +518,7 @@
 
     const guessSet = document.createElement('div');
     guessSet.className = 'tile-set';
+    guessSet.style.setProperty('--n', String(attempt.guess.length));
     for (let i = 0; i < attempt.guess.length; i++) {
       const tile = document.createElement('div');
       tile.className = `tile tile-${attempt.colors[i]}` + (animateIn ? ' tile-new' : '');
@@ -528,6 +529,7 @@
 
     const decoySet = document.createElement('div');
     decoySet.className = 'tile-set';
+    decoySet.style.setProperty('--n', String(attempt.decoy.length));
     for (let i = 0; i < attempt.decoy.length; i++) {
       const tile = document.createElement('div');
       tile.className = 'tile tile-decoy' + (animateIn ? ' tile-new' : '');
