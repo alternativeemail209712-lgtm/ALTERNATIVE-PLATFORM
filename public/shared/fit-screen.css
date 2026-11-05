@@ -135,3 +135,22 @@ html.fs body #app > #game > .board > .guess-list { padding-top: 6px; padding-bot
 html.fs body .app > .stage > .round-card > .fxBoard:not([hidden]) { overflow: visible; }
 /* scroll fallback mode: same room above the card */
 html.fs.fs-scroll body .app > .stage { padding-top: 20px; }
+
+/* ==========================================================================
+   UPDATE 134 - one stable size.
+   tile-fit.js puts an inline max-height (about 150-200px) on the guess list. In the one-screen layout that clamp made the list
+   look "too small" to fit-screen.js, which then shrank the WHOLE game to 70-80% and fell back to scroll mode (small game, blank
+   screen below it). In the one-screen layout the list takes the height that is left (flex), so the clamp is switched off there.
+   ========================================================================== */
+html.fs:not(.fs-scroll) body .app .tilesWrap { max-height: none !important; }
+
+/* ---- compact levels (fit-screen.js adds them only when the game would not fit at full size) ----
+   level 1: tighter gaps, smaller reserved message slot, no keyboard heading;  level 2: also hides the banner's description line.
+   Everything stays on screen - the game is only shrunk (zoom) if this is still not enough. */
+html.fs.fs-compact { --toast-slot-height: 44px; }
+html.fs.fs-compact body .app > .stage { padding-top: 16px; padding-bottom: 2px; }
+html.fs.fs-compact body .app > .stage > .round-card { gap: 4px; padding-top: 6px; padding-bottom: 6px; }
+html.fs.fs-compact body .keyboardHead { display: none; }
+html.fs.fs-compact body .heroBand { padding-top: 6px !important; padding-bottom: 4px !important; gap: 2px !important; }
+html.fs.fs-compact2 body .heroBand .heroTagline { display: none; }
+html.fs.fs-compact2 body .app > .controls .controlsHandle { padding-top: 4px; padding-bottom: 4px; }

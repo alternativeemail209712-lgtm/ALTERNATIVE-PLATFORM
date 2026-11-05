@@ -16,6 +16,45 @@
     zoom = Math.max(MIN_ZOOM, Math.min(1, z));
     doc.style.setProperty("--fs-zoom", String(zoom));
   }
+  var compact = 0;
+  function setCompact(n) {
+    compact = n;
+    doc.classList.toggle("fs-compact", n >= 1);
+    doc.classList.toggle("fs-compact2", n >= 2);
+  }
+  /* update 134: RE-SIZE THE TILES WHEN THE ZOOM CHANGES. Every game works out its tile size from the width of its guess list at the
+     moment a guess is drawn. fit-screen changes the zoom AFTER that, so the list suddenly became wider (in game pixels) and the
+     rows stayed small, leaving a blank strip beside them (small tiles, sometimes medium, sometimes big, depending on when the guess
+     was drawn). Every game already redraws its tiles on a window "resize", so one resize event after the zoom settles is enough. */
+  var tilesZoom = 1, retileQueued = false;
+  function retile() {
+    if (Math.abs(zoom - tilesZoom) < 0.001 || retileQueued) return;
+    retileQueued = true;
+    requestAnimationFrame(function () {
+      retileQueued = false;
+      if (Math.abs(zoom - tilesZoom) < 0.001) return;
+      tilesZoom = zoom;
+      try { window.dispatchEvent(new Event("resize")); } catch (e) {}
+      fitRows();
+    });
+  }
+  /* update 134: the games ask "how much height may a tile row use?" with a guess (window height - list top - 230) that is wrong whenever
+     the page is zoomed or the legend / keyboard are tall (it came out at 150px and made the tiles small). In the one-screen layout the
+     list's REAL height is known, so the answer is taken from it. (Only the games that have this helper are affected.) */
+  function patchTileHeight() {
+    if (window.__fsTileHeightPatched || typeof window.computeAvailableTilesHeight !== "function") return;
+    window.__fsTileHeightPatched = true;
+    var orig = window.computeAvailableTilesHeight;
+    window.computeAvailableTilesHeight = function () {
+      try {
+        var box = list || document.getElementById("tilesWrap");
+        if (doc.classList.contains("fs") && !doc.classList.contains(SCROLL_CLS) && box && box.offsetParent !== null && box.clientHeight > 60) {
+          return Math.max(80, box.clientHeight - 16);
+        }
+      } catch (e) {}
+      return orig.apply(this, arguments);
+    };
+  }
   function setVh() { doc.style.setProperty("--fs-vh", window.innerHeight + "px"); }
   function minList() {
     var b = list && list.parentNode && list.parentNode.classList && list.parentNode.classList.contains("fxBoard") ? list : list;
@@ -43,15 +82,19 @@
     // then switched back on in the same frame if the game still does not fit - the user never sees the switch).
     var y = window.pageYOffset || 0, wasScroll = doc.classList.contains(SCROLL_CLS);
     if (wasScroll) doc.classList.remove(SCROLL_CLS);
-    if (fromFull) setZoom(1);
+    if (fromFull) { setZoom(1); setCompact(0); }
     var guard = 0;
+    // update 134: first trim dead space (level 1: tighter gaps / smaller message slot; level 2: also the banner's description line),
+    // and only then shrink the whole game. Bigger, steadier tiles and text on small phones.
+    if (zoom >= 1 && overflowing()) { setCompact(1); if (overflowing()) setCompact(2); }
     while (overflowing() && zoom > MIN_ZOOM + 0.0001 && guard++ < 40) setZoom(zoom - STEP);
     // update 132: even at the smallest zoom it does not fit -> NEVER clip it: let the page scroll like a normal page.
     var stillTooBig = overflowing();
     if (stillTooBig) doc.classList.add(SCROLL_CLS);
     if (wasScroll && stillTooBig && y) window.scrollTo(0, y);
-    if (zoom < 1) scheduleGrow();
+    if (zoom < 1 || compact) scheduleGrow();
     fitRows();
+    retile();
   }
   /* update 132: ROW FIT. Every game works out its tile size ONCE (from the width it measured at that moment) and keeps it
      until the next guess. If the width changes afterwards (a scrollbar appears, the zoom changes, the phone turns, fonts
@@ -93,7 +136,7 @@
     growTimer = setTimeout(function () { growTimer = 0; grow(); }, 1800);
   }
   function grow() {
-    if (!app || zoom >= 1) return;
+    if (!app || (zoom >= 1 && !compact)) return;
     // update 132: measure in one-screen mode (the scroll fallback is switched off for the measurement and back on if still needed)
     var y = window.pageYOffset || 0, wasScroll = doc.classList.contains(SCROLL_CLS);
     if (wasScroll) doc.classList.remove(SCROLL_CLS);
@@ -106,10 +149,19 @@
       ok = zoom;
     }
     setZoom(ok);
+    if (ok >= 1 && compact) {           // full size again: see whether the trimmed dead space can come back
+      var back = compact;
+      for (var lv = compact - 1; lv >= 0; lv--) {
+        setCompact(lv);
+        var bx = listBox();
+        if (overflowing() || (bx && bx.offsetParent !== null && bx.clientHeight < minList() + GROW_MARGIN)) { setCompact(lv + 1); break; }
+      }
+    }
     if (overflowing() || (listBox() && listBox().offsetParent !== null && listBox().clientHeight < minList() - 1)) doc.classList.add(SCROLL_CLS);
     if (wasScroll && y) window.scrollTo(0, y);
     if (ok < 1 && ok !== start) scheduleGrow();
     fitRows();
+    retile();
   }
   function schedule(fromFull) {
     if (fromFull) { lastW = -1; }
@@ -128,6 +180,7 @@
     app = document.querySelector(".app") || document.getElementById("app");
     if (!app) return;
     lastW = window.innerWidth; lastH = window.innerHeight;
+    patchTileHeight();
     fit(true);
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", function () { setTimeout(onResize, 200); });
