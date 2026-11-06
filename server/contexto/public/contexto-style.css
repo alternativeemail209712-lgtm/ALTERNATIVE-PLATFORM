@@ -371,7 +371,7 @@ button { font-family: inherit; }
   gap: 8px;
   flex-wrap: wrap;
 }
-.dot-sep { opacity: .5; }
+.dot-sep { display: none; }
 .diff-chip {
   padding: 2px 9px;
   border-radius: 999px;
@@ -1171,3 +1171,10 @@ html[data-deco="off"] .wordmark::before, html[data-deco="off"] .wordmark::after 
 .guess-row .guess-who .pp-avatar, .guess-who .who-spacer { flex: 0 0 var(--who-av); width: var(--who-av); height: var(--who-av); }
 .guess-who .who-spacer { display: block; }
 .guess-row .guess-user { flex: 1 1 auto; min-width: 0; max-width: none; text-align: left; }
+
+/* ---- update 138: the title now sits ABOVE the toolbar (same order as every other game) ---- */
+#app > .hero { width: 100%; max-width: var(--ctx-max, 820px); margin: 0 auto; box-sizing: border-box;
+  padding: calc(var(--live-safe-top, var(--safe-top)) + 6px) 16px 8px; flex: 0 0 auto; }
+#diagnostics { padding-top: 0; }
+#game { padding-top: 8px; }
+.stats-row { gap: 10px; }

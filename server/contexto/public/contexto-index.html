@@ -24,6 +24,18 @@
 
 <div id="app">
 
+  <!-- ===== TITLE (update 138: above the toolbar, like every other game) ===== -->
+  <section class="hero">
+    <h1 class="wordmark">Contexto <span>LIVE</span></h1>
+    <p id="heroSub" class="hero-sub">Pick a mode, adjust the settings, then start a round.</p>
+    <div id="statsRow" class="stats-row hidden">
+      <span id="statGuesses">0 guesses</span>
+      <span class="dot-sep">·</span>
+      <span id="statPlayers">0 players</span>
+      <span id="statDiff" class="diff-chip hidden"></span>
+    </div>
+  </section>
+
   <!-- ===== TOP BAR: status word + every control in one single row ===== -->
   <header id="diagnostics">
     <div class="top-bar">
@@ -93,16 +105,6 @@
   <!-- ===== MAIN GAME AREA ===== -->
   <main id="game">
 
-    <section class="hero">
-      <h1 class="wordmark">Contexto <span>LIVE</span></h1>
-      <p id="heroSub" class="hero-sub">Pick a mode, adjust the settings, then start a round.</p>
-      <div id="statsRow" class="stats-row hidden">
-        <span id="statGuesses">0 guesses</span>
-        <span class="dot-sep">·</span>
-        <span id="statPlayers">0 players</span>
-        <span id="statDiff" class="diff-chip hidden"></span>
-      </div>
-    </section>
 
     <!-- Floating "+N points" popups, one per scoring guess. Centered,
          between the stats row above and the latest-guess box below. -->
@@ -113,16 +115,16 @@
       <span id="winIcon">🎉</span>
       <strong id="winnerName"></strong> found it — <strong id="winWord"></strong>!
       <span id="winMeta" class="win-meta"></span>
-    </section>
+  </section>
 
     <section id="giveUpBanner" class="give-up-banner hidden">
       Round ended. The answer was <strong id="giveUpWord"></strong> (#1).
-    </section>
+  </section>
 
     <!-- ===== LATEST GUESS (single line) ===== -->
     <section class="latest" aria-label="Latest guess" aria-live="polite">
       <div id="latestRow" class="guess-row is-empty">Waiting for the first guess…</div>
-    </section>
+  </section>
 
     <!-- ===== LIVE GUESSES (auto-sorted by rank, always top-down) ===== -->
     <section class="board">
@@ -132,7 +134,7 @@
       </div>
       <div id="guessList" class="guess-list"></div>
       <p id="guessEmpty" class="empty-hint">Guesses will appear here, closest word first.</p>
-    </section>
+  </section>
 
   </main>
 

@@ -1216,7 +1216,7 @@ body[data-game="boxdle"] .bxWordRow { background: linear-gradient(160deg, var(--
 body[data-game="boxdle"] .bxWordText { flex: none; font: 800 18px/1.1 "Baloo 2", "Fredoka", sans-serif; letter-spacing: 0.05em; overflow-wrap: anywhere; white-space: normal; color: var(--bxc-navy); text-overflow: clip; }
 body[data-game="boxdle"] .bxWho { flex: none; text-align: left; font: 700 11.5px "Quicksand", sans-serif; color: var(--bxc-muted); }
 body[data-game="boxdle"] .bxPts { font-family: var(--font-display); font-size: 15px; min-width: 46px; }
-.bxMissedRow { flex: 0 0 auto; padding: 8px 6px 2px; border-top: 2px dotted var(--bxc-line); font: 700 12.5px/1.8 "Patrick Hand", "Quicksand", sans-serif; color: var(--bxc-muted); }
+.bxMissedRow { flex: 0 0 auto; padding: 8px 6px 2px; border-top: 0; font: 700 12.5px/1.8 "Patrick Hand", "Quicksand", sans-serif; color: var(--bxc-muted); }
 .bxMissedRow b { color: var(--bxc-navy); text-transform: uppercase; letter-spacing: 0.03em; padding: 1px 8px; margin: 0 2px; border-radius: 999px; border: 1.5px solid var(--bxc-line); background: var(--bxc-tile); display: inline-block; font-family: var(--font-display); }
 body[data-game="boxdle"] .bxEmpty { font-family: "Patrick Hand", "Quicksand", cursive; font-size: 15px; color: var(--bxc-muted); }
 
