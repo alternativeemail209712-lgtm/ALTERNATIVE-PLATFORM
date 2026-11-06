@@ -1178,3 +1178,23 @@ html[data-deco="off"] .wordmark::before, html[data-deco="off"] .wordmark::after 
 #diagnostics { padding-top: 0; }
 #game { padding-top: 8px; }
 .stats-row { gap: 10px; }
+
+/* update 139: same toolbar look as every other game - round emoji buttons, one size */
+#diagnostics .top-bar .icon-pill, #diagnostics .top-bar .icon-btn, #diagnostics .top-bar > a.icon-btn{
+  width: clamp(28px, 8.6vw, 38px); height: clamp(28px, 8.6vw, 38px); min-width: 0; padding: 0; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.2vw, 18px); line-height: 1; flex: 0 0 auto; position: relative;
+}
+#diagnostics .top-bar .icon-pill svg, #diagnostics .top-bar .icon-btn svg{ display: none; }
+#diagnostics .top-bar{ gap: 4px; flex-wrap: nowrap; justify-content: space-between; }
+#diagnostics .top-bar #roundBtn{ flex: 0 1 auto; padding: 0 10px; height: clamp(28px, 8.6vw, 38px); font-size: 12px; white-space: nowrap; }
+#fsIconEnter.hidden, #fsIconExit.hidden{ display: none; }
+#diagnostics .top-bar{ flex-wrap: wrap; row-gap: 4px; justify-content: center; }
+#diagnostics .top-bar .icon-pill, #diagnostics .top-bar .icon-btn, #diagnostics .top-bar > a.icon-btn{ width: clamp(26px, 7.2vw, 34px); height: clamp(26px, 7.2vw, 34px); }
+#diagnostics .top-bar #roundBtn{ height: clamp(26px, 7.2vw, 34px); padding: 0 8px; font-size: 11px; }
+#diagnostics .top-bar .status-word{ min-width: 0; max-width: 64px; overflow: hidden; text-overflow: clip; font-size: 10px; padding: 3px 6px; flex: 0 1 auto; }
+#diagnostics .top-bar .theme-picker{ flex: 0 0 auto; }
+#diagnostics .top-bar{ gap: 3px; }
+#diagnostics .top-bar .icon-pill, #diagnostics .top-bar .icon-btn, #diagnostics .top-bar > a.icon-btn{ width: clamp(24px, 6.4vw, 32px); height: clamp(24px, 6.4vw, 32px); font-size: clamp(12px, 3.6vw, 16px); }
+#diagnostics .top-bar #roundBtn{ height: clamp(24px, 6.4vw, 32px); padding: 0 7px; font-size: 10.5px; }
+#diagnostics .top-bar .status-word{ max-width: 54px; font-size: 9.5px; padding: 3px 5px; }
+#diagnostics .top-bar{ align-items: center; } #diagnostics .top-bar .more-wrap{ display: inline-flex; align-items: center; align-self: center; margin: 0; } #diagnostics .top-bar .more-wrap > .icon-btn{ margin: 0; }
