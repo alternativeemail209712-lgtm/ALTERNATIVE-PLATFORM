@@ -35,7 +35,7 @@
      three never overlap and nothing jumps when the message appears or disappears.
      This is the slot's height - raise it if the message is ever cut off, lower it to
      move the keyboard and board back up. */
-  --toast-slot-height: 62px;
+  --toast-slot-height: 52px;
 
   --theme-bg-top:  #FFF3DC;
   --theme-bg:      #F5E3C0;
@@ -660,3 +660,26 @@ html[data-deco="off"] .heroTitle .hT1::before{ content: none !important; display
 html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroBand{ padding-top: max(15px, var(--hero-pad-top, 0px)); }
 /* the first sparkle moves to the lower-left corner in the compact banner, so it never collides with the crown on long titles */
 html[data-banner="compact"] body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroDeco.d1{ top: auto; bottom: 10%; left: 4%; }
+
+
+/* ==========================================================================
+   UPDATE 137 - the floating guess / message window is lighter.
+   Before: a big dark drop shadow (0 14px 32px) that the reserved slot cut off with a hard edge, which showed as an obvious
+   border line between the window and the section below it, plus a coloured bar and a thick outline.
+   Now: a small, soft shadow that fits inside the slot (so nothing is cut), a hairline outline and no extra bar. The message
+   still gets two compact lines. Same look in every game (Boxdle, Crossdle and the others override their own colours only).
+   ========================================================================== */
+html body .toastSlot, html body .toast-slot { overflow: visible !important; border: 0 !important; box-shadow: none !important; background: transparent !important; }
+html body .toastSlot .rejectionToast, html body .toast-slot .reject-toast, html body .toastSlot .toast {
+  top: 2px !important;
+  padding: 5px 12px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  box-shadow: 0 1px 4px rgba(30, 14, 28, .20) !important;
+  font-size: 12px !important; line-height: 1.22 !important;
+  max-height: calc(var(--toast-slot-height) - 6px) !important; overflow: hidden !important;
+}
+html body .toastSlot .rejectionToast::before, html body .toast-slot .reject-toast::before { display: none !important; }
+html body[data-game="boxdle"] .toastSlot .rejectionToast, html body[data-game="boxdle"] .toastSlot .rejectionToast.ok, html body[data-game="boxdle"] .toastSlot .rejectionToast.bad {
+  border-width: 1px !important; border-style: solid !important; box-shadow: 0 1px 4px rgba(30, 14, 28, .16) !important;
+}

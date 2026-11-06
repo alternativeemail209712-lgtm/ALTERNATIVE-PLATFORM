@@ -17,7 +17,12 @@
     doc.style.setProperty("--fs-zoom", String(zoom));
   }
   var compact = 0;
+  /* update 137: ONE banner size for every game. The title banner (tagline hidden, tighter gaps) used to switch on and off depending on
+     how much each game had on screen, so one game had a big banner and the next a small one. Now it depends only on the screen height:
+     every phone-sized screen gets the same compact banner in every game; tall screens (desktop / tablet) keep the full banner. */
+  function baseCompact() { return window.innerHeight < 1000 ? 2 : 0; }
   function setCompact(n) {
+    n = Math.max(n, baseCompact());
     compact = n;
     doc.classList.toggle("fs-compact", n >= 1);
     doc.classList.toggle("fs-compact2", n >= 2);
@@ -82,7 +87,7 @@
     // then switched back on in the same frame if the game still does not fit - the user never sees the switch).
     var y = window.pageYOffset || 0, wasScroll = doc.classList.contains(SCROLL_CLS);
     if (wasScroll) doc.classList.remove(SCROLL_CLS);
-    if (fromFull) { setZoom(1); setCompact(0); }
+    if (fromFull) { setZoom(1); setCompact(0); }   // (setCompact never goes below the screen's base level)
     var guard = 0;
     // update 134: first trim dead space (level 1: tighter gaps / smaller message slot; level 2: also the banner's description line),
     // and only then shrink the whole game. Bigger, steadier tiles and text on small phones.
@@ -92,7 +97,7 @@
     var stillTooBig = overflowing();
     if (stillTooBig) doc.classList.add(SCROLL_CLS);
     if (wasScroll && stillTooBig && y) window.scrollTo(0, y);
-    if (zoom < 1 || compact) scheduleGrow();
+    if (zoom < 1 || compact > baseCompact()) scheduleGrow();
     fitRows();
     retile();
   }
@@ -107,6 +112,38 @@
     return out;
   }
   var fitRowsBusy = false;
+  /* update 137: ONE TILE-SIZE RULE FOR EVERY GAME.
+     Each game used to work out its own tile size (some capped tiles at about 30px "as if the word had 17 letters", some used 40px,
+     some 60px), so the same 5-letter word looked small in one game, medium in the next and big in the third, with a blank strip beside
+     the rows. Now, after a game has drawn its guess rows, rows that are narrower than the box are scaled UP (CSS zoom, crisp text)
+     until they fill the box width - but never beyond MAX_ROW_H px tall (so a 5-letter word gets about 52px tiles, a 10-letter word
+     about 30px) and never so much that fewer than about 2.5 rows would stay visible. Rows that already fill the box (cards, pills, bars)
+     are left alone. Hosts who chose their own sizes in Settings > Customize keep their choice (no automatic growing). */
+  var MAX_ROW_H = 58;
+  var MIN_VISIBLE_ROWS = 2.5;
+  var customChecked = 0, customVal = false;
+  function hostCustomised() {
+    var now = Date.now();
+    if (now - customChecked < 1500) return customVal;
+    customChecked = now; customVal = false;
+    try {
+      var game = (document.body && document.body.getAttribute("data-game")) || "";
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k || k.indexOf("craft.custom.") !== 0) continue;
+        if (k.slice(-2) !== "__" && game && k.slice(-(game.length + 1)) !== "." + game && k.slice(-5) !== "__all") continue;
+        var j = JSON.parse(localStorage.getItem(k) || "{}");
+        if ((j.tiles && Object.keys(j.tiles).length) || (j.size && (j.size.board || j.size.tiles))) { customVal = true; break; }
+      }
+    } catch (e) {}
+    return customVal;
+  }
+  function unionWidth(row) {      // width of what is really inside the row (same pixels as getBoundingClientRect)
+    try {
+      var rg = document.createRange(); rg.selectNodeContents(row);
+      var b = rg.getBoundingClientRect(); return b ? b.width : 0;
+    } catch (e) { return 0; }
+  }
   function fitRows() {
     var box = list;
     if (!box || fitRowsBusy) return;
@@ -116,14 +153,40 @@
       if (!avail) return;
       var cs = window.getComputedStyle(box);
       avail -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
-      var rows = rowsOf(box);
-      for (var i = 0; i < rows.length; i++) {
-        var r = rows[i];
+      var rows = rowsOf(box), i, r;
+      // 1. natural size of every row; shrink the ones that are too wide
+      for (i = 0; i < rows.length; i++) {
+        r = rows[i];
         if (r.style.zoom) r.style.zoom = "";           // measure at natural size
         var need = r.scrollWidth;
         if (need > avail + 1) r.style.zoom = String(Math.max(0.4, Math.floor((avail / need) * 1000) / 1000));
       }
-    } finally { fitRowsBusy = false; }
+      // 2. grow tile rows that are narrower than the box (one common factor, so every row of the list has the same size)
+      if (hostCustomised() || !rows.length || doc.classList.contains(SCROLL_CLS)) return;
+      var boxRect = box.getBoundingClientRect();
+      if (!boxRect.width || !box.clientWidth) return;
+      var k = boxRect.width / box.clientWidth;           // layout px -> screen px (page zoom)
+      var maxUnion = 0, maxH = 0, shrunk = false;
+      for (i = 0; i < rows.length; i++) {
+        r = rows[i];
+        if (r.style.zoom) { shrunk = true; break; }
+        var u = unionWidth(r), h = r.getBoundingClientRect().height;
+        if (u > maxUnion) maxUnion = u;
+        if (h > maxH) maxH = h;
+      }
+      if (shrunk || !maxUnion || !maxH) return;
+      var rowLayoutH = maxH / k, unionLayout = maxUnion / k;
+      if (unionLayout > avail - 4) return;                // already fills the box (cards, pills, bars, long words)
+      var f = Math.min(avail / unionLayout, MAX_ROW_H / rowLayoutH, 2.4);
+      var listH = box.clientHeight - ((parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0));
+      if (listH > 80) f = Math.min(f, Math.max(1, listH / (MIN_VISIBLE_ROWS * rowLayoutH)));
+      f = Math.floor(f * 100) / 100;
+      if (f < 1.05) return;
+      for (i = 0; i < rows.length; i++) rows[i].style.zoom = String(f);
+    } finally {
+      fitRowsBusy = false;
+      if (observer && observer.takeRecords) observer.takeRecords();   // our own style writes must not trigger another fit
+    }
   }
   // Grow back (after something big - a panel, a banner - went away). Only when there is CLEAR spare room (the guess
   // list would still keep MIN_LIST + GROW_MARGIN px at the bigger size), so the size can never bounce up and down.
@@ -136,7 +199,7 @@
     growTimer = setTimeout(function () { growTimer = 0; grow(); }, 1800);
   }
   function grow() {
-    if (!app || (zoom >= 1 && !compact)) return;
+    if (!app || (zoom >= 1 && compact <= baseCompact())) return;
     // update 132: measure in one-screen mode (the scroll fallback is switched off for the measurement and back on if still needed)
     var y = window.pageYOffset || 0, wasScroll = doc.classList.contains(SCROLL_CLS);
     if (wasScroll) doc.classList.remove(SCROLL_CLS);
@@ -149,9 +212,9 @@
       ok = zoom;
     }
     setZoom(ok);
-    if (ok >= 1 && compact) {           // full size again: see whether the trimmed dead space can come back
+    if (ok >= 1 && compact > baseCompact()) {           // full size again: see whether the trimmed dead space can come back
       var back = compact;
-      for (var lv = compact - 1; lv >= 0; lv--) {
+      for (var lv = compact - 1; lv >= baseCompact(); lv--) {
         setCompact(lv);
         var bx = listBox();
         if (overflowing() || (bx && bx.offsetParent !== null && bx.clientHeight < minList() + GROW_MARGIN)) { setCompact(lv + 1); break; }
@@ -181,6 +244,7 @@
     if (!app) return;
     lastW = window.innerWidth; lastH = window.innerHeight;
     patchTileHeight();
+    setCompact(0);
     fit(true);
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", function () { setTimeout(onResize, 200); });

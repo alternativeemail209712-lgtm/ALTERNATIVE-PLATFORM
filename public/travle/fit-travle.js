@@ -16,7 +16,7 @@
     kids.forEach(function (c) { if (c !== card) others += c.offsetHeight; });
     var chrome = card.offsetHeight - wrap.offsetHeight;
     var avail = board.clientHeight - padV - others - gap * (kids.length - 1) - chrome;
-    var maxW = Math.min((document.documentElement.clientWidth / (parseFloat(document.documentElement.style.getPropertyValue("--fs-zoom")) || 1)) - 56, 560);
+    var maxW = Math.min((document.documentElement.clientWidth / (parseFloat(document.documentElement.style.getPropertyValue("--fs-zoom")) || 1)) - 36, 640);
     var size = Math.max(MIN, Math.min(Math.floor(avail), maxW));
     var cur = parseFloat((document.documentElement.style.getPropertyValue("--globe-size") || "").replace("px", ""));
     if (cur === size) return;

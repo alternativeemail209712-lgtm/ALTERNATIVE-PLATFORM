@@ -36,7 +36,9 @@
 body[data-game="findle"] { --hero-font: "Baloo 2", "Fredoka", sans-serif; --hero-accent: #E08A1E; --hero-spacing: .04em; }
 body[data-game="flagle"] { --hero-font: "Baloo 2", "Fredoka", sans-serif; --hero-accent: #D64F5F; --hero-spacing: .04em; }
 body[data-game="travle"] { --hero-font: "Baloo 2", "Fredoka", sans-serif; --hero-accent: #2B8FC4; --hero-spacing: .04em; }
-.heroBandSlim { min-height: 0 !important; padding-top: max(6px, var(--live-safe-top, 0px) * 0.35) !important; padding-bottom: 6px !important; }
+.heroBandSlim { min-height: 0 !important; padding-top: 12px !important; padding-bottom: 4px !important; }
+.heroBandSlim .heroTagline { display: none; } /* update 137: same compact banner as the other games on phones */
+@media (min-height: 1000px) { .heroBandSlim .heroTagline { display: block; } }
 .heroBandSlim .heroTitle { font-size: clamp(24px, 7.4vw, 36px); }
 /* the banner now carries the space reserved for TikTok LIVE's own buttons, so the bar under it needs no extra top room */
 .heroBandSlim + .topbar { padding-top: 6px !important; }
