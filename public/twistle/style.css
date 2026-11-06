@@ -171,7 +171,7 @@ button { cursor: pointer; }
 .grow.new .tile { animation: tile-pop 0.28s cubic-bezier(.34,1.56,.64,1) both; animation-delay: min(calc(var(--i) * 45ms), 600ms); }
 @keyframes tile-pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .sym { width: var(--cell); height: var(--cell); display: flex; align-items: center; justify-content: center; }
-.sym:empty::before { content: ''; width: 26%; aspect-ratio: 1; border-radius: 50%; background: #23264f; }
+.sym:empty::before { content: none; }
 .sym svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 3px 3px rgba(0,0,0,0.45)); }
 .grow.new .sym svg { animation: sym-in 0.4s cubic-bezier(.34,1.56,.64,1) both; animation-delay: calc(300ms + min(calc(var(--i) * 60ms), 700ms)); }
 @keyframes sym-in { from { transform: scale(0) rotate(-40deg); } to { transform: scale(1) rotate(0); } }
