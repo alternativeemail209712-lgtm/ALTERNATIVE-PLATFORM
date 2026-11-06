@@ -177,13 +177,22 @@ el.fullscreenBtn.addEventListener("click", () => {
 // ------------------------------------------------------------
 let lastMineSignature = "";
 
+/* update 139: STEADY BOARD SIZE. The tile size used to come from the section's width in "game pixels" - but fit-screen shrinks the
+   whole game with CSS zoom, which makes that width bigger again, so the tiles grew back and the board ended up small, medium or
+   big depending on when it was drawn. Now the size is worked out in REAL SCREEN pixels (width x zoom, and a share of the screen
+   height) and converted back, so the board looks the same every time on the same phone, whatever the zoom does to the rest. */
 function mineMetrics(n) {
+  const z = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--fs-zoom")) || 1;
   const secW = el.mineSection.clientWidth || (el.tilesWrap && el.tilesWrap.clientWidth) || 320;
-  const avail = Math.max(120, secW - 24);
-  const gap = n <= 5 ? 6 : n <= 8 ? 5 : 3;
-  const maxTile = n <= 5 ? 60 : n <= 8 ? 46 : 38;
-  const size = Math.max(18, Math.min(maxTile, Math.floor((avail - gap * (n - 1)) / n)));
-  return { size, gap, letterFont: Math.max(9, Math.round(size * 0.42)), numFont: Math.max(8, Math.round(size * 0.3)) };
+  const visW = secW * z;                                   // real on-screen width of the section
+  const visH = (window.innerHeight || 700) * 0.46;         // the board may use up to ~46% of the screen height
+  const availVis = Math.max(120, Math.min(visW - 24 * z, visH));
+  const gapVis = n <= 5 ? 6 : n <= 8 ? 5 : 3;
+  const maxTileVis = n <= 5 ? 60 : n <= 8 ? 46 : 38;
+  const sizeVis = Math.max(18, Math.min(maxTileVis, Math.floor((availVis - gapVis * (n - 1)) / n)));
+  const size = Math.max(10, Math.round(sizeVis / z));
+  const gap = Math.max(1, Math.round(gapVis / z));
+  return { size, gap, letterFont: Math.max(8, Math.round(size * 0.42)), numFont: Math.max(7, Math.round(size * 0.3)) };
 }
 
 function renderMine(g) {
@@ -195,7 +204,8 @@ function renderMine(g) {
   const bank = g.bank || [];
   const locked = g.status !== "live";
   const width = el.mineSection.clientWidth;
-  const signature = [g.roundNumber, g.grid.size, locked ? 1 : 0, width, JSON.stringify(marks), g.showResetBtn === false ? 0 : 1, g.showBank === false ? 0 : 1, bank.join("")].join("|");
+  const zsig = getComputedStyle(document.documentElement).getPropertyValue("--fs-zoom") + "@" + window.innerHeight;
+  const signature = [g.roundNumber, g.grid.size, locked ? 1 : 0, width, zsig, JSON.stringify(marks), g.showResetBtn === false ? 0 : 1, g.showBank === false ? 0 : 1, bank.join("")].join("|");
   if (signature === lastMineSignature) return;
   lastMineSignature = signature;
 
@@ -810,7 +820,8 @@ function computeTileMetrics(wordLength, rowCount) {
   let tileSizeByHeight = Math.floor(rowHeightBudget);
   tileSizeByHeight = Math.max(8, Math.min(90, tileSizeByHeight));
 
-  const tileSize = Math.max(8, Math.min(tileSizeByWidth, tileSizeByHeight));
+  // update 139: width only (extra rows scroll) - the list height changes with the zoom/legend and made the guess tiles small, medium or big
+  const tileSize = Math.max(8, tileSizeByWidth);
   const tileHeight = tileSize;
   const fontSize = Math.max(7, Math.round(tileSize * 0.5));
 
