@@ -744,3 +744,9 @@ input[type="range"].settings-input,
 .lbRank{ color:var(--ink-mid); font-weight:700; min-width:28px; }
 .lbName{ flex:1; word-break:break-word; }
 .lbScore{ font-weight:800; color:var(--wood-deep); }
+
+/* update 139: standard platform toolbar (same as the other games) */
+.liveInfoRow{ display:flex; justify-content:center; gap:10px; font-size:12px; font-weight:700; opacity:.8; padding:2px 8px; }
+.liveInfoRow .heartbeat{ position:static; }
+.liveInfoRow:has(#heartbeat.hidden) #live-username{ opacity:.8; }
+.timerBadge{ min-width:2.2em; }

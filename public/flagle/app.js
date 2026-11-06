@@ -63,7 +63,7 @@ const hostForm = document.getElementById("host-form");
 const hostInput = document.getElementById("host-input");
 const skipBtn = document.getElementById("skip-btn");
 const hintBtn = document.getElementById("hint-btn");
-const fullscreenBtn = document.getElementById("fullscreen-btn");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
 
 let countdownInterval = null;
 let currentMode = "live"; // update 46
@@ -274,7 +274,7 @@ socket.on("session-started", ({ mode, label, settings }) => {
   debugStripEl.classList.toggle("hidden", mode !== "live");
 
   modeBadgeEl.textContent = mode.toUpperCase();
-  modeBadgeEl.className = "mode-badge " + mode;
+  modeBadgeEl.className = "modeBadge mode-badge " + mode;
 
   latestFanStats = { likes: [], gifts: [] };
   renderFansList();

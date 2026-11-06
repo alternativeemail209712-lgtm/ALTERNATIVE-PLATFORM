@@ -376,7 +376,7 @@ html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="cont
 }
 
 /* ---- TILES: glossy raised blocks ---- */
-html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mineTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .codeCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .patCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .symbolCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .letterChartCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .hint-tile{
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .tile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .exTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .mineTile, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .letterChartCell, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .hint-tile{
   box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.14),
     0 var(--d1, 2px) 0 rgba(0,0,0,.26), 0 calc(var(--d1, 2px) + 3px) var(--dblur, 8px) -3px var(--theme-shadow);
   background-image: radial-gradient(ellipse 70% 45% at 30% 14%, rgba(255,255,255,.28), transparent 70%);
@@ -409,7 +409,7 @@ html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="cont
 }
 
 /* ---- ROWS ---- */
-html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .guessRow, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .attempt-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .banner-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-row{
+html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .attempt-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .banner-row, html:not([data-depth="off"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .host-row{
   box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 var(--d1, 2px) 0 rgba(0,0,0,.16);
 }
 
@@ -683,3 +683,14 @@ html body .toastSlot .rejectionToast::before, html body .toast-slot .reject-toas
 html body[data-game="boxdle"] .toastSlot .rejectionToast, html body[data-game="boxdle"] .toastSlot .rejectionToast.ok, html body[data-game="boxdle"] .toastSlot .rejectionToast.bad {
   border-width: 1px !important; border-style: solid !important; box-shadow: 0 1px 4px rgba(30, 14, 28, .16) !important;
 }
+
+
+/* update 139: guess rows never get the 3D "under-edge" line (it read as an ugly separator line between the rows) */
+.guessRow, .guessRow.new, html body .guessRow{ box-shadow: none !important; }
+
+
+/* update 139: the symbol / code / pattern cells above the guesses are plain pictures - no 3D tile look, no grey bar under them */
+.symbolCell, .codeCell, .patCell, .symbolCell::before, .symbolCell::after, .codeCell::before, .codeCell::after, .patCell::before, .patCell::after{
+  box-shadow: none !important; background-image: none !important;
+}
+.symbolCell, .codeCell, .patCell{ border: 0 !important; }

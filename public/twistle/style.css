@@ -416,3 +416,8 @@ button { cursor: pointer; }
 
 /* update 39: when tiles keep a fixed size, a long row scrolls sideways - keep its start reachable (centered overflow would clip the left side) */
 .guessRow { justify-content: safe center; }
+
+/* update 139: no small "TWISTLE" name under the title (the title is already at the top); the chip only shows when it has a message */
+#roundLabel { display: none; }
+.roundChip:has(#roundSub:empty) { display: none; }
+.metaRow:not(:has(.roundChip:not(:has(#roundSub:empty)))):not(:has(.guessBadge:not([hidden]))) { display: none; }

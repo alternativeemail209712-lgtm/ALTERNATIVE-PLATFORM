@@ -24,8 +24,7 @@
   // --------------------------------------------------------------------
   const el = (id) => document.getElementById(id);
 
-  const diagToggle = el('diagToggle');
-  const diagPanel = el('diagPanel');
+    const diagPanel = el('diagPanel');
   const diagDot = el('diagDot');
   const diagSummary = el('diagSummary');
   const diagConnState = el('diagConnState');
@@ -94,7 +93,7 @@
   // --------------------------------------------------------------------
   // Diagnostics ribbon toggle
   // --------------------------------------------------------------------
-  diagToggle.addEventListener('click', () => diagPanel.classList.toggle('hidden'));
+  
 
   // --------------------------------------------------------------------
   // Fullscreen toggle
@@ -103,15 +102,8 @@
     return !!(document.fullscreenElement || document.webkitFullscreenElement);
   }
   function updateFullscreenLabel() {
-    const label = fullscreenBtn.querySelector('.btn-text');
-    const icon = fullscreenBtn.querySelector('span');
-    if (isFullscreen()) {
-      icon.textContent = '⤢';
-      if (label) label.textContent = 'Exit Fullscreen';
-    } else {
-      icon.textContent = '⛶';
-      if (label) label.textContent = 'Fullscreen';
-    }
+    fullscreenBtn.textContent = isFullscreen() ? '⤢' : '⛶';
+    fullscreenBtn.setAttribute('aria-label', isFullscreen() ? 'Exit fullscreen' : 'Enter fullscreen');
   }
   fullscreenBtn.addEventListener('click', () => {
     try {

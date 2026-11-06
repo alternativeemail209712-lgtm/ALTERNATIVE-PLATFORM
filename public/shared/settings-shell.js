@@ -69,7 +69,7 @@
     },
     { // Flagle
       name: "flagle", overlay: "#settings-overlay", body: ".settingsBody", close: "#settings-close", btn: "#settings-btn", apply: "#settings-apply", applyNote: "#settings-status",
-      isOpen: function (o) { return !o.hidden; }, mode: "flow", headSel: "h4.settings-subhead", untitled: ["Round timing & flag blur"], gameTitle: "Host settings"
+      isOpen: function (o) { return !o.hidden; }, mode: "flow", headSel: "h4.settings-subhead", untitled: ["Round timing & flag blur"], gameTitle: "Settings"
     },
     { // Travle
       name: "travle", overlay: "#settingsDrawer", body: ".drawer-body", close: "#closeSettings", btn: "#settingsBtn", apply: "#applySettingsBtn", applyNote: "#applyNote",
@@ -86,7 +86,7 @@
     },
     { // Crossdle
       name: "crossdle", overlay: "#hostPanelOverlay", body: ".host-cards", close: "#hostPanelClose", btn: "#hostFab",
-      isOpen: function (o) { return !o.classList.contains("hidden"); }, mode: "sections", sectionSel: ":scope > .host-card", titleSel: ".host-card-title", gameTitle: "Host controls"
+      isOpen: function (o) { return !o.classList.contains("hidden"); }, mode: "sections", sectionSel: ":scope > .host-card", titleSel: ".host-card-title", gameTitle: "Settings"
     }
   ];
 

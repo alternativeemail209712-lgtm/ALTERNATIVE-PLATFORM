@@ -500,7 +500,7 @@
     var de = document.documentElement;
     if (!(de.requestFullscreen || de.webkitRequestFullscreen)) return;   // e.g. iPhone Safari: nothing to offer
     var found = document.querySelector("#fullscreenBtn, #fullscreen-btn, #fsBtn, [aria-label*='ullscreen'], [aria-label*='ull screen'], .fsAutoBtn");
-    if (found && found.offsetParent !== null) return;
+    if (found && (found.offsetParent !== null || (found.closest && found.closest(".screen, .hidden, [hidden]")))) return;   // update 139: a button inside a screen that is simply not shown yet counts as present
     var bar = document.querySelector(".toolbarRow, .topbar-actions, .topbar, .app-header");
     if (!bar) return;
     var b = document.createElement("button");
