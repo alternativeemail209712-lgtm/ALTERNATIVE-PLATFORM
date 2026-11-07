@@ -147,7 +147,7 @@ html.fs:not(.fs-scroll) body .app .tilesWrap { max-height: none !important; }
 /* ---- compact levels (fit-screen.js adds them only when the game would not fit at full size) ----
    level 1: tighter gaps, smaller reserved message slot, no keyboard heading;  level 2: also hides the banner's description line.
    Everything stays on screen - the game is only shrunk (zoom) if this is still not enough. */
-html.fs.fs-compact { --toast-slot-height: 44px; }   /* (update 137: the message card is 2 compact lines = 39px, it fits) */
+html.fs.fs-compact { --toast-slot-height: 42px; }   /* (update 137: the message card is 2 compact lines = 39px, it fits) */
 html.fs.fs-compact body .app > .stage { padding-top: 16px; padding-bottom: 2px; }
 html.fs.fs-compact body .app > .stage > .round-card { gap: 4px; padding-top: 6px; padding-bottom: 6px; }
 html.fs.fs-compact body .keyboardHead { display: none; }

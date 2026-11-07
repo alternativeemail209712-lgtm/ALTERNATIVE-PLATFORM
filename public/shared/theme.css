@@ -35,7 +35,7 @@
      three never overlap and nothing jumps when the message appears or disappears.
      This is the slot's height - raise it if the message is ever cut off, lower it to
      move the keyboard and board back up. */
-  --toast-slot-height: 52px;
+  --toast-slot-height: 42px;
 
   --theme-bg-top:  #FFF3DC;
   --theme-bg:      #F5E3C0;
@@ -697,23 +697,20 @@ html body[data-game="boxdle"] .toastSlot .rejectionToast, html body[data-game="b
 
 
 /* ==========================================================================
-   UPDATE 140 - floating message window docked into the score-ticker strip (see the end of theme.js for when this applies).
-   - the reserved slot has NO height of its own, so the blank band between the ticker and the game card disappears;
-   - the message window sits exactly where the ticker is (vertically centred in it), and the ticker is hidden (visibility only, it
-     keeps its size) for as long as a message is showing, so nothing is covered and the layout never jumps;
-   - the gap above the game card is only as tall as the washi tape / heart decoration that sticks out of it.
+   UPDATE 140 - the floating guess / message window gets a TIGHT slot of its own, strictly BELOW the score ticker.
+   (It never sits on top of the ticker or of anything else.) What was trimmed, nothing else:
+   - the slot is exactly as tall as a 2-line message needs (42px; it was 52px, 44px in compact) and has no extra margin under it;
+   - the message card is sized to fit those 2 lines completely (no clipped second line);
+   - the blank band above the game card is only as tall as the washi tape / heart that sticks out of it (20px in total, the card's own 12px top margin + 8px; it was 28-32px).
+   The slot keeps its height whether a message shows or not, so the page never jumps when one appears.
    ========================================================================== */
-html.toast-dock body .toastSlot, html.toast-dock body .toast-slot{
-  height: 0 !important; min-height: 0 !important; max-height: 0 !important; flex: 0 0 0 !important;
-  margin: 0 !important; padding: 0 !important; overflow: visible !important;
+html body .toastSlot, html body .toast-slot{
+  --toast-slot-height: 42px;
+  height: 42px !important; min-height: 42px !important; max-height: 42px !important; flex: 0 0 42px !important;
+  margin-top: 0 !important; margin-bottom: 0 !important; overflow: visible !important;
 }
-html.toast-dock body .toastSlot .rejectionToast, html.toast-dock body .toast-slot .reject-toast{
-  top: auto !important; bottom: calc(var(--dock-gap, 0px) + (var(--dock-h, 49px) - 41px) / 2) !important;
-  max-height: calc(var(--dock-h, 49px) - 4px) !important; z-index: 45 !important;
+html body .toastSlot .rejectionToast, html body .toast-slot .reject-toast{
+  top: 1px !important; box-sizing: border-box !important; padding: 4px 12px !important; line-height: 1.2 !important;
+  max-height: 40px !important; overflow: hidden !important;
 }
-html.toast-dock body:has(.toastSlot .rejectionToast:not([hidden])) .stk-bar,
-html.toast-dock body:has(.toast-slot .reject-toast:not(.hidden)) .stk-bar{ visibility: hidden; }
-/* the card's decorations stick out ~17px above it: that is all the gap that is needed now */
-html.toast-dock.fs body .app > .stage, html.toast-dock.fs.fs-compact body .app > .stage{ padding-top: 19px; }
-/* Crossdle: its slot is moved next to the ticker by theme.js, so give the message the same side margins as the page */
-html.toast-dock body #app > .toast-slot .reject-toast{ left: 10px !important; right: 10px !important; }
+html body .app > .stage, html.fs body .app > .stage, html.fs.fs-compact body .app > .stage, html.fs.fs-scroll body .app > .stage{ padding-top: 8px !important; }   /* + the card's own 12px top margin = 20px: the 17px tape/heart plus 3px */
