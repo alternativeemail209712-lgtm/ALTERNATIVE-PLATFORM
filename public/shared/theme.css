@@ -694,3 +694,26 @@ html body[data-game="boxdle"] .toastSlot .rejectionToast, html body[data-game="b
   box-shadow: none !important; background-image: none !important;
 }
 .symbolCell, .codeCell, .patCell{ border: 0 !important; }
+
+
+/* ==========================================================================
+   UPDATE 140 - floating message window docked into the score-ticker strip (see the end of theme.js for when this applies).
+   - the reserved slot has NO height of its own, so the blank band between the ticker and the game card disappears;
+   - the message window sits exactly where the ticker is (vertically centred in it), and the ticker is hidden (visibility only, it
+     keeps its size) for as long as a message is showing, so nothing is covered and the layout never jumps;
+   - the gap above the game card is only as tall as the washi tape / heart decoration that sticks out of it.
+   ========================================================================== */
+html.toast-dock body .toastSlot, html.toast-dock body .toast-slot{
+  height: 0 !important; min-height: 0 !important; max-height: 0 !important; flex: 0 0 0 !important;
+  margin: 0 !important; padding: 0 !important; overflow: visible !important;
+}
+html.toast-dock body .toastSlot .rejectionToast, html.toast-dock body .toast-slot .reject-toast{
+  top: auto !important; bottom: calc(var(--dock-gap, 0px) + (var(--dock-h, 49px) - 41px) / 2) !important;
+  max-height: calc(var(--dock-h, 49px) - 4px) !important; z-index: 45 !important;
+}
+html.toast-dock body:has(.toastSlot .rejectionToast:not([hidden])) .stk-bar,
+html.toast-dock body:has(.toast-slot .reject-toast:not(.hidden)) .stk-bar{ visibility: hidden; }
+/* the card's decorations stick out ~17px above it: that is all the gap that is needed now */
+html.toast-dock.fs body .app > .stage, html.toast-dock.fs.fs-compact body .app > .stage{ padding-top: 19px; }
+/* Crossdle: its slot is moved next to the ticker by theme.js, so give the message the same side margins as the page */
+html.toast-dock body #app > .toast-slot .reject-toast{ left: 10px !important; right: 10px !important; }

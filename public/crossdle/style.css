@@ -520,3 +520,14 @@ input[type="text"]:focus, .select:focus { border-color: var(--accent-2); box-sha
 .attempt-row.attempt-long > .tile-set:nth-of-type(3) { grid-area: decoy; }
 .attempt-row.attempt-long .tile-set { gap: 3px; }
 @media (max-width: 420px) { .tile { font-size: clamp(8px, calc((100cqw - 4px * (var(--n, 5) - 1)) / var(--n, 5) * 0.6), 22px); } }
+
+/* update 140: seamless guess rows. The rows were separate bordered cards with a drop shadow, and the board (which scrolls and so clips)
+   cut the shadow of the last row at its bottom edge and of every row at the sides: that was the cut-off look and the line between rows.
+   Rows are now borderless and shadow-free (the tiles carry the look), a correct guess is marked with a soft tint instead of a border,
+   and the board has enough room around its content that tile glows are never sliced. */
+.board { gap: 4px; }
+.attempt-row { background: transparent; border: 0; border-radius: 12px; box-shadow: none; padding: 5px 4px; }
+.attempt-row.attempt-correct { border: 0; box-shadow: none; background: linear-gradient(90deg, rgba(63,214,122,0.20), rgba(63,214,122,0.07)); }
+html.fs body #app .main-content .board-section > #board.board { padding: 8px 8px 16px; }
+/* the shared theme draws a 3D edge line under every .attempt-row; the seamless rows have none */
+html body .attempt-row, html body .attempt-row.attempt-correct { box-shadow: none !important; }

@@ -421,3 +421,11 @@ button { cursor: pointer; }
 #roundLabel { display: none; }
 .roundChip:has(#roundSub:empty) { display: none; }
 .metaRow:not(:has(.roundChip:not(:has(#roundSub:empty)))):not(:has(.guessBadge:not([hidden]))) { display: none; }
+
+/* update 140: guess rows are never squashed or sliced.
+   Cause of the cut-off tiles / hard line between rows: every .guessRow is an overflow-x:auto box (so a very long word can scroll sideways),
+   and a box that scrolls on one axis also clips on the other. (1) In the fixed-height list the rows were SHRUNK below their content
+   height by flex (a row needing 21px was drawn 10-13px tall), and (2) the clip sliced the tiles' 3D bottom edge and the symbols' shadow.
+   Now a row never shrinks (flex 0 0 auto) and has room inside its own box for the 3D edge / shadow; the negative margins give the same
+   room back, so the spacing between rows is exactly what it was. */
+.guessRow { flex: 0 0 auto; padding: 4px 4px 11px; margin: -4px -4px -11px; width: calc(100% + 8px); max-width: none; box-sizing: border-box; }
