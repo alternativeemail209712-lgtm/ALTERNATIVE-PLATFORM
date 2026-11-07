@@ -181,7 +181,14 @@ let lastMineSignature = "";
    whole game with CSS zoom, which makes that width bigger again, so the tiles grew back and the board ended up small, medium or
    big depending on when it was drawn. Now the size is worked out in REAL SCREEN pixels (width x zoom, and a share of the screen
    height) and converted back, so the board looks the same every time on the same phone, whatever the zoom does to the rest. */
-function mineMetrics(n) {
+/* update 140: THE BOARD GIVES WAY BEFORE THE RESULT PANEL IS PUSHED OFF THE SCREEN. The board used to take a fixed ~46% of the screen
+   height whatever else was visible, so once a round ended (result panel + answer + Play again + countdown) the page was taller than
+   the screen: fit-screen shrank everything to 70% and then fell back to scrolling, leaving the panel below the bottom edge.
+   Now fit-screen asks the board (window.__fitScreenPre, same hook TRAVLE uses) to fit first: every time it checks whether the game
+   fits, the board is re-measured from its natural size and made only as small as needed (never below MINE_MIN_VIS screen pixels). */
+let mineCapVis = 0;                 // 0 = natural size; otherwise the largest tile (screen px) that lets the whole game fit
+const MINE_MIN_VIS = 20;
+function mineMetrics(n, forceVis) {
   const z = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--fs-zoom")) || 1;
   const secW = el.mineSection.clientWidth || (el.tilesWrap && el.tilesWrap.clientWidth) || 320;
   const visW = secW * z;                                   // real on-screen width of the section
@@ -189,11 +196,43 @@ function mineMetrics(n) {
   const availVis = Math.max(120, Math.min(visW - 24 * z, visH));
   const gapVis = n <= 5 ? 6 : n <= 8 ? 5 : 3;
   const maxTileVis = n <= 5 ? 60 : n <= 8 ? 46 : 38;
-  const sizeVis = Math.max(18, Math.min(maxTileVis, Math.floor((availVis - gapVis * (n - 1)) / n)));
+  let sizeVis = Math.max(18, Math.min(maxTileVis, Math.floor((availVis - gapVis * (n - 1)) / n)));
+  if (typeof forceVis === "number") sizeVis = forceVis;
+  else if (mineCapVis > 0) sizeVis = Math.min(sizeVis, mineCapVis);
   const size = Math.max(10, Math.round(sizeVis / z));
   const gap = Math.max(1, Math.round(gapVis / z));
-  return { size, gap, letterFont: Math.max(8, Math.round(size * 0.42)), numFont: Math.max(7, Math.round(size * 0.3)) };
+  return { size, gap, sizeVis, letterFont: Math.max(8, Math.round(size * 0.42)), numFont: Math.max(7, Math.round(size * 0.3)) };
 }
+function paintMineSize(n, m) {      // resize the tiles that are already on screen (no redraw)
+  el.mineGrid.style.gridTemplateColumns = "repeat(" + n + ", " + m.size + "px)";
+  el.mineGrid.style.gap = m.gap + "px";
+  const r = Math.max(5, Math.round(m.size * 0.2)) + "px";
+  el.mineGrid.querySelectorAll(".mineTile").forEach((t) => {
+    t.style.width = m.size + "px"; t.style.height = m.size + "px"; t.style.borderRadius = r;
+    const l = t.querySelector(".mnL"), u = t.querySelector(".mnN");
+    if (l) l.style.fontSize = m.letterFont + "px";
+    if (u) u.style.fontSize = m.numFont + "px";
+  });
+}
+window.__fitScreenPre = function () {
+  try {
+    const doc = document.documentElement;
+    if (!lastState || !doc.classList.contains("fs") || el.mineSection.hidden || el.mineGrid.children.length === 0) return;
+    const n = lastState.game.grid && lastState.game.grid.size;
+    if (!n) return;
+    const app = document.getElementById("app"), card = app && app.querySelector(".round-card"), list = el.tilesWrap;
+    if (!app || !card) return;
+    const z = parseFloat(getComputedStyle(doc).getPropertyValue("--fs-zoom")) || 1;
+    const need = () => (list.children.length >= 2 ? 175 : 130);   // same room fit-screen wants for the guess list
+    const fits = () => app.scrollHeight <= app.clientHeight + 1 && card.scrollHeight <= card.clientHeight + 1 && (list.offsetParent === null || list.clientHeight >= need() - 1);
+    const savedCap = mineCapVis; mineCapVis = 0;           // natural (uncapped) size first
+    let vis = mineMetrics(n).sizeVis; mineCapVis = savedCap;
+    const top = vis;
+    paintMineSize(n, mineMetrics(n, vis));
+    while (!fits() && vis > MINE_MIN_VIS) { vis -= 2; paintMineSize(n, mineMetrics(n, vis)); }
+    mineCapVis = vis >= top ? 0 : vis;
+  } catch (e) { /* never block the game */ }
+};
 
 function renderMine(g) {
   const show = g.status !== "idle" && g.grid && g.grid.size > 0;
@@ -443,6 +482,24 @@ let activeLeaderboardTab = "round";
 el.tabThisRound.addEventListener("click", () => { activeLeaderboardTab = "round"; renderLeaderboardTab(); });
 el.tabAllTime.addEventListener("click", () => { activeLeaderboardTab = "total"; renderLeaderboardTab(); });
 
+/* update 140: if the screen is so small that the page still has to scroll, bring the result panel (answer, Play again, countdown)
+   into view ONCE when a round ends, so it is never left below the bottom edge. Does nothing when everything already fits. */
+let revealedKey = "";
+function revealResultOnce(g) {
+  if (!g || (g.status !== "won" && g.status !== "lost")) { if (g && g.status === "live") revealedKey = ""; return; }
+  const key = (g.roundNumber || 0) + ":" + g.status;
+  if (key === revealedKey) return;
+  revealedKey = key;
+  const go = () => {
+    const doc = document.documentElement;
+    if (!doc.classList.contains("fs-scroll")) return;
+    const b = document.getElementById("resultBanner");
+    if (b && !b.hidden) window.scrollTo(0, doc.scrollHeight);   // instant: a smooth scroll gets interrupted when fit-screen re-measures
+  };
+  setTimeout(go, 700);
+  setTimeout(go, 1800);   // once more after the layout has settled
+}
+
 let socket = null;
 let lastState = null;
 
@@ -457,6 +514,7 @@ function connectSocket() {
 
   socket.on("state", (payload) => {
     try { render(payload); } catch (err) { console.error("Couldn't render server state:", err); }
+    try { revealResultOnce(payload && payload.game); } catch (e) { /* cosmetic only */ }
   });
   socket.on("offline_guess_result", (payload) => handleOfflineGuessResult(payload));
   socket.on("set_secret_word_result", (payload) => handleSetAnswerResult(payload));
