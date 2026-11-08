@@ -117,11 +117,12 @@
   <!-- ============ HOST CONTROL DOCK ============ -->
   <footer class="host-dock">
     <p class="mode-banner" id="modeBanner"></p>
-    <button class="dock-toggle" id="dockToggle" aria-expanded="true">
+    <!-- update 142: the Host controls panel is MINIMIZED by default in every mode (Offline, Test, Live); only the host opens it -->
+    <button class="dock-toggle" id="dockToggle" aria-expanded="false">
       <span>Host controls</span>
-      <span class="feed-chevron" id="dockChevron">▾</span>
+      <span class="feed-chevron" id="dockChevron">▸</span>
     </button>
-    <div class="dock-collapsible" id="dockCollapsible">
+    <div class="dock-collapsible collapsed" id="dockCollapsible">
       <div class="host-row" id="viewerRow">
         <input id="viewerInput" class="host-input" type="text" placeholder="Viewer name (from chat)" autocomplete="off" />
       </div>

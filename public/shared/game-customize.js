@@ -231,8 +231,10 @@
   /* ------------------------------------------------------------------ TILES & SHAPES (update 135)
      t(id, icon, label, desc, selector of the tiles, host selector (must exist on the page for the card to show), options)
        options: sizeSel (what gets zoomed, default = tiles) | gapSel (the row / grid that holds the tiles) | textSel (the letters)
-                no:[controls this kind of tile cannot use]   keys:true (keyboard: no size / proportions)                       */
-  function t(id, icon, label, desc, sel, host, o) { o = o || {}; return { id: id, icon: icon, label: label, desc: desc, sel: sel, host: host || sel, sizeSel: o.sizeSel || sel, gapSel: o.gapSel || "", textSel: o.textSel || sel, no: o.no || [], keys: !!o.keys }; }
+                no:[controls this kind of tile cannot use]   keys:true (keyboard: no size / proportions)
+       follow:"tiles" (update 142: symbols / numbers / clue boxes that belong to the guess tiles take the SAME size as the guess tiles
+                      unless the host gives them a size of their own)                       */
+  function t(id, icon, label, desc, sel, host, o) { o = o || {}; return { id: id, icon: icon, label: label, desc: desc, sel: sel, host: host || sel, sizeSel: o.sizeSel || sel, gapSel: o.gapSel || "", textSel: o.textSel || sel, no: o.no || [], keys: !!o.keys, follow: o.follow || "" }; }
   var LETTER_GAMES = ["blindle", "codedle", "colorblindle", "colordle", "comparable", "forbackle", "linedle", "minedle", "numberblindle", "oracle", "rangedle", "shapedle", "shiftle", "structle", "textle", "wordle", "twistle"];
   var COUNT_GAMES = ["blindle", "numberblindle", "oracle", "structle"];
   function tileCatalog() {
@@ -240,16 +242,16 @@
     if (LETTER_GAMES.indexOf(G) >= 0) {
       if (G === "twistle") {
         out.push(t("tiles", "🔠", "Guess tiles", "The letter boxes of every guess.", "#grid .tile", "#grid", { gapSel: "#grid .lets" }));
-        out.push(t("syms", "🔣", "Symbol boxes", "The small symbols under the letters.", "#grid .sym", "#grid", { gapSel: "#grid .syms", no: ["letter", "font"] }));
+        out.push(t("syms", "🔣", "Symbol boxes", "The small symbols under the letters.", "#grid .sym", "#grid", { gapSel: "#grid .syms", no: ["letter", "font"], follow: "tiles" }));
       } else if (G === "textle") {
         out.push(t("tiles", "🔠", "Guess tiles", "The letter boxes and text pieces of every guess.", "#tilesWrap .tile, #tilesWrap .seg", "#tilesWrap", { gapSel: "#tilesWrap .tileRow", no: ["shape", "ratio"] }));
       } else {
         out.push(t("tiles", "🔠", "Guess tiles", "The letter boxes of every guess.", "#tilesWrap .tile", "#tilesWrap", { gapSel: "#tilesWrap .tileRow" }));
       }
-      if (COUNT_GAMES.indexOf(G) >= 0) out.push(t("counts", "🔢", "Count boxes", "The small number boxes after each guess.", "#tilesWrap .countBadge", "#tilesWrap", { gapSel: "#tilesWrap .countsCol", no: ["ratio"] }));
-      if (G === "comparable") out.push(t("pattern", "↔️", "Symbol circles", "The < > = clues between the letters.", "#patternWrap .patCircle, #tilesWrap .patCircle", "#patternWrap", { gapSel: "#patternWrap .patCells, #tilesWrap .patCells", no: ["ratio"] }));
-      if (G === "codedle") out.push(t("codecells", "🔐", "Code cells", "The code the audience is cracking.", "#codeSection .codeCell", "#codeSection", { gapSel: "#codeSection .codeCells" }));
-      if (G === "shapedle") out.push(t("symbols", "🔣", "Symbol cells", "The shapes the secret word is made of.", "#symbolSection .symbolCell", "#symbolSection", { gapSel: "#symbolSection .symbolCells" }));
+      if (COUNT_GAMES.indexOf(G) >= 0) out.push(t("counts", "🔢", "Count boxes", "The small number boxes after each guess.", "#tilesWrap .countBadge", "#tilesWrap", { sizeSel: "#tilesWrap .countsCol", gapSel: "#tilesWrap .countsCol", no: ["ratio"], follow: "tiles" }));
+      if (G === "comparable") out.push(t("pattern", "↔️", "Symbol circles", "The < > = clues between the letters.", "#patternWrap .patCircle, #tilesWrap .patCircle", "#patternWrap", { sizeSel: "#patternWrap .patCell", gapSel: "#patternWrap .patCells, #tilesWrap .patCells", no: ["ratio"], follow: "tiles" }));
+      if (G === "codedle") out.push(t("codecells", "🔐", "Code cells", "The code the audience is cracking.", "#codeSection .codeCell", "#codeSection", { gapSel: "#codeSection .codeCells", follow: "tiles" }));
+      if (G === "shapedle") out.push(t("symbols", "🔣", "Symbol cells", "The shapes the secret word is made of.", "#symbolSection .symbolCell", "#symbolSection", { gapSel: "#symbolSection .symbolCells", follow: "tiles" }));
       if (G === "minedle") {
         out.push(t("mine", "💣", "Mine grid tiles", "The grid with numbers and marks.", "#mineGrid .mineTile", "#mineGrid", { sizeSel: "#mineGrid", gapSel: "#mineGrid" }));
         out.push(t("bank", "🔡", "Letter bank", "Blue letters collected so far.", "#letterBank .bankLetter", "#letterBank", { no: ["ratio"] }));
@@ -345,7 +347,11 @@
     var rules = [];
     if (!st.tiles) return rules;
     tileCatalog().forEach(function (g) {
-      var o = st.tiles[g.id]; if (!o) return;
+      var o = st.tiles[g.id];
+      // update 142: symbols / numbers / clue boxes that belong to the guess tiles follow the guess tiles' size (S / M / L ...)
+      if (g.follow && !(o && o.size) && st.tiles[g.follow] && st.tiles[g.follow].size && T_ZOOM[st.tiles[g.follow].size] && g.no.indexOf("size") < 0)
+        rules.push(selList(g.sizeSel).join(",") + "{zoom:" + T_ZOOM[st.tiles[g.follow].size] + " !important}");
+      if (!o) return;
       var d = tdecls(o), body = [];
       if (d.zoom && g.no.indexOf("size") < 0) rules.push(selList(g.sizeSel).join(",") + "{zoom:" + d.zoom + " !important}");
       if (d.radius && g.no.indexOf("shape") < 0) body.push("border-radius:" + d.radius + " !important");
@@ -411,15 +417,25 @@
 
   /* ------------------------------------------------------------------ storage */
   var KEY = "craft.custom.v" + VERSION + "." + GAME, KEY_ALL = "craft.custom.v" + VERSION + ".__all";
-  function blank() { return { hide: {}, size: {}, tiles: {}, fit: true, collapse: false }; }
+  function blank() { return withDefaults({ hide: {}, size: {}, tiles: {}, fit: true, collapse: false, tdef: false }); }
   function load() {
     try {
       var raw = localStorage.getItem(KEY) || localStorage.getItem(KEY_ALL);
-      if (!raw) return blank();
+      if (!raw) return withDefaults(blank());
       var j = JSON.parse(raw), b = blank();
-      b.hide = j.hide || {}; b.size = j.size || {}; b.tiles = (j.tiles && typeof j.tiles === "object") ? j.tiles : {}; b.fit = j.fit !== false; b.collapse = !!j.collapse;
-      return b;
-    } catch (e) { return blank(); }
+      b.hide = j.hide || {}; b.size = j.size || {}; b.tiles = (j.tiles && typeof j.tiles === "object") ? j.tiles : {}; b.fit = j.fit !== false; b.collapse = !!j.collapse; b.tdef = !!j.tdef;
+      return withDefaults(b);
+    } catch (e) { return withDefaults(blank()); }
+  }
+  // update 142: every game's guess tiles default to size M; MINEDLE's guess tiles default to size S (applied once - after that the host's own choice wins, also when it goes back to M)
+  function withDefaults(b) {
+    if (GAME === "minedle" && !b.tdef) {
+      b.tdef = true;
+      if (!b.tiles) b.tiles = {};
+      if (!b.tiles.tiles) b.tiles.tiles = { size: "s" };
+      else if (!b.tiles.tiles.size) b.tiles.tiles.size = "s";
+    }
+    return b;
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   var st = blank();
@@ -534,6 +550,7 @@
   function tset(gid) { return st.tiles[gid] || (st.tiles[gid] = {}); }
   function setTile(gid, key, val) {
     var o = tset(gid);
+    if (GAME === "minedle" && gid === "tiles" && key === "size" && (val === "" || val == null)) val = "m";   // update 142: MINEDLE's default is S, so M must be stored explicitly
     if (val === "" || val == null) delete o[key]; else o[key] = val;
     if (!Object.keys(o).length) delete st.tiles[gid];
     save(); apply(); refresh();
@@ -607,7 +624,7 @@
         sec.appendChild(tileControl(g, ctl));
       });
       var rb = mk("button", "gcBtn", "↩️ Reset these tiles"); rb.type = "button";
-      rb.addEventListener("click", function () { delete st.tiles[g.id]; save(); apply(); refresh(); });
+      rb.addEventListener("click", function () { delete st.tiles[g.id]; st.tdef = false; withDefaults(st); save(); apply(); refresh(); });
       sec.appendChild(rb);
       out.push(sec);
     });
@@ -615,7 +632,7 @@
   }
   function applyTStyle(id) {
     var ps = T_STYLES.filter(function (x) { return x.id === id; })[0]; if (!ps) return;
-    st.tiles = {};
+    st.tiles = {}; st.tdef = false;
     if (ps.set) tileCatalog().filter(tileExists).forEach(function (g) {
       var o = {};
       Object.keys(ps.set).forEach(function (k) {
@@ -625,11 +642,12 @@
       });
       if (Object.keys(o).length) st.tiles[g.id] = o;
     });
+    withDefaults(st);
     save(); apply(); refresh();
   }
   function refreshTiles(root) {
     Array.prototype.forEach.call(root.querySelectorAll("[data-tg]"), function (b) {
-      var o = st.tiles[b.getAttribute("data-tg")] || {}, cur = o[b.getAttribute("data-tk")] || "";
+      var o = st.tiles[b.getAttribute("data-tg")] || {}, cur = o[b.getAttribute("data-tk")] || ""; if (cur === "m" && b.getAttribute("data-tk") === "size") cur = "";
       if (b.tagName === "SELECT") b.value = cur; else b.classList.toggle("on", b.getAttribute("data-tv") === cur);
     });
     Array.prototype.forEach.call(root.querySelectorAll("[data-tprev]"), paintPreview);
