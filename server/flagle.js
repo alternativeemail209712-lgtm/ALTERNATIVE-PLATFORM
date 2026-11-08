@@ -262,6 +262,7 @@ function processGuess(session, username, rawText) {
   const dir = bearingCompass(guessedCountry.lat, guessedCountry.lng, target.lat, target.lng);
 
   session.socket.emit("wrong-guess", {
+    username, // update 142: the floating window announces who guessed what
     guessedName: guessedCountry.name,
     distanceKm: dist,
     direction: dir,

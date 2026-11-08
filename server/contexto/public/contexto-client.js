@@ -26,6 +26,7 @@
     if (socket) return;
     socket = io('/contexto', { reconnection: true, reconnectionDelay: 1000, reconnectionDelayMax: 10000 });
     socket.on('connect', () => {
+      try { setTimeout(syncAutoNextToServer, 50); } catch (e) { /* ignore */ }
       wsReady = true;
       if (wsToasted) { toast('Reconnected to the game server.'); wsToasted = false; }
     });
@@ -48,6 +49,13 @@
     socket.emit('action', { type, payload });
   }
   // A phone that woke from sleep may hold a dead link: nudge Socket.IO to reconnect right away.
+  // update 142: tell the server the Auto next round setting so it can start the next round even if this page missed the round's end
+  function syncAutoNextToServer() {
+    try {
+      const ms = (Math.max(0.5, Number(settings.timingAnswerSeconds) || 4.2) + Math.max(1, Number(settings.timingAutoNextSeconds) || 5)) * 1000;
+      send({ type: 'auto_next_config', on: !!settings.autoNextRound, ms: Math.round(ms) });
+    } catch (e) { /* never block the page */ }
+  }
   function wakeWS() { if (socket && !socket.connected) socket.connect(); }
   window.addEventListener('online', wakeWS);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) wakeWS(); });
@@ -641,6 +649,7 @@
       settings[id] = clampTiming(id, input.value);
       input.value = settings[id];
       saveSettings();
+      syncAutoNextToServer();
     });
   });
   resetMiniBtns.forEach((btn) => {
@@ -817,6 +826,7 @@
   }
   autoNextToggle.addEventListener('change', () => {
     settings.autoNextRound = autoNextToggle.checked;
+    syncAutoNextToServer();
     saveSettings();
     syncAutoNextUi();
   });
@@ -874,7 +884,7 @@
     roundBtn.className = 'btn ' + (active ? 'btn-ghost' : 'btn-primary');
   }
 
-  function startRound() {
+  function startRound(auto) {
     const mode = settings.mode;
     starting = true;
     updateRoundButton();
@@ -887,7 +897,8 @@
       send({ type: 'start_game', mode, word: liveWord.value.trim() });
       liveWord.value = ''; // never leave the secret word sitting on screen
     } else if (mode === 'test') {
-      send({ type: 'start_game', mode, word: testWord.value, autoplay: settings.autoplay, speed: settings.speed });
+      // update 142: a round started by Auto next round in Test mode always runs the simulated chat, otherwise it would never end
+      send({ type: 'start_game', mode, word: testWord.value, autoplay: auto === true ? true : settings.autoplay, speed: settings.speed });
     } else {
       send({ type: 'start_game', mode, word: offlineWord.value });
     }
@@ -1263,15 +1274,18 @@
         leaderboardOverlay.classList.add('hidden');
         overlayCountdown.classList.add('hidden');
         updateRoundButton();
-        if (settings.autoNextRound && !isActive() && !starting) startRound();
+        if (settings.autoNextRound && !isActive()) { starting = false; startRound(true); }
         return;
       }
       tick();
     }, 1000);
   }
 
+  let handledResultKey = null;
+  function resultKey(r) { return r ? [r.word, r.winner, r.guesses, r.gaveUp ? 1 : 0, r.players].join('|') : null; }
   function runRoundEndSequence(result) {
     if (!result) return;
+    handledResultKey = resultKey(result);
     clearTimeout(overlayTimer1);
     clearLeaderboardAutoClose();
     roundEndOverlay.classList.add('hidden');
@@ -1402,6 +1416,8 @@
 
   function onGameStarted() {
     starting = false;
+    handledResultKey = null;
+    clearLeaderboardAutoClose();
     board.clear();
     scheduleBoardRender();
     renderLatest(null);
@@ -1471,6 +1487,13 @@
       syncAutoplayUi();
     }
     if (state.game.active) starting = false;
+    // update 142: if this page missed the 'win' / 'give_up' message (sleeping phone, socket reconnect, throttled tab) the round-end
+    // sequence - and with it the Auto next round countdown - still runs as soon as the state shows a finished round
+    if (!state.game.active && state.game.result && resultKey(state.game.result) !== handledResultKey) {
+      const r = state.game.result;
+      showResult({ word: r.word, winner: r.winner, gaveUp: !!r.gaveUp, guesses: r.guesses, points: r.points, total: r.total });
+      runRoundEndSequence(r);
+    }
 
     // Round
     const g = state.game;
