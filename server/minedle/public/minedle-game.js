@@ -214,23 +214,52 @@ function paintMineSize(n, m) {      // resize the tiles that are already on scre
     if (u) u.style.fontSize = m.numFont + "px";
   });
 }
+/* update 142: THE MINE GRID NEVER SHRINKS WHILE A ROUND RUNS. Update 140 re-measured the board every time fit-screen looked at the page, so
+   it got smaller when the first guess tiles appeared and again when the round ended (answer + Play again + countdown were added).
+   Now the size is worked out ONCE for the worst case - the guess list with room for several rows AND the result panel (answer, Play again,
+   auto-continue countdown) already on screen, shown for a moment while measuring and then put back - and that size is kept
+   (cached per screen / grid size) for the whole round, for guesses appearing and for the end of the round. */
+let mineFitKey = "";
+const MINE_NEED_LIST = 175;        // game px that the guess list always keeps (about 3 rows of guess tiles)
 window.__fitScreenPre = function () {
   try {
     const doc = document.documentElement;
     if (!lastState || !doc.classList.contains("fs") || el.mineSection.hidden || el.mineGrid.children.length === 0) return;
-    const n = lastState.game.grid && lastState.game.grid.size;
+    const g = lastState.game;
+    const n = g.grid && g.grid.size;
     if (!n) return;
     const app = document.getElementById("app"), card = app && app.querySelector(".round-card"), list = el.tilesWrap;
     if (!app || !card) return;
     const z = parseFloat(getComputedStyle(doc).getPropertyValue("--fs-zoom")) || 1;
-    const need = () => (list.children.length >= 2 ? 175 : 130);   // same room fit-screen wants for the guess list
-    const fits = () => app.scrollHeight <= app.clientHeight + 1 && card.scrollHeight <= card.clientHeight + 1 && (list.offsetParent === null || list.clientHeight >= need() - 1);
+    const gc = document.getElementById("gcStyle");
+    const key = [n, window.innerWidth, window.innerHeight, Math.round(el.mineSection.clientWidth * z), gc ? gc.textContent.length : 0, g.showBank === false ? 0 : 1, g.showResetBtn === false ? 0 : 1, g.mode].join("|");
+    const ended = g.status === "won" || g.status === "lost";
+
+    // same screen, same grid: keep the size that was worked out before (no shrinking when guesses or the result panel appear)
+    if (key === mineFitKey) { paintMineSize(n, mineMetrics(n)); return; }
+
     const savedCap = mineCapVis; mineCapVis = 0;           // natural (uncapped) size first
     let vis = mineMetrics(n).sizeVis; mineCapVis = savedCap;
     const top = vis;
-    paintMineSize(n, mineMetrics(n, vis));
-    while (!fits() && vis > MINE_MIN_VIS) { vis -= 2; paintMineSize(n, mineMetrics(n, vis)); }
+
+    // worst case: the result panel is on screen (unless the round already ended - then the real one is)
+    const banner = el.resultBanner, txt = el.resultText, note = el.autoContinueNote;
+    const saved = { bh: banner.hidden, nh: note.hidden, t: txt.textContent, nt: note.textContent };
+    if (!ended) {
+      banner.hidden = false; note.hidden = false;
+      txt.textContent = "\u{1F389} some_viewer_name solved it! \"MINEDLE\" \u2014 +1 points";
+      note.textContent = "Auto-continuing in 10s\u2026";
+    }
+    try {
+      const fits = () => app.scrollHeight <= app.clientHeight + 1 && card.scrollHeight <= card.clientHeight + 1 && (list.offsetParent === null || list.clientHeight >= MINE_NEED_LIST - 1);
+      paintMineSize(n, mineMetrics(n, vis));
+      while (!fits() && vis > MINE_MIN_VIS) { vis -= 2; paintMineSize(n, mineMetrics(n, vis)); }
+    } finally {
+      if (!ended) { banner.hidden = saved.bh; note.hidden = saved.nh; txt.textContent = saved.t; note.textContent = saved.nt; }
+    }
     mineCapVis = vis >= top ? 0 : vis;
+    mineFitKey = key;
+    paintMineSize(n, mineMetrics(n));
   } catch (e) { /* never block the game */ }
 };
 

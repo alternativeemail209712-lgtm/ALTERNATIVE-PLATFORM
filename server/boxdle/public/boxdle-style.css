@@ -959,7 +959,7 @@ body[data-game="boxdle"] .toolbarRow .lengthBadge {
 }
 .bxGridSection[hidden] { display: none; }
 .bxGridWrap { position: relative; margin: 0 auto; }
-.bxGrid { display: grid; justify-content: center; align-content: start; }
+.bxGrid { display: grid; justify-content: center; align-content: start; position: relative; }
 .bxTile {
   display: flex; align-items: center; justify-content: center; box-sizing: border-box; user-select: none;
   background: rgba(60, 40, 20, 0.16); border: 1.5px solid rgba(60, 40, 20, 0.42); color: var(--text);
@@ -969,7 +969,7 @@ body[data-game="boxdle"] .toolbarRow .lengthBadge {
 .bxTile.hl { background: var(--bx-path); color: var(--bx-path-ink); border-color: var(--bx-path-dark); transform: scale(1.06); z-index: 1; }
 .bxTile.hint { background: var(--bx-hint); color: var(--bx-hint-ink); border-color: var(--bx-hint-dark); animation: bx-pulse 1s ease-in-out infinite; }
 .bxGrid.over .bxTile { opacity: 0.78; }
-.bxPathSvg { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.bxPathSvg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; overflow: visible; }  /* update 142: inside the grid */
 .bxRuleNote { margin: 8px 0 0; text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); }
 .bxRuleNote:empty { display: none; }
 
