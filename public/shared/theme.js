@@ -248,6 +248,29 @@
     }, 60);
   }
 
+  // update 145: the crown sits exactly on the top-left corner of the FIRST LETTER of the title on every phone. The letter's real ink position is
+  // measured with the title's own font (canvas text metrics), so it does not matter which font the phone ends up using or how big the title is.
+  // Results are in em, so they stay right when the title is resized.
+  function placeCrown() {
+    try {
+      var t = document.querySelector(".heroTitle"), a = t && t.querySelector(".hT1");
+      if (!a) return;
+      var cs = getComputedStyle(a), size = parseFloat(cs.fontSize);
+      var ch = (a.textContent || "").trim().charAt(0);
+      if (cs.textTransform === "uppercase") ch = ch.toUpperCase(); else if (cs.textTransform === "lowercase") ch = ch.toLowerCase();
+      if (!ch || !size) return;
+      var ctx = (placeCrown.cv || (placeCrown.cv = document.createElement("canvas"))).getContext("2d");
+      ctx.font = (cs.fontStyle || "normal") + " " + (cs.fontWeight || "400") + " " + size + "px " + cs.fontFamily;
+      var m = ctx.measureText(ch);
+      if (m.actualBoundingBoxAscent == null || m.fontBoundingBoxAscent == null) return;
+      var top = (m.fontBoundingBoxAscent - m.actualBoundingBoxAscent) / size;   // from the top of the text box to the top of the letter
+      var left = -m.actualBoundingBoxLeft / size;                                  // from the left of the text box to the left of the letter
+      if (!isFinite(top) || !isFinite(left) || top < -0.5 || top > 1.2) return;
+      a.style.setProperty("--crown-top", top.toFixed(3) + "em");
+      a.style.setProperty("--crown-left", Math.max(-0.1, left).toFixed(3) + "em");
+    } catch (e) { /* the CSS fallback position is used */ }
+  }
+
   function fitTitle() {
     var t = document.querySelector(".heroTitle"), band = document.getElementById("heroBand");
     if (!t || !band || !document.documentElement.hasAttribute("data-look")) return;
@@ -280,8 +303,9 @@
     band.insertBefore(rib, tag || null);
     // the title keeps its place: ribbon goes right under it
     if (t.nextSibling !== rib) band.insertBefore(rib, t.nextSibling);
-    fitTitle();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+    fitTitle(); placeCrown();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitTitle(); placeCrown(); });
+    window.addEventListener("resize", placeCrown);
   }
 
   function setHStyle(id) {
@@ -290,7 +314,7 @@
     try { localStorage.setItem(HKEY, id); } catch (e) {}
     var sel = document.querySelectorAll("[data-hstyle-select]");
     for (var i = 0; i < sel.length; i++) if (sel[i].value !== id) sel[i].value = id;
-    setTimeout(fitTitle, 0);
+    setTimeout(function () { fitTitle(); placeCrown(); }, 0);
     relayout();
   }
 

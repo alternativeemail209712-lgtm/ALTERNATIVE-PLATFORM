@@ -649,9 +649,12 @@ html[data-look]:not([data-hstyle="classic"]) body:not([data-game="boxdle"]):not(
 .heroCrown{ display: none !important; }   /* the old stand-alone crown element is never shown any more */
 html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTitle .hT1{ position: relative; overflow: visible; }
 html[data-look]:not([data-hstyle="classic"]):not([data-hstyle="candy"]):not([data-hstyle="note"]) body:not([data-game="boxdle"]):not([data-game="contexto"]) .heroTitle .hT1::before{
-  content: "\1F451"; position: absolute; left: -.2em; top: -.36em; z-index: 3;
-  font: 400 .52em/1 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; letter-spacing: 0;
-  -webkit-text-stroke: 0; -webkit-text-fill-color: initial; text-shadow: none; paint-order: normal;
+  content: ""; position: absolute; z-index: 3; display: block;
+  /* update 145: the crown is a fixed-shape picture (the same on every Android phone - no emoji font involved) sized in em of the title, and it is
+     placed from the MEASURED top-left corner of the first letter (--crown-top / --crown-left are set by theme.js for the real font on this phone) */
+  width: .56em; height: .44em;
+  left: calc(var(--crown-left, .02em) - .30em); top: calc(var(--crown-top, .16em) - .44em + .07em);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 50'%3E%3Cpath d='M5 41 L3 13 L19 27 L32 5 L45 27 L61 13 L59 41 Z' fill='%23FFC62E' stroke='%23C98A0C' stroke-width='3' stroke-linejoin='round'/%3E%3Crect x='5' y='41' width='54' height='7' rx='3' fill='%23F2A60C' stroke='%23C98A0C' stroke-width='2'/%3E%3Ccircle cx='3' cy='13' r='4' fill='%23FF5C8A'/%3E%3Ccircle cx='32' cy='5' r='4.5' fill='%23FF5C8A'/%3E%3Ccircle cx='61' cy='13' r='4' fill='%23FF5C8A'/%3E%3C/svg%3E") center / contain no-repeat;
   transform: rotate(-18deg); transform-origin: 50% 100%; pointer-events: none; user-select: none;
   filter: drop-shadow(0 1px 1px rgba(0,0,0,.25));
 }

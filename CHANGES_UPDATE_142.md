@@ -14,3 +14,7 @@
 # UPDATE 144
 - AUTOPILOT voting: "Who can vote" is applied strictly. A viewer's role (follower / moderator / subscriber) is now learned from every TikTok event of the live (joins, likes, gifts, shares, follows), not only from the vote's chat line, and "follows the host" is read from every field TikTok may use (followRole, followInfo.followStatus, ...). Any ticked group may vote; nobody outside the ticked groups can. The result log says how many chat votes were not counted.
 - AUTOPILOT connection: the next game is linked to the shared TikTok connection while the vote result is on screen, and the link check runs every 2 s for the whole game (stage side retries faster), so no manual reconnect is needed after a game change.
+
+# UPDATE 145
+- CONTEXTO: the "Hide toolbar" and "Connection details" buttons (and their "..." menu) are removed; the toolbar is always shown (a hidden state saved earlier on a device is cleared). The line under the "Latest guess" row is gone (hard 3D shadow of its wrapper + under-edge of the row).
+- CROWN (title decoration, all games incl. BOXDLE): now a fixed-shape SVG picture instead of an emoji (emoji look and size differ per Android phone / font) and it is placed from the measured top-left corner of the title's first letter (canvas text metrics, in em), re-measured when fonts load, the title is resized or the header style changes.
