@@ -10,3 +10,7 @@
 
 # UPDATE 143
 - BOXDLE: the end-of-round "Longest word" is now the longest word found in the whole round (ties: the one found first), shown with its letter count and who found it - in the winner card and in the result banner. Before, it was only the round winner's own longest word.
+
+# UPDATE 144
+- AUTOPILOT voting: "Who can vote" is applied strictly. A viewer's role (follower / moderator / subscriber) is now learned from every TikTok event of the live (joins, likes, gifts, shares, follows), not only from the vote's chat line, and "follows the host" is read from every field TikTok may use (followRole, followInfo.followStatus, ...). Any ticked group may vote; nobody outside the ticked groups can. The result log says how many chat votes were not counted.
+- AUTOPILOT connection: the next game is linked to the shared TikTok connection while the vote result is on screen, and the link check runs every 2 s for the whole game (stage side retries faster), so no manual reconnect is needed after a game change.
