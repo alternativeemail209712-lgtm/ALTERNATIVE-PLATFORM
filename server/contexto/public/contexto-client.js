@@ -249,7 +249,8 @@
     if (isSheetOpen(hostSheet)) closeSheet(hostSheet, dockToggle);
   });
 
-  diagBtn.addEventListener('click', () => {
+  // update 145: the "Connection details" button was removed (the panel stays hidden; its numbers are still collected)
+  if (diagBtn) diagBtn.addEventListener('click', () => {
     const nowHidden = diagPanel.classList.toggle('hidden');
     diagBtn.setAttribute('aria-expanded', String(!nowHidden));
   });
@@ -526,19 +527,15 @@
   }
   function setToolbarHidden(hidden) {
     diagnosticsEl.classList.toggle('toolbar-collapsed', hidden);
-    toolbarShowBtn.classList.toggle('hidden', !hidden);
+    if (toolbarShowBtn) toolbarShowBtn.classList.toggle('hidden', !hidden);
     diagnosticsEl.setAttribute('aria-hidden', String(hidden));
     if (hidden) closeThemeMenu();
   }
-  toolbarHideBtn.addEventListener('click', () => {
-    saveToolbarHidden(true);
-    setToolbarHidden(true);
-  });
-  toolbarShowBtn.addEventListener('click', () => {
-    saveToolbarHidden(false);
-    setToolbarHidden(false);
-  });
-  setToolbarHidden(loadToolbarHidden());
+  // update 145: the "Hide toolbar" button is gone, so the toolbar is always shown (a hidden state saved earlier on this device is cleared)
+  if (toolbarHideBtn) toolbarHideBtn.addEventListener('click', () => { saveToolbarHidden(true); setToolbarHidden(true); });
+  if (toolbarShowBtn) toolbarShowBtn.addEventListener('click', () => { saveToolbarHidden(false); setToolbarHidden(false); });
+  saveToolbarHidden(false);
+  setToolbarHidden(false);
 
   // ============================================================
   // Settings (remembered between visits on this device)
